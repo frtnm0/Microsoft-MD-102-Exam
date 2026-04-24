@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  --color-azure-50: #eff6ff;
+  --color-azure-100: #dbeafe;
+  --color-azure-200: #bfdbfe;
+  --color-azure-300: #93c5fd;
+  --color-azure-400: #60a5fa;
+  --color-azure-500: #3b82f6;
+  --color-azure-600: #2563eb;
+  --color-azure-700: #1d4ed8;
+  --color-azure-800: #1e40af;
+  --color-azure-900: #1e3a8a;
+  --color-azure-950: #172554;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-radius: var(--radius);
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --background: #eff6ff;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary: #2563eb;
+    --primary-foreground: #ffffff;
+    --secondary: #dbeafe;
+    --secondary-foreground: #1e3a8a;
+    --muted: #e0f2fe;
+    --muted-foreground: #475569;
+    --accent: #bfdbfe;
+    --accent-foreground: #1e3a8a;
+    --destructive: #ef4444;
+    --destructive-foreground: #f8fafc;
+    --border: #bfdbfe;
+    --input: #dbeafe;
+    --ring: #3b82f6;
+    --radius: 0.6rem;
+  }
+
+  .dark {
+    --background: #020817;
+    --foreground: #f8fafc;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+    --primary: var(--color-azure-500);
+    --primary-foreground: #020817;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #1e293b;
+    --accent-foreground: #f8fafc;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #f8fafc;
+    --border: #1e293b;
+    --input: #1e293b;
+    --ring: var(--color-azure-500);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Immersive Azure Gradient for light mode */
+    background: radial-gradient(circle at 10% 20%, #bfdbfe 0%, #eff6ff 35%, #e0f2fe 100%);
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  .dark body {
+    background: var(--background);
+  }
+
+  /* Micro animations for interactivity */
+  button, a {
+    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  
+  button:active, a:active {
+    transform: scale(0.97);
+  }
+
+  /* Richer dynamic styles for cards */
+  .bg-card {
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  :root:not(.dark) .bg-card {
+    background: rgba(255, 255, 255, 0.65) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08), 0 0 3px rgba(37, 99, 235, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  :root:not(.dark) .bg-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 12px 30px -4px rgba(37, 99, 235, 0.15), 0 0 4px rgba(37, 99, 235, 0.05);
+  }
+}
+
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
+html, body, #root {
+  height: 100%;
+}
