@@ -22,12 +22,13 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
     return `${m}m ${s}s`;
   };
 
-  // Calculate breakdown if this is the full exam (selectedDomain === 4)
-  const isFullExam = selectedDomain === 4;
+  // Calculate breakdown if this is the full exam (selectedDomain === 5)
+  const isFullExam = selectedDomain === 5;
   
   let domain1Score = { correct: 0, total: 0 };
   let domain2Score = { correct: 0, total: 0 };
   let domain3Score = { correct: 0, total: 0 };
+  let domain4Score = { correct: 0, total: 0 };
 
   if (isFullExam) {
     Object.values(answers).forEach((ans) => {
@@ -38,9 +39,12 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
       } else if (qid >= 200 && qid < 300) {
         domain2Score.total += 1;
         if (ans.isCorrect) domain2Score.correct += 1;
-      } else {
+      } else if (qid >= 300 && qid < 400) {
         domain3Score.total += 1;
         if (ans.isCorrect) domain3Score.correct += 1;
+      } else {
+        domain4Score.total += 1;
+        if (ans.isCorrect) domain4Score.correct += 1;
       }
     });
   }
@@ -102,7 +106,7 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
               {/* Domain 1 */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium">Domain 1: Fundamentals</span>
+                  <span className="text-sm font-medium">Domain 1: Deploy Windows client</span>
                   <span className="text-sm font-semibold">{getPercentage(domain1Score.correct, domain1Score.total)}%</span>
                 </div>
                 <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
@@ -117,7 +121,7 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
               {/* Domain 2 */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium">Domain 2: Data Protection</span>
+                  <span className="text-sm font-medium">Domain 2: Manage identity and compliance</span>
                   <span className="text-sm font-semibold">{getPercentage(domain2Score.correct, domain2Score.total)}%</span>
                 </div>
                 <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
@@ -132,7 +136,7 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
               {/* Domain 3 */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium">Domain 3: Administration</span>
+                  <span className="text-sm font-medium">Domain 3: Manage, maintain, and protect devices</span>
                   <span className="text-sm font-semibold">{getPercentage(domain3Score.correct, domain3Score.total)}%</span>
                 </div>
                 <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
@@ -142,6 +146,21 @@ export function ResultsView({ score, total, answers = {}, selectedDomain = 1, el
                   </div>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1 text-right">{domain3Score.correct} / {domain3Score.total}</div>
+              </div>
+
+              {/* Domain 4 */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm font-medium">Domain 4: Manage applications</span>
+                  <span className="text-sm font-semibold">{getPercentage(domain4Score.correct, domain4Score.total)}%</span>
+                </div>
+                <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-primary h-2.5 rounded-full transition-all duration-1000" 
+                    style={{ width: `${getPercentage(domain4Score.correct, domain4Score.total)}%` }}>
+                  </div>
+                </div>
+                <div className="text-xs text-muted-foreground mt-1 text-right">{domain4Score.correct} / {domain4Score.total}</div>
               </div>
 
             </div>

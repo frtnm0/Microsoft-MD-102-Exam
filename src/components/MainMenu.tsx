@@ -9,10 +9,10 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
     <div className="max-w-4xl mx-auto w-full p-4 md:p-8 animate-in fade-in zoom-in-95 duration-500">
       <div className="mb-10 text-center">
         <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">
-          Master the Fundamentals
+          Master Endpoint Administration
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Prepare for Microsoft Exam MD-102: Endpoint Administrator with interactive study guides.
+          Accelerate your path to the Microsoft 365 MD-102 certification. Test your expertise in modern device deployment, Intune management, and endpoint security with our comprehensive, exam-style practice sets.
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage identity and compliance
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>0 Questions</span>
+            <span>50 Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -74,7 +74,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage, maintain, and protect devices
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>0 Questions</span>
+            <span>50 Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -96,7 +96,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage applications
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>0 Questions</span>
+            <span>50 Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -121,12 +121,12 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
               Full Practice Exam
             </h3>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-              Simulate the real MD-102 exam. A comprehensive 45-question test covering all objective domains proportionally.
+              Simulate the real MD-102 exam. A comprehensive 60-question test covering all objective domains proportionally.
             </p>
           </div>
           
           <div className="flex-shrink-0 mt-6 md:mt-0 flex flex-col items-center md:items-end w-full md:w-auto">
-             <div className="text-sm font-semibold text-primary mb-1">45 Questions</div>
+             <div className="text-sm font-semibold text-primary mb-1">60 Questions</div>
              <div className="text-xs text-muted-foreground mb-3">Domain Scoring Included</div>
              <span className="inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded group-hover:bg-primary/90 transition-colors">
                Start Exam &rarr;
@@ -137,3 +137,4 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
     </div>
   );
 }
+

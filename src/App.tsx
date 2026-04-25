@@ -85,11 +85,18 @@ function App() {
 
   const generateRandomOrder = (domain: number) => {
     if (domain === 5) {
+      // MD-102 exam weightings (approximate):
+      // Domain 1: Deploy Windows client (25%) -> 15 questions
+      // Domain 2: Manage identity and compliance (20%) -> 12 questions
+      // Domain 3: Manage, maintain, and protect devices (40%) -> 24 questions
+      // Domain 4: Manage applications (15%) -> 9 questions
+      // Total = 60 questions
       const d1 = domain1Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 15);
-      const d2 = domain2Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 15);
-      const d3 = domain3Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 10);
-      const d4 = domain4Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 10);
-      return [...d1, ...d2, ...d3, ...d4].sort(() => Math.random() - 0.5).slice(0, 45);
+      const d2 = domain2Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 12);
+      const d3 = domain3Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 24);
+      const d4 = domain4Dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5).slice(0, 9);
+      
+      return [...d1, ...d2, ...d3, ...d4].sort(() => Math.random() - 0.5);
     }
     
     let dataset = domain1Dataset;
@@ -98,7 +105,7 @@ function App() {
     if (domain === 4) dataset = domain4Dataset;
     
     const allQuestions = dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5);
-    return domain === 1 ? allQuestions.slice(0, 50) : allQuestions.slice(0, 30);
+    return allQuestions.slice(0, 50);
   };
 
   const handleSelectQuiz = (domain: number) => {
