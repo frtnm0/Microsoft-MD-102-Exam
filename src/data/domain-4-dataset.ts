@@ -870,5 +870,300 @@ export const domain4Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/user-help/send-logs-to-your-it-admin-windows"
       }
     ]
+  },
+  {
+    id: 994,
+    term: "App Management Scenario Steps",
+    category: "Manage applications and updates",
+    questions: [
+      {
+        id: 451,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to package and deploy a custom Win32 application (.exe) using Microsoft Intune:",
+        options: [
+          "Organize the installer (.exe) and any dependent files into a single source folder.",
+          "Run the Microsoft Win32 Content Prep Tool to convert the source folder into an .intunewin file.",
+          "Upload the .intunewin file to the Intune admin center under 'Apps > Windows > Add'.",
+          "Configure the Install and Uninstall commands (e.g., app.exe /quiet).",
+          "Define the Detection Rules (e.g., checking for a specific registry key or file path).",
+          "Assign the app as Required or Available to a user/device group."
+        ],
+        answer: "Organize files -> Run Prep Tool -> Upload to Intune -> Configure Commands -> Define Detection Rules -> Assign",
+        explanation: "Deploying a Win32 app requires strict packaging. First, gather the files, use the Prep Tool to encrypt/compress them into an .intunewin package, upload it to the cloud, explicitly define how it installs and uninstalls via CLI, teach Intune how to detect its presence, and finally deploy it.",
+        moreDetails: "If the detection rule is incorrect, the deployment will fail or loop continuously.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add"
+      },
+      {
+        id: 452,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the phases of deploying an out-of-band Expedited Quality Update via Intune to fix a zero-day vulnerability:",
+        options: [
+          "Navigate to Devices > Windows > Quality updates for Windows 10 and later.",
+          "Create a new Expedited update profile.",
+          "Select the specific target release (e.g., '04/11/2026 - 2026.04 B Security Updates').",
+          "Configure the number of days until a forced restart occurs (e.g., 1 day).",
+          "Assign the profile to all vulnerable devices."
+        ],
+        answer: "Navigate to Quality Updates -> Create Expedited Profile -> Select Target Release -> Configure Restart Days -> Assign",
+        explanation: "Expediting an update requires creating a specific profile that overrides existing deferrals. You must pick the exact KB/Release you want to enforce and set an aggressive forced-restart deadline.",
+        moreDetails: "This process relies heavily on the Windows Update for Business deployment service.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-10-expedite-updates"
+      },
+      {
+        id: 453,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure Delivery Optimization (DO) using Intune to optimize bandwidth across a campus with a shared high-speed backbone but multiple public IPs:",
+        options: [
+          "Create a new Device Configuration profile > Templates > Delivery Optimization.",
+          "Set the 'Download mode' to 'Group (2)'.",
+          "Configure the 'Group ID' setting using a specific GUID.",
+          "Set the 'Minimum RAM (inclusive)' and 'Minimum disk size' requirements for peer caching.",
+          "Assign the profile to all PCs on the campus."
+        ],
+        answer: "Create Profile -> Set Mode to Group (2) -> Configure Group ID GUID -> Set Hardware Minimums -> Assign",
+        explanation: "Because multiple public IPs are in use, standard LAN mode will fail. You must use 'Group (2)' mode and explicitly bind all campus devices together using a shared Group ID GUID. You also define which hardware is capable of acting as a cache.",
+        moreDetails: "PCs with very low disk space or RAM will automatically opt out of hosting content to prevent performance degradation.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization-reference#group-id"
+      },
+      {
+        id: 454,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the typical flow of App Protection Policy (MAM-WE) enforcement when a user attempts to copy corporate data on a personal device:",
+        options: [
+          "User opens the managed Outlook app and authenticates.",
+          "The App Protection Policy downloads from Intune and applies to the application wrapper.",
+          "User opens an email containing sensitive corporate text.",
+          "User attempts to 'Copy' the text and 'Paste' it into a personal, unmanaged notes app.",
+          "The MAM policy intercepts the clipboard request and blocks the 'Paste' action."
+        ],
+        answer: "Authenticate -> Policy Applies -> Open Email -> Attempt Copy/Paste -> MAM Intercepts and Blocks",
+        explanation: "MAM operates at the application layer. Once the user authenticates, the app secures itself based on Intune rules. When the user attempts an unauthorized data transfer, the enlightened app blocks the OS-level clipboard action.",
+        moreDetails: "This prevents data leakage without Intune needing to manage the rest of the user's personal device.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
+      },
+      {
+        id: 455,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and deploy a Microsoft Store app (new) in Intune with a required system context:",
+        options: [
+          "Navigate to Apps > Windows > Add and select 'Microsoft Store app (new)'.",
+          "Search the Store repository for the target application and select it.",
+          "In the App information tab, set the 'Install behavior' to 'System'.",
+          "Configure any required assignments for target device groups.",
+          "The Intune Management Extension uses Windows Package Manager to download and install the app to the Program Files directory for all users."
+        ],
+        answer: "Select Store App -> Search Store -> Set Install Behavior to System -> Assign to Devices -> Winget Installs Globally",
+        explanation: "Deploying a new Store app (via winget integration) requires you to select the specific install behavior. 'System' means it installs for all users on the device, as opposed to 'User' which only installs into the active user's AppData profile.",
+        moreDetails: "Not all Store apps support 'System' context; some are designed explicitly as per-user applications.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft"
+      },
+      {
+        id: 456,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the update lifecycle when using the Windows Package Manager (winget) integration for Win32 apps hosted in the Microsoft Store:",
+        options: [
+          "The ISV (Independent Software Vendor) publishes a new version of the Win32 application installer to the Microsoft Store.",
+          "The Microsoft Store catalog is updated with the new version manifest.",
+          "The Intune Management Extension on the client checks the local app version against the winget catalog.",
+          "Winget silently downloads the updated .exe/.msi from the Store CDN in the background.",
+          "Winget executes the installer using the system context to update the application seamlessly."
+        ],
+        answer: "ISV Publishes Update -> Store Catalog Updates -> Client Checks Catalog -> Winget Downloads -> Winget Installs Update",
+        explanation: "One of the greatest benefits of the new Intune Store integration is automatic updates for Win32 apps. The local winget client continuously polls the Store catalog and pulls updates without requiring the administrator to re-package and re-upload .intunewin files.",
+        moreDetails: "This drastically reduces the packaging overhead for common third-party apps like Adobe Reader or Zoom.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft#update-store-apps"
+      },
+      {
+        id: 457,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure an App Protection Policy (MAM) to securely handle web links opened from within a managed Android application:",
+        options: [
+          "Navigate to Apps > App protection policies and create a new Android policy.",
+          "Target specific managed apps like Outlook and Teams.",
+          "Under Data Transfer > 'Restrict web content transfer with other apps', select 'Policy managed browsers'.",
+          "Ensure the Microsoft Edge app is assigned as an 'Available' or 'Required' app to the user.",
+          "When the user clicks a link in Outlook, they are forced to open it in Microsoft Edge.",
+          "Edge applies the same MAM policies, preventing the user from copying the webpage text to personal apps."
+        ],
+        answer: "Create Policy -> Target Outlook/Teams -> Restrict Web Content -> Ensure Edge is Deployed -> Link Opens in Edge -> Edge Protects Data",
+        explanation: "To prevent users from opening a sensitive corporate SharePoint link in their personal Chrome browser (where they could copy/paste data freely), you must force all web links from managed apps to open strictly in a MAM-enlightened browser like Microsoft Edge.",
+        moreDetails: "This extends the secure container from the email client directly into the web browsing session.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-android#data-transfer"
+      }
+    ]
+  },
+  {
+    id: 996,
+    term: "Multi-Select App Management Scenarios",
+    category: "Manage applications",
+    questions: [
+      {
+        id: 458,
+        type: "hard",
+        format: "multi-select",
+        question: "You are packaging a complex desktop application into a `.intunewin` file using the Microsoft Win32 Content Prep Tool. Which of the following requirements MUST be met for the deployment to succeed via Intune? (Select THREE)",
+        options: [
+          "The uncompressed application folder size must not exceed 8 GB (without requesting a support quota increase).",
+          "You must specify an exact silent install command (e.g., msiexec /i setup.msi /qn).",
+          "You must specify an uninstallation command.",
+          "The application installer must be an .msi file.",
+          "You must include a custom PowerShell script for installation."
+        ],
+        multiAnswers: [
+          "The uncompressed application folder size must not exceed 8 GB (without requesting a support quota increase).",
+          "You must specify an exact silent install command (e.g., msiexec /i setup.msi /qn).",
+          "You must specify an uninstallation command."
+        ],
+        explanation: "Win32 app deployments require strict metadata. The file size is hard-capped at <b>8 GB</b> by default. Because Intune executes the payload headlessly in the background (SYSTEM context), you MUST provide a <b>silent install command</b> and a valid <b>uninstall command</b>.",
+        moreDetails: "Win32 apps can wrap any file type (.exe, .bat, .ps1, .msi); they are not restricted to just .msi. A custom PowerShell script is optional, not mandatory.",
+        otherOptions: ".exe installers and batch scripts are completely supported, so it doesn't have to be an .msi or PS1.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
+      },
+      {
+        id: 459,
+        type: "medium",
+        format: "multi-select",
+        question: "When creating an App Protection Policy (MAM) for iOS/iPadOS, which of the following 'Data Transfer' restrictions can be enforced? (Select THREE)",
+        options: [
+          "Prevent users from taking screenshots of the managed app.",
+          "Block users from saving corporate files to their personal iCloud Drive.",
+          "Restrict cutting, copying, and pasting between other apps.",
+          "Prevent the user from uninstalling the managed application.",
+          "Require the user to connect to a corporate Wi-Fi network before opening the app."
+        ],
+        multiAnswers: [
+          "Prevent users from taking screenshots of the managed app.",
+          "Block users from saving corporate files to their personal iCloud Drive.",
+          "Restrict cutting, copying, and pasting between other apps."
+        ],
+        explanation: "MAM policies at the application layer can enforce <b>screen capture blocking</b> (though on iOS this is often handled by blurring or blocking the OS API), restrict <b>saving to unmanaged storage</b> (like iCloud), and control <b>clipboard behavior</b> (copy/paste).",
+        moreDetails: "Because MAM does not manage the device OS, it cannot prevent a user from simply deleting an app from their home screen, nor does it control OS-level Wi-Fi profiles.",
+        otherOptions: "MAM cannot prevent app uninstallation or enforce specific Wi-Fi connections.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-ios"
+      },
+      {
+        id: 460,
+        type: "hard",
+        format: "multi-select",
+        question: "You are defining 'Detection rules' for a newly packaged Win32 application in Intune. Which of the following methods are natively supported for detecting if the application successfully installed? (Select THREE)",
+        options: [
+          "MSI product code presence.",
+          "File or folder presence (with optional version/date checking).",
+          "Registry key presence or value comparison.",
+          "Active network port listening on localhost.",
+          "Analyzing the output of a native Windows Event Log query."
+        ],
+        multiAnswers: [
+          "MSI product code presence.",
+          "File or folder presence (with optional version/date checking).",
+          "Registry key presence or value comparison."
+        ],
+        explanation: "Intune natively supports detecting Win32 apps by checking for an <b>MSI Product Code</b>, looking for a specific <b>File/Folder</b> path, or querying a <b>Registry</b> key.",
+        moreDetails: "If you need to detect based on network ports or Event Logs, you would have to write a Custom Detection Script (PowerShell) instead of using the native drop-down rules.",
+        otherOptions: "Network ports and Event Logs require custom PowerShell detection scripts.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
+      },
+      {
+        id: 461,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following scenarios are valid use cases for deploying an 'App Configuration Policy' in Intune? (Select TWO)",
+        options: [
+          "Pre-populating a server URL for a line-of-business iOS app so the user doesn't have to type it.",
+          "Silently disabling the 'Save Password' feature inside the managed Microsoft Edge browser.",
+          "Blocking an unmanaged personal device from accessing Exchange Online.",
+          "Forcing a Windows 11 device to upgrade to the latest Feature Update."
+        ],
+        multiAnswers: [
+          "Pre-populating a server URL for a line-of-business iOS app so the user doesn't have to type it.",
+          "Silently disabling the 'Save Password' feature inside the managed Microsoft Edge browser."
+        ],
+        explanation: "App Configuration Policies inject settings directly into the application's property list (iOS) or managed config (Android). This is used to <b>pre-configure app settings</b> (like URLs) or <b>toggle app features</b> (like disabling Edge features).",
+        moreDetails: "Blocking access is handled by Conditional Access. OS updates are handled by Windows Update rings.",
+        otherOptions: "Conditional Access blocks devices; Update Rings manage OS upgrades.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-overview"
+      }
+    ]
+  },
+  {
+    id: 1000,
+    term: "Multi-Select (Select Two) App Management",
+    category: "Manage applications",
+    questions: [
+      {
+        id: 462,
+        type: "medium",
+        format: "multi-select",
+        question: "You are configuring a Microsoft Edge policy in Intune. Which of the following features can be controlled using Edge Administrative Templates? (Select TWO)",
+        options: [
+          "Forcing the installation of a specific browser extension.",
+          "Configuring the Edge startup page to a corporate intranet site.",
+          "Preventing the user from uninstalling the Microsoft Edge application from Windows.",
+          "Setting Edge as the default PDF viewer for the entire OS."
+        ],
+        multiAnswers: [
+          "Forcing the installation of a specific browser extension.",
+          "Configuring the Edge startup page to a corporate intranet site."
+        ],
+        explanation: "Edge Administrative Templates allow granular control over browser behavior, including <b>forcing extensions</b> and <b>setting startup pages</b>.",
+        moreDetails: "Edge is integrated into Windows 11 and cannot be uninstalled by default, but this isn't controlled via an Edge policy template. OS-level default app associations (like PDF viewers) require a Default Associations configuration file, not a browser template.",
+        otherOptions: "App uninstallation and OS default associations are not handled by Edge administrative templates.",
+        link: "https://learn.microsoft.com/en-us/deployedge/configure-microsoft-edge"
+      },
+      {
+        id: 463,
+        type: "hard",
+        format: "multi-select",
+        question: "When deploying an iOS store app via Intune, which of the following requirements must be met to silently install the app without prompting the user for an Apple ID? (Select TWO)",
+        options: [
+          "The app must be purchased/acquired through Apple Volume Purchase Program (VPP) / Apple Business Manager.",
+          "The VPP token must be synchronized with Intune and the app assigned as 'Required'.",
+          "The user must have an active personal iCloud account signed into the device.",
+          "The app must be a custom line-of-business (.ipa) file."
+        ],
+        multiAnswers: [
+          "The app must be purchased/acquired through Apple Volume Purchase Program (VPP) / Apple Business Manager.",
+          "The VPP token must be synchronized with Intune and the app assigned as 'Required'."
+        ],
+        explanation: "To bypass the Apple ID prompt and silently push an iOS app, the app licenses must be managed via <b>Apple Business Manager (VPP)</b> and deployed as device-licensed apps in Intune.",
+        moreDetails: "If you just deploy a regular App Store link, iOS will prompt the user to enter their Apple ID to 'purchase' the free app.",
+        otherOptions: "Requiring personal iCloud defeats silent deployment. It does not need to be a custom LOB app; public store apps work via VPP.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/vpp-apps-ios"
+      },
+      {
+        id: 464,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following application types can be natively added and deployed to Android Enterprise fully managed devices via Intune? (Select TWO)",
+        options: [
+          "Managed Google Play store apps.",
+          "Web links (Web apps) published through Managed Google Play.",
+          "Windows Win32 (.intunewin) packages.",
+          "macOS (.pkg) installers."
+        ],
+        multiAnswers: [
+          "Managed Google Play store apps.",
+          "Web links (Web apps) published through Managed Google Play."
+        ],
+        explanation: "Android Enterprise relies heavily on <b>Managed Google Play</b> to deliver both native Android <b>store apps</b> and custom <b>web apps/links</b> directly to the managed device.",
+        moreDetails: "Win32 packages are explicitly for Windows. macOS installers are for Apple devices.",
+        otherOptions: "Win32 and macOS installers cannot run on Android.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-android-for-work"
+      }
+    ]
   }
 ];

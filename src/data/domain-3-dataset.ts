@@ -870,5 +870,422 @@ export const domain3Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control#roles-created-in-entra-id"
       }
     ]
+  },
+  {
+    id: 993,
+    term: "Device Maintenance Scenario Steps",
+    category: "Protect devices and data",
+    questions: [
+      {
+        id: 351,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and enforce Microsoft Defender Antivirus Network Protection using Microsoft Intune:",
+        options: [
+          "Navigate to the Endpoint Security node in the Intune admin center.",
+          "Select 'Antivirus' and create a new policy.",
+          "Choose 'Windows 10, Windows 11, and Windows Server' and the 'Microsoft Defender Antivirus' profile.",
+          "Under the 'Real-time protection' category, locate the 'Enable network protection' setting.",
+          "Set the value to 'Enable' (or 'Audit Mode' for initial testing).",
+          "Assign the policy to the target device or user group."
+        ],
+        answer: "Navigate to Endpoint Security -> Select Antivirus -> Choose Profile -> Locate Network Protection -> Enable -> Assign",
+        explanation: "Network Protection is managed as a subset of the Endpoint Security Antivirus profile in Intune. You create the policy, configure the specific Real-time protection setting, and assign it.",
+        moreDetails: "It's highly recommended to use Audit Mode first to ensure it doesn't break custom internal web apps before switching to Enable.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/enable-network-protection"
+      },
+      {
+        id: 352,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to silently enable BitLocker on an Entra ID joined device using Intune:",
+        options: [
+          "Create an Endpoint Security > Disk encryption policy.",
+          "Set 'Require devices to be backed up to Azure AD' to 'Yes'.",
+          "Set 'Warning for other disk encryption' to 'Block'.",
+          "Set 'Allow standard users to enable encryption during Autopilot' to 'Yes'.",
+          "Assign the policy to a device group containing TPM-enabled hardware."
+        ],
+        answer: "Create Policy -> Require Backup -> Block Warning -> Allow Standard Users -> Assign",
+        explanation: "To achieve silent, zero-touch encryption, you must configure the policy to automatically backup the key to Entra ID, suppress any third-party encryption warnings, and allow standard users to trigger the encryption process without needing local admin rights.",
+        moreDetails: "If the device lacks a TPM chip, silent encryption will fail, and the user will be prompted.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/encrypt-devices#silently-enable-bitlocker-on-devices"
+      },
+      {
+        id: 353,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy Microsoft Defender Application Guard (MDAG) for Edge and define its network isolation boundaries:",
+        options: [
+          "Create an Endpoint Security > Attack Surface Reduction policy.",
+          "Select the 'App and browser isolation' profile.",
+          "Turn on Application Guard for Edge (Standalone mode or Enterprise mode).",
+          "Create a separate 'Network boundary' configuration profile.",
+          "Define the 'Enterprise resource domains' (e.g., contoso.com) that are trusted.",
+          "Assign both profiles to the targeted users."
+        ],
+        answer: "Create ASR Policy -> Select Isolation Profile -> Turn on MDAG -> Create Network Boundary -> Define Domains -> Assign",
+        explanation: "First, you must actually enable the MDAG feature on the endpoint using an ASR profile. Then, to make it functional in Enterprise mode, you must define the Network Boundary profile so the system knows which domains are safe and which must open in the isolated container.",
+        moreDetails: "Without the network boundary definitions, MDAG doesn't know what to protect and typically won't enforce isolation properly.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/microsoft-defender-application-guard/configure-md-app-guard"
+      },
+      {
+        id: 354,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to update an existing Intune Security Baseline to a newly released version:",
+        options: [
+          "Navigate to Endpoint security > Security baselines.",
+          "Select the specific baseline (e.g., Windows 10 Security Baseline) that shows an 'Update available' status.",
+          "Select the existing assigned profile and click 'Change Version'.",
+          "Choose to either keep your existing customizations or discard them for the new defaults.",
+          "Review the newly mapped settings and save the updated profile."
+        ],
+        answer: "Navigate to Baselines -> Select Baseline Type -> Click Change Version -> Choose Customization Handling -> Review and Save",
+        explanation: "Intune does not auto-update baselines. Administrators must manually initiate the 'Change Version' wizard on their existing profiles, carefully choosing whether to maintain their previous customizations or revert to the new Microsoft defaults.",
+        moreDetails: "It is highly recommended to test the new baseline on a small pilot group before updating the production profile.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/security-baselines-configure#change-the-baseline-version-for-a-profile"
+      },
+      {
+        id: 355,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and deploy a custom OMA-URI policy in Intune:",
+        options: [
+          "Navigate to Devices > Configuration profiles and create a new profile.",
+          "Select 'Windows 10 and later' as the platform and 'Templates' > 'Custom' as the profile type.",
+          "Click 'Add' to create a new OMA-URI row.",
+          "Enter a clear Name, Description, the exact OMA-URI string, and specify the Data type (e.g., String, Integer).",
+          "Enter the corresponding Value for the OMA-URI setting and save the row.",
+          "Assign the Custom profile to the target user or device group."
+        ],
+        answer: "Create Profile -> Select Custom Template -> Add Row -> Enter OMA-URI/Type -> Enter Value -> Assign",
+        explanation: "When a native GUI toggle isn't available in Intune, administrators can push raw Configuration Service Provider (CSP) settings using OMA-URI (Open Mobile Alliance Uniform Resource Identifier). You must select the Custom template, explicitly define the URI path, data type, and value.",
+        moreDetails: "Typos in the OMA-URI string or selecting the wrong data type will result in a silent failure or 'Error' status on the client.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/custom-settings-windows-10"
+      },
+      {
+        id: 356,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the recommended phases for safely deploying a new Attack Surface Reduction (ASR) rule:",
+        options: [
+          "Create an ASR profile with the target rule set to 'Audit mode'.",
+          "Deploy the Audit profile to a representative group of pilot users.",
+          "Monitor the Microsoft Defender portal (ASR reports) to identify any legitimate line-of-business apps being flagged.",
+          "Create file path exclusions for the legitimate apps discovered during auditing.",
+          "Change the ASR rule from 'Audit mode' to 'Block mode' and deploy broadly."
+        ],
+        answer: "Set to Audit -> Deploy to Pilot -> Monitor Logs -> Create Exclusions -> Set to Block",
+        explanation: "ASR rules can be highly disruptive to legacy or custom software. Best practice dictates running in Audit mode first, which logs what *would* have been blocked. After analyzing the logs and exempting critical apps, you can safely flip the switch to Block mode.",
+        moreDetails: "Skipping the audit phase often results in significant helpdesk call volume.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/enable-attack-surface-reduction"
+      },
+      {
+        id: 357,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy a Proactive Remediation to automatically clear temporary files on Windows devices:",
+        options: [
+          "Write a PowerShell Detection script (e.g., checking if the Temp folder is > 1GB).",
+          "Write a PowerShell Remediation script (e.g., deleting files in the Temp folder).",
+          "In Endpoint Analytics, go to Proactive remediations and create a script package.",
+          "Upload both the Detection and Remediation scripts into the package.",
+          "Configure the execution schedule (e.g., run daily).",
+          "Assign the package to a device group."
+        ],
+        answer: "Write Detection -> Write Remediation -> Create Package -> Upload Scripts -> Set Schedule -> Assign",
+        explanation: "Proactive remediations require a strict two-script architecture. The Detection script runs first; if it exits with code 1 (issue found), the Remediation script triggers immediately to fix it. Both are uploaded to Endpoint Analytics and scheduled to run recursively.",
+        moreDetails: "If the Detection script returns code 0 (no issue), the remediation is skipped, saving CPU cycles.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/proactive-remediations"
+      },
+      {
+        id: 358,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to configure Endpoint Analytics to collect data from Intune-managed devices:",
+        options: [
+          "Ensure devices are licensed properly (e.g., Windows Enterprise E3).",
+          "Navigate to Reports > Endpoint analytics in the Intune admin center.",
+          "Click 'Start' to begin the onboarding process.",
+          "Configure the Intune data collection policy (Windows health monitoring profile) to enable 'Endpoint analytics'.",
+          "Assign the health monitoring profile to target devices.",
+          "Wait up to 24-48 hours for telemetry data to populate the portal dashboards."
+        ],
+        answer: "Check Licensing -> Navigate to Portal -> Start Onboarding -> Configure Policy -> Assign Policy -> Wait",
+        explanation: "Endpoint analytics is not fully active by default. You must onboard the tenant, then explicitly create and assign a Windows health monitoring profile to tell the Intune Management Extension on the clients to start uploading startup and app reliability metrics.",
+        moreDetails: "The data processing is not real-time; new devices may take a couple of days to appear in the reports.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/enroll-intune"
+      },
+      {
+        id: 359,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the onboarding process for Microsoft Defender for Endpoint (MDE) via Microsoft Intune:",
+        options: [
+          "Verify the Intune tenant is connected to the Microsoft Defender portal (Tenant Administration > Connectors).",
+          "Download the onboarding package from the Microsoft Defender portal (optional for specific flows).",
+          "Create an Endpoint Detection and Response (EDR) policy in Intune.",
+          "Select 'Auto from connector' as the onboarding package type within the policy.",
+          "Assign the EDR policy to Windows devices.",
+          "Verify the device appears as 'Onboarded' in the Defender device inventory."
+        ],
+        answer: "Verify Connector -> Download Package (optional) -> Create EDR Policy -> Select Auto -> Assign -> Verify Inventory",
+        explanation: "For Intune-managed devices, the simplest method is leveraging the native Service-to-Service connector. By creating an EDR policy and selecting 'Auto from connector', Intune automatically provisions the required registry keys and blobs to attach the device to your Defender workspace.",
+        moreDetails: "Without the EDR policy, the device will have Defender Antivirus running, but will not report telemetry to the Defender for Endpoint portal.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure"
+      },
+      {
+        id: 360,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to securely wipe a stolen laptop using the Intune portal:",
+        options: [
+          "Navigate to Devices > Windows.",
+          "Search for and select the stolen device.",
+          "Click the 'Wipe' remote action from the top menu.",
+          "Select the 'Wipe device, and continue to wipe even if device loses power' checkbox.",
+          "Confirm the action by clicking 'Wipe' again.",
+          "Monitor the device's status; the wipe will execute the next time the device connects to the internet."
+        ],
+        answer: "Navigate to Devices -> Select Device -> Click Wipe Action -> Select Force Wipe Checkbox -> Confirm -> Monitor",
+        explanation: "The 'Wipe' remote action is the nuclear option for stolen devices. Checking the box to continue even if the device loses power forces the firmware to resume the wipe process even if the thief attempts to interrupt it by holding the power button.",
+        moreDetails: "Once triggered, the action remains queued until the device connects to a network. If it never connects, the wipe cannot occur.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe"
+      }
+    ]
+  },
+  {
+    id: 995,
+    term: "Multi-Select Device Protection Scenarios",
+    category: "Manage, maintain, and protect devices",
+    questions: [
+      {
+        id: 361,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following Intune remote actions can be performed on a corporate-owned Windows 11 device without requiring the user to interact with the device? (Select THREE)",
+        options: [
+          "Autopilot Reset.",
+          "Remote Assistance (via Quick Assist).",
+          "Sync.",
+          "Restart.",
+          "BitLocker PIN recovery prompt."
+        ],
+        multiAnswers: [
+          "Autopilot Reset.",
+          "Sync.",
+          "Restart."
+        ],
+        explanation: "Intune allows silent, remote execution of <b>Sync</b>, <b>Restart</b>, and <b>Autopilot Reset</b> without any interaction from the end-user.",
+        moreDetails: "Remote Assistance requires the user to accept a prompt for privacy reasons. BitLocker PIN recovery is an action the user takes when locked out, not something pushed silently to their screen.",
+        otherOptions: "Quick Assist and BitLocker recovery require user presence and interaction.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/device-management"
+      },
+      {
+        id: 362,
+        type: "hard",
+        format: "multi-select",
+        question: "You are implementing Microsoft Defender for Endpoint (MDE) integration with Intune. Which of the following features require the 'Microsoft Defender for Endpoint' toggle to be enabled in Intune's tenant administration? (Select TWO)",
+        options: [
+          "Enforcing local Windows Firewall rules.",
+          "Using MDE machine risk scores in Intune Compliance Policies.",
+          "Deploying a Defender Antivirus scan schedule.",
+          "Syncing device security tasks from Defender Vulnerability Management to Intune.",
+          "Configuring Attack Surface Reduction (ASR) rules."
+        ],
+        multiAnswers: [
+          "Using MDE machine risk scores in Intune Compliance Policies.",
+          "Syncing device security tasks from Defender Vulnerability Management to Intune."
+        ],
+        explanation: "The Intune-MDE service-to-service connector specifically enables cross-platform communication like <b>evaluating machine risk scores for compliance</b> and <b>passing security tasks</b> (from Defender's TVM dashboard) into Intune as actionable items.",
+        moreDetails: "Basic Defender Antivirus, Firewall, and ASR policies are native OS capabilities managed by Intune directly; they do not require the MDE connector to function (though MDE is needed for reporting).",
+        otherOptions: "Firewall, AV, and ASR are native OS features managed independently of the MDE connector.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure"
+      },
+      {
+        id: 363,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following reports are natively available within Intune Endpoint Analytics? (Select THREE)",
+        options: [
+          "Startup performance.",
+          "Application reliability.",
+          "Network proxy bandwidth consumption.",
+          "Work from anywhere (Windows 11 readiness).",
+          "Detailed browser history for Microsoft Edge."
+        ],
+        multiAnswers: [
+          "Startup performance.",
+          "Application reliability.",
+          "Work from anywhere (Windows 11 readiness)."
+        ],
+        explanation: "Endpoint Analytics focuses on user experience metrics, specifically providing deep insights into <b>Startup performance</b> (boot times), <b>Application reliability</b> (crash rates), and <b>Work from anywhere</b> (hardware readiness for Windows 11).",
+        moreDetails: "It explicitly does not track user privacy data like browser history or granular network bandwidth per proxy.",
+        otherOptions: "Browser history and proxy bandwidth are not tracked by Endpoint Analytics.",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/overview"
+      },
+      {
+        id: 364,
+        type: "hard",
+        format: "multi-select",
+        question: "You need to silently enable BitLocker on Entra ID Joined devices via Intune. Which of the following conditions must be met to avoid prompting the standard user? (Select THREE)",
+        options: [
+          "The device must have a TPM 1.2 or 2.0 chip.",
+          "The policy must be set to 'Allow standard users to enable encryption during Autopilot'.",
+          "The policy must suppress third-party encryption warnings.",
+          "The device must have a local Administrator account active.",
+          "The user must manually run 'manage-bde.exe'."
+        ],
+        multiAnswers: [
+          "The device must have a TPM 1.2 or 2.0 chip.",
+          "The policy must be set to 'Allow standard users to enable encryption during Autopilot'.",
+          "The policy must suppress third-party encryption warnings."
+        ],
+        explanation: "Silent encryption requires a <b>TPM</b> to securely store the key, the policy must explicitly <b>allow standard users</b> to trigger the process (otherwise it fails citing lack of admin rights), and you must <b>suppress third-party warnings</b> so no UI popups halt the flow.",
+        moreDetails: "Standard users normally cannot enable BitLocker. Intune temporarily bypasses this restriction if the specific policy is configured.",
+        otherOptions: "Local admins and manage-bde.exe defeat the purpose of zero-touch silent encryption.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/encrypt-devices#silently-enable-bitlocker-on-devices"
+      },
+      {
+        id: 365,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following are valid scopes/profiles under Intune's Endpoint Security node? (Select THREE)",
+        options: [
+          "Antivirus.",
+          "Disk encryption.",
+          "Microsoft Office macros.",
+          "Attack surface reduction.",
+          "SharePoint external sharing."
+        ],
+        multiAnswers: [
+          "Antivirus.",
+          "Disk encryption.",
+          "Attack surface reduction."
+        ],
+        explanation: "The Endpoint Security node consolidates security-focused profiles, including <b>Antivirus</b>, <b>Disk encryption (BitLocker/FileVault)</b>, <b>Firewall</b>, <b>Endpoint detection and response</b>, and <b>Attack surface reduction</b>.",
+        moreDetails: "Office macros are typically managed via Settings Catalog or Administrative Templates. SharePoint sharing is managed in the SharePoint admin center.",
+        otherOptions: "Office macros and SharePoint sharing are not managed in the Endpoint Security node.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security"
+      },
+      {
+        id: 366,
+        type: "hard",
+        format: "multi-select",
+        question: "When troubleshooting an Intune device policy failure, which logs on the local Windows client are most useful for diagnosing Configuration Service Provider (CSP) errors? (Select TWO)",
+        options: [
+          "Event Viewer > Applications and Services > Microsoft > Windows > DeviceManagement-Enterprise-Diagnostics-Provider.",
+          "C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\\IntuneManagementExtension.log.",
+          "Event Viewer > Windows Logs > Security.",
+          "C:\\Windows\\System32\\winevt\\Logs\\Setup.evtx."
+        ],
+        multiAnswers: [
+          "Event Viewer > Applications and Services > Microsoft > Windows > DeviceManagement-Enterprise-Diagnostics-Provider.",
+          "C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\\IntuneManagementExtension.log."
+        ],
+        explanation: "The <b>DeviceManagement-Enterprise-Diagnostics-Provider</b> event log tracks native MDM sync and CSP application errors. The <b>IntuneManagementExtension.log</b> tracks Win32 app deployments and PowerShell scripts pushed by Intune.",
+        moreDetails: "These two locations contain 90% of the relevant client-side diagnostic data for Intune troubleshooting.",
+        otherOptions: "The standard Security and Setup logs do not track Intune MDM policy execution.",
+        link: "https://learn.microsoft.com/en-us/windows/client-management/mdm/diagnose-mdm-failures-in-windows-10"
+      },
+      {
+        id: 367,
+        type: "easy",
+        format: "multi-select",
+        question: "Which of the following actions will trigger an immediate compliance evaluation on a Windows device managed by Intune? (Select TWO)",
+        options: [
+          "Clicking 'Sync' from the device properties in the Intune portal.",
+          "Clicking 'Sync' from the Access work or school settings in the Windows Settings app.",
+          "Rebooting the device.",
+          "Changing the desktop wallpaper."
+        ],
+        multiAnswers: [
+          "Clicking 'Sync' from the device properties in the Intune portal.",
+          "Clicking 'Sync' from the Access work or school settings in the Windows Settings app."
+        ],
+        explanation: "Forcing a <b>Sync</b>—either from the cloud portal or locally on the device—prompts the device to check in with Intune, download new policies, and immediately upload its current compliance state.",
+        moreDetails: "Reboots and wallpaper changes do not force an immediate check-in, though a device typically checks in shortly after a reboot.",
+        otherOptions: "Reboots do not guarantee an immediate compliance sync. Wallpaper changes are entirely unrelated.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/user-help/sync-your-device-manually-windows"
+      }
+    ]
+  },
+  {
+    id: 999,
+    term: "Multi-Select (Select Two) Device Protection",
+    category: "Manage, maintain, and protect devices",
+    questions: [
+      {
+        id: 368,
+        type: "medium",
+        format: "multi-select",
+        question: "You are reviewing the 'Noncompliant devices' report in the Intune admin center. Which of the following states will cause a device to be marked as 'Not compliant'? (Select TWO)",
+        options: [
+          "The device fails to meet a setting defined in its assigned compliance policy.",
+          "The device has not checked in with Intune before its compliance validity period expires.",
+          "The user changed their desktop wallpaper.",
+          "The device is currently downloading a Windows Update."
+        ],
+        multiAnswers: [
+          "The device fails to meet a setting defined in its assigned compliance policy.",
+          "The device has not checked in with Intune before its compliance validity period expires."
+        ],
+        explanation: "A device becomes noncompliant if it violates a specific <b>compliance rule</b> (e.g., BitLocker disabled) or if it fails to sync with Intune within the tenant's defined <b>compliance validity period</b> (default is 30 days).",
+        moreDetails: "Downloading updates does not break compliance unless the OS version drops below a required threshold. Wallpaper changes are irrelevant.",
+        otherOptions: "Updating and changing wallpapers do not affect Intune compliance state.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/device-compliance-get-started"
+      },
+      {
+        id: 369,
+        type: "hard",
+        format: "multi-select",
+        question: "When creating a Configuration Profile in Intune using the Settings Catalog, which of the following features are supported by the Settings Catalog interface? (Select TWO)",
+        options: [
+          "Searching for specific keywords across all available Windows configuration service providers (CSPs).",
+          "Deploying complex PowerShell scripts directly within the catalog.",
+          "Viewing a dynamically generated summary of the configured settings before saving.",
+          "Packaging a Win32 application (.intunewin)."
+        ],
+        multiAnswers: [
+          "Searching for specific keywords across all available Windows configuration service providers (CSPs).",
+          "Viewing a dynamically generated summary of the configured settings before saving."
+        ],
+        explanation: "The Settings Catalog simplifies policy creation by allowing admins to <b>search across all CSPs</b> and select only the exact settings they want. It then provides a clean <b>summary view</b> of the chosen configuration.",
+        moreDetails: "The Settings Catalog does not execute PowerShell scripts (that is a separate policy type) or package Win32 apps.",
+        otherOptions: "PowerShell scripts and Win32 apps are entirely different workload types in Intune.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/settings-catalog"
+      },
+      {
+        id: 370,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following actions can a Local Administrator perform to temporarily pause BitLocker encryption on a Windows 11 device without fully decrypting the drive? (Select TWO)",
+        options: [
+          "Run 'Suspend-BitLocker' in an elevated PowerShell session.",
+          "Click 'Suspend protection' in the BitLocker Drive Encryption Control Panel applet.",
+          "Delete the TPM module from Device Manager.",
+          "Disable the Windows Firewall."
+        ],
+        multiAnswers: [
+          "Run 'Suspend-BitLocker' in an elevated PowerShell session.",
+          "Click 'Suspend protection' in the BitLocker Drive Encryption Control Panel applet."
+        ],
+        explanation: "BitLocker protection can be temporarily suspended (which leaves the drive encrypted but temporarily stores a clear key on the disk) using the <b>PowerShell cmdlet</b> or the <b>Control Panel UI</b>. This is often necessary when updating BIOS/firmware.",
+        moreDetails: "Deleting the TPM module will cause a BitLocker recovery event, not suspend it. The firewall is unrelated to disk encryption.",
+        otherOptions: "Messing with the TPM triggers recovery mode. Firewall is a network security component.",
+        link: "https://learn.microsoft.com/en-us/powershell/module/bitlocker/suspend-bitlocker"
+      }
+    ]
   }
 ];

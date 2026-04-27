@@ -870,5 +870,283 @@ export const domain2Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads#endpoint-protection"
       }
     ]
+  },
+  {
+    id: 992,
+    term: "Identity and Compliance Scenario Steps",
+    category: "Manage devices and tenant applications",
+    questions: [
+      {
+        id: 251,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy a Custom Compliance Policy in Microsoft Intune:",
+        options: [
+          "Write a PowerShell discovery script to evaluate the specific setting on the device.",
+          "Write a JSON file defining the rules and expected values for compliance.",
+          "Upload the PowerShell script to Intune (Compliance policies > Scripts).",
+          "Create a new custom Compliance Policy.",
+          "Select the uploaded discovery script and upload the JSON rules file.",
+          "Assign the policy to a device or user group."
+        ],
+        answer: "Write Script -> Write JSON -> Upload Script -> Create Policy -> Select Script & Upload JSON -> Assign",
+        explanation: "Custom compliance requires two components: the PowerShell script that runs on the device to discover the state, and the JSON file uploaded to the policy itself that tells Intune how to interpret the script's output.",
+        moreDetails: "The script must return a single line of JSON-formatted data. The Intune policy then compares that returned JSON against the JSON rules file provided during policy creation.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-custom-script"
+      },
+      {
+        id: 252,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps an administrator takes to block legacy authentication across the organization using Conditional Access:",
+        options: [
+          "Navigate to Microsoft Entra ID > Security > Conditional Access.",
+          "Create a new Conditional Access policy.",
+          "Target 'All users' (excluding emergency break-glass accounts).",
+          "Set the 'Client apps' condition to select 'Other clients' (Legacy authentication protocols).",
+          "Under 'Grant' controls, select 'Block access'.",
+          "Set the policy state to 'On' (or 'Report-only' for initial testing)."
+        ],
+        answer: "Navigate to CA -> Create Policy -> Target Users -> Set Condition (Legacy Clients) -> Set Block -> Turn On",
+        explanation: "Blocking legacy auth is a standard CA policy flow: identify the target (all users minus break-glass), set the condition (legacy clients like POP/IMAP), apply the control (Block), and enable the policy.",
+        moreDetails: "Always exclude at least one global administrator (break-glass account) to prevent accidentally locking out the entire tenant if a policy is misconfigured.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/block-legacy-authentication"
+      },
+      {
+        id: 253,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and enforce Windows LAPS (Local Administrator Password Solution) using Intune:",
+        options: [
+          "Enable Windows LAPS in the Microsoft Entra ID tenant settings (Device settings).",
+          "Create an Endpoint Security > Account protection policy in Intune.",
+          "Select the 'Local admin password solution (Windows LAPS)' profile type.",
+          "Configure the backup directory to 'Microsoft Entra ID' and set password complexity rules.",
+          "Assign the policy to the targeted Windows devices.",
+          "Monitor the device status and view passwords in the Entra ID device properties."
+        ],
+        answer: "Enable in Entra -> Create Account Protection Policy -> Select LAPS Profile -> Configure Settings -> Assign -> Monitor",
+        explanation: "LAPS requires tenant-level enablement first. Then, you use Intune's Endpoint Security (Account protection) to define the LAPS rules (complexity, rotation schedule, backup target) and deploy it to clients.",
+        moreDetails: "The clients will then automatically rotate the built-in local admin password and escrow it securely into Entra ID, where authorized admins can retrieve it.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-intune"
+      },
+      {
+        id: 254,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the typical device lifecycle phases when managing a corporately owned asset in Intune:",
+        options: [
+          "Enroll (Device is registered and management profile is installed via Autopilot/OOBE).",
+          "Configure (Wi-Fi, VPN, and security policies are pushed to the device).",
+          "Protect (Compliance policies evaluate health, Conditional Access secures apps).",
+          "Maintain (Proactive remediations run, apps are updated, remote assistance is provided).",
+          "Retire/Wipe (Device is wiped and unenrolled when it reaches end of life or is stolen)."
+        ],
+        answer: "Enroll -> Configure -> Protect -> Maintain -> Retire/Wipe",
+        explanation: "The MDM lifecycle begins with getting the device into the system (Enroll), setting it up (Configure), securing its data (Protect), keeping it healthy over time (Maintain), and finally disposing of it securely (Retire/Wipe).",
+        moreDetails: "Understanding this lifecycle is fundamental to endpoint administration and structuring how policies are organized.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/device-lifecycle"
+      },
+      {
+        id: 255,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy Windows Hello for Business using the Cloud Trust deployment model:",
+        options: [
+          "Ensure devices are Hybrid Entra ID joined or Entra ID joined.",
+          "Create a Kerberos Server object in the on-premises Active Directory.",
+          "Deploy the Entra Kerberos configuration to devices using Intune.",
+          "Enable Windows Hello for Business in the Intune enrollment profile or Identity Protection policy.",
+          "Users sign in with a password to trigger the WHfB enrollment prompt.",
+          "Users configure a PIN/Biometric and can instantly authenticate to on-premises resources via Cloud Trust."
+        ],
+        answer: "Ensure Join -> Create Kerberos Object -> Deploy Configuration -> Enable WHfB -> User Signs In -> Configure PIN",
+        explanation: "Cloud Trust simplifies WHfB deployment by removing the need for complex PKI or ADFS. You simply establish trust by creating a Kerberos Server object in on-prem AD, push the policy via Intune, and the user's PIN is instantly trusted for SSO to legacy local resources via the Entra ID primary refresh token.",
+        moreDetails: "If the Kerberos Server object is missing, users will be prompted for a password when trying to access on-prem file shares, even if their PIN is working for the desktop.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/deploy/"
+      },
+      {
+        id: 256,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the flow of a Conditional Access policy utilizing a Terms of Use (ToU) agreement:",
+        options: [
+          "Administrator uploads a PDF containing the Terms of Use to Entra ID.",
+          "Administrator creates a Conditional Access policy requiring the ToU for specific apps.",
+          "User attempts to access a protected application (e.g., SharePoint).",
+          "Entra ID interrupts the authentication flow and presents the PDF.",
+          "User reads and accepts the Terms of Use.",
+          "Entra ID grants the access token and the user enters the application."
+        ],
+        answer: "Upload PDF -> Create Policy -> User Attempts Access -> Entra ID Interrupts -> User Accepts -> Token Granted",
+        explanation: "Terms of Use are enforced via Conditional Access. The document must be uploaded first, then bound to a CA policy. When a user triggers that policy, the auth flow halts, forces acceptance, records the audit trail, and then proceeds.",
+        moreDetails: "If the user declines, access is blocked and an event is logged in the Entra ID sign-in logs.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/terms-of-use"
+      }
+    ]
+  },
+  {
+    id: 994,
+    term: "Multi-Select Identity Scenarios",
+    category: "Manage identity and compliance",
+    questions: [
+      {
+        id: 257,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following conditions can be evaluated by a Microsoft Entra ID Conditional Access policy? (Select THREE)",
+        options: [
+          "The user's group membership or role.",
+          "The user's typing speed and mouse movements.",
+          "The device's compliance status in Intune.",
+          "The user's sign-in risk level as determined by Identity Protection.",
+          "The battery level of the user's mobile device."
+        ],
+        multiAnswers: [
+          "The user's group membership or role.",
+          "The device's compliance status in Intune.",
+          "The user's sign-in risk level as determined by Identity Protection."
+        ],
+        explanation: "Conditional Access uses multiple signals to make access decisions. Common conditions include <b>User/Group</b>, <b>Device Compliance</b>, <b>Location (IP)</b>, <b>Client Apps</b>, and <b>Risk Level</b>.",
+        moreDetails: "Behavioral biometrics like typing speed or hardware stats like battery level are not native Conditional Access conditions.",
+        otherOptions: "Typing speed and battery level are not Conditional Access signals.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-conditions"
+      },
+      {
+        id: 258,
+        type: "hard",
+        format: "multi-select",
+        question: "You need to configure an Intune Compliance Policy for Windows 11. Which of the following settings are natively available in the built-in compliance profile template? (Select THREE)",
+        options: [
+          "Require BitLocker to be enabled.",
+          "Require the device to have a specific registry key value.",
+          "Require a minimum OS version.",
+          "Require a specific line-of-business app to be installed.",
+          "Require Microsoft Defender Antivirus to be active and up to date."
+        ],
+        multiAnswers: [
+          "Require BitLocker to be enabled.",
+          "Require a minimum OS version.",
+          "Require Microsoft Defender Antivirus to be active and up to date."
+        ],
+        explanation: "The native Windows compliance template includes settings for <b>BitLocker</b>, <b>OS version thresholds</b>, <b>Password requirements</b>, and <b>Defender Antivirus</b> status.",
+        moreDetails: "Checking for a specific registry key or application requires a Custom Compliance script (PowerShell + JSON), not the native template.",
+        otherOptions: "Registry keys and specific LOB apps require custom compliance scripts.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-policy-create-windows"
+      },
+      {
+        id: 259,
+        type: "medium",
+        format: "multi-select",
+        question: "When configuring Local Administrator Password Solution (LAPS) in Intune, which of the following are valid password backup locations? (Select TWO)",
+        options: [
+          "Microsoft Entra ID.",
+          "A local CSV file on the C: drive.",
+          "On-premises Active Directory.",
+          "An external USB drive."
+        ],
+        multiAnswers: [
+          "Microsoft Entra ID.",
+          "On-premises Active Directory."
+        ],
+        explanation: "Windows LAPS natively supports backing up the local administrator password securely to either <b>Microsoft Entra ID</b> (for cloud/hybrid devices) or <b>On-premises Active Directory</b> (for legacy domains).",
+        moreDetails: "You configure the backup directory within the Intune Endpoint Security > Account Protection policy.",
+        otherOptions: "CSV files and USB drives are entirely unsecure and unsupported natively.",
+        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-intune"
+      },
+      {
+        id: 260,
+        type: "hard",
+        format: "multi-select",
+        question: "Which of the following actions can a Microsoft Entra ID 'Access Review' perform automatically when the review period ends? (Select TWO)",
+        options: [
+          "Remove access for users who were denied by the reviewer.",
+          "Delete the user account from Entra ID permanently.",
+          "Remove access for users who did not respond (if configured).",
+          "Format the user's Intune-managed device."
+        ],
+        multiAnswers: [
+          "Remove access for users who were denied by the reviewer.",
+          "Remove access for users who did not respond (if configured)."
+        ],
+        explanation: "Access Reviews help manage group memberships and enterprise app assignments. If auto-apply is enabled, the system will automatically <b>remove access for denied users</b> and can also <b>remove access for non-responders</b>.",
+        moreDetails: "Access Reviews govern permissions and access; they do not delete user identities or wipe hardware.",
+        otherOptions: "Deleting users or wiping devices are not actions performed by Access Reviews.",
+        link: "https://learn.microsoft.com/en-us/entra/id-governance/access-reviews-overview"
+      }
+    ]
+  },
+  {
+    id: 998,
+    term: "Multi-Select (Select Two) Identity Scenarios",
+    category: "Manage identity and compliance",
+    questions: [
+      {
+        id: 261,
+        type: "medium",
+        format: "multi-select",
+        question: "When configuring a Microsoft Entra ID Device Restriction policy in Intune, which of the following password requirements can be enforced natively? (Select TWO)",
+        options: [
+          "Minimum password length.",
+          "Preventing the use of the 100,000 most common passwords (banned passwords list).",
+          "Password expiration (maximum age in days).",
+          "Forcing the user to include an emoji in their password."
+        ],
+        multiAnswers: [
+          "Minimum password length.",
+          "Password expiration (maximum age in days)."
+        ],
+        explanation: "Intune Device Restriction policies for Windows natively allow administrators to enforce standard metrics such as <b>Minimum password length</b>, <b>Password complexity</b>, and <b>Password expiration (maximum age)</b>.",
+        moreDetails: "Entra ID Password Protection (which bans common passwords) is configured at the tenant level in the Entra portal, not natively inside an Intune Device Restriction profile.",
+        otherOptions: "Banned password lists are managed in Entra ID. Emojis cannot be enforced.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-restrictions-windows-10"
+      },
+      {
+        id: 262,
+        type: "hard",
+        format: "multi-select",
+        question: "Which of the following scenarios represent a valid use case for implementing Microsoft Entra ID Global Secure Access (Internet Access/Private Access)? (Select TWO)",
+        options: [
+          "Replacing a traditional legacy VPN to securely access an on-premises web application.",
+          "Filtering outbound internet traffic to block malicious or non-compliant web categories.",
+          "Imaging bare-metal laptops over the internet via PXE boot.",
+          "Providing a local desktop GUI to manage Hyper-V virtual machines."
+        ],
+        multiAnswers: [
+          "Replacing a traditional legacy VPN to securely access an on-premises web application.",
+          "Filtering outbound internet traffic to block malicious or non-compliant web categories."
+        ],
+        explanation: "Global Secure Access provides ZTNA (Zero Trust Network Access). <b>Private Access</b> replaces legacy VPNs for accessing on-prem resources. <b>Internet Access</b> acts as a Secure Web Gateway (SWG) to filter and protect outbound traffic.",
+        moreDetails: "It does not provide hardware imaging over the internet, nor is it a virtualization management tool.",
+        otherOptions: "Imaging requires MDT/Autopilot. Hyper-V is managed via Hyper-V Manager.",
+        link: "https://learn.microsoft.com/en-us/entra/global-secure-access/overview-what-is-global-secure-access"
+      },
+      {
+        id: 263,
+        type: "medium",
+        format: "multi-select",
+        question: "You want to enforce Multi-Factor Authentication (MFA) using Conditional Access, but you want to minimize MFA prompts for users working from the corporate office. Which of the following conditions can you configure to achieve this? (Select TWO)",
+        options: [
+          "Configure a 'Named location' for the corporate public IP addresses and exclude it from the MFA policy.",
+          "Set the policy to only require MFA if the user's sign-in risk is 'High'.",
+          "Configure the policy to block access if the user is on a mobile device.",
+          "Require the user to log in via a wired Ethernet connection."
+        ],
+        multiAnswers: [
+          "Configure a 'Named location' for the corporate public IP addresses and exclude it from the MFA policy.",
+          "Set the policy to only require MFA if the user's sign-in risk is 'High'."
+        ],
+        explanation: "To reduce MFA friction, you can use <b>Named locations</b> to trust the corporate network IP, or leverage Identity Protection to only require MFA when the sign-in is deemed <b>High risk</b> (e.g., impossible travel).",
+        moreDetails: "Conditional access cannot explicitly detect wired vs wireless connections. Blocking mobile devices entirely doesn't solve the MFA prompt frequency issue; it just blocks the devices.",
+        otherOptions: "Wired vs wireless is not a CA condition. Blocking mobile devices is not a solution to MFA fatigue.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/location-condition"
+      }
+    ]
   }
 ];

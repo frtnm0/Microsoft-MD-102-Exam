@@ -105,7 +105,7 @@ function App() {
     if (domain === 4) dataset = domain4Dataset;
     
     const allQuestions = dataset.flatMap(term => term.questions).map(q => q.id).sort(() => Math.random() - 0.5);
-    return allQuestions.slice(0, 50);
+    return allQuestions;
   };
 
   const handleSelectQuiz = (domain: number) => {

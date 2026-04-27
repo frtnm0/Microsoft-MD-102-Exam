@@ -1,9 +1,11 @@
 export interface Question {
   id: number;
   type: 'easy' | 'medium' | 'hard';
+  format?: 'multiple-choice' | 'order-steps' | 'multi-select';
   question: string;
   options: string[];
-  answer: string;
+  answer?: string;
+  multiAnswers?: string[];
   explanation: string;
   moreDetails: string;
   otherOptions: string;
@@ -885,6 +887,319 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "It is the primary tool used by endpoint administrators to verify if a Hybrid join succeeded or why an Autopilot device failed to acquire its user token.",
         otherOptions: "ipconfig shows network details. gpresult shows GPOs. certutil shows certificates.",
         link: "https://learn.microsoft.com/en-us/entra/identity/devices/troubleshoot-device-cmd"
+      }
+    ]
+  },
+  {
+    id: 991,
+    term: "Deployment Scenario Steps",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 151,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy a custom Windows image using the Microsoft Deployment Toolkit (MDT) from scratch:",
+        options: [
+          "Install the Windows ADK and the WinPE add-on.",
+          "Install the Microsoft Deployment Toolkit (MDT).",
+          "Create a new Deployment Share.",
+          "Import the operating system files (Windows ISO).",
+          "Create a new Task Sequence.",
+          "Update the Deployment Share to generate boot images."
+        ],
+        answer: "Install ADK -> Install MDT -> Create Share -> Import OS -> Create Task Sequence -> Update Share",
+        explanation: "To use MDT, you first need the prerequisite ADK and WinPE add-on. Then you install MDT, create the Deployment Share, import the OS, configure the Task Sequence, and finally update the share to generate the bootable WIM/ISO.",
+        moreDetails: "Updating the deployment share is the final crucial step because it compiles the Bootstrap.ini and CustomSettings.ini into the WinPE boot image.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/prepare-for-windows-deployment-with-mdt"
+      },
+      {
+        id: 152,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to perform a User State Migration Tool (USMT) hard-link migration during a PC refresh:",
+        options: [
+          "Run ScanState.exe with the /hardlink flag to capture user data.",
+          "Wipe the OS partition (leaving the migration store intact).",
+          "Install the new Windows operating system.",
+          "Run LoadState.exe with the /hardlink flag to restore user data."
+        ],
+        answer: "ScanState -> Wipe OS -> Install New OS -> LoadState",
+        explanation: "For a PC refresh using hard-links, you first run ScanState to create the hard-links, then carefully wipe only the OS (not the whole drive), install the new OS, and finally run LoadState.",
+        moreDetails: "Hard-link migration avoids physically copying files, saving vast amounts of time and disk space.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-hard-link-migration-store"
+      },
+      {
+        id: 153,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure a Windows Autopilot deployment profile in Microsoft Intune:",
+        options: [
+          "Extract the hardware hash from the Windows client.",
+          "Upload a CSV file containing the hardware hash into Intune.",
+          "Create a dynamic or assigned Entra ID group for Autopilot devices.",
+          "Create a Windows Autopilot deployment profile.",
+          "Assign the deployment profile to the Entra ID device group."
+        ],
+        answer: "Extract hash -> Upload CSV -> Create Group -> Create Profile -> Assign Profile",
+        explanation: "First, you must obtain and register the device identity (hash). Then you group those devices. After grouping, you create the deployment profile and assign it to that group.",
+        moreDetails: "OEMs can automate the hardware hash upload, but for manual enrollment, the Get-WindowsAutopilotInfo PowerShell script is used.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/autopilot/profiles"
+      },
+      {
+        id: 154,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the phases of the Autopilot Enrollment Status Page (ESP):",
+        options: [
+          "Device preparation (joining Entra ID, enrolling in Intune).",
+          "Device setup (installing security policies, certs, and device-targeted apps).",
+          "User sign-in.",
+          "Account setup (installing user-targeted apps and policies)."
+        ],
+        answer: "Device preparation -> Device setup -> User sign-in -> Account setup",
+        explanation: "The ESP first secures the physical hardware during 'Device preparation' and 'Device setup'. Then, the user provides their credentials, moving into 'Account setup' where user-specific settings apply.",
+        moreDetails: "A failure in the Device setup phase typically blocks the user from ever seeing the desktop if the ESP is configured to block.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
+      },
+      {
+        id: 155,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to perform a Windows Autopilot for pre-provisioned deployment (formerly White Glove):",
+        options: [
+          "IT Admin creates an Autopilot profile with 'Allow pre-provisioned deployment' set to Yes and assigns it.",
+          "Technician boots the new device and presses the Windows key five times at the OOBE screen.",
+          "Technician selects 'Windows Autopilot provisioning' and clicks 'Provision'.",
+          "The device downloads and installs device-targeted apps and policies, then displays a green success screen.",
+          "Technician clicks 'Reseal' and powers down the device to ship it to the user.",
+          "The user receives the device, powers it on, connects to Wi-Fi, and signs in to complete the user phase."
+        ],
+        answer: "Create Profile -> Press Win 5x -> Select Provision -> Device Setup -> Reseal -> User Sign-in",
+        explanation: "Pre-provisioning shifts the heavy lifting of installing massive apps to the OEM or IT partner. The technician enters the specialized flow by pressing the Windows key 5 times, completing the device phase, and resealing it so the end-user only has to do a quick sign-in.",
+        moreDetails: "This process requires TPM 2.0 and network connectivity. If the device phase fails, a red screen appears with diagnostic logs.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/autopilot/pre-provision"
+      },
+      {
+        id: 156,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to capture and restore user data during a PC replacement using the User State Migration Tool (USMT):",
+        options: [
+          "Run ScanState.exe on the old PC to collect user profiles, settings, and files.",
+          "Store the compressed migration store (.mig file) on a secure network share or external drive.",
+          "Install the fresh Windows OS on the new PC.",
+          "Join the new PC to the domain/Entra ID.",
+          "Run LoadState.exe on the new PC to apply the collected data to the target system."
+        ],
+        answer: "Run ScanState -> Store Data -> Install OS -> Join Domain -> Run LoadState",
+        explanation: "USMT operates in two primary phases. `ScanState` gathers the old data and puts it in a temporary location. Then, after the new OS is prepared and networked, `LoadState` unpacks the data onto the new machine.",
+        moreDetails: "USMT is often heavily automated within a Microsoft Deployment Toolkit (MDT) or Configuration Manager task sequence.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-overview"
+      },
+      {
+        id: 157,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to enroll a tenant into Windows Autopatch:",
+        options: [
+          "Ensure licensing prerequisites (e.g., Windows 10/11 Enterprise E3/E5) are met.",
+          "Run the Autopatch Readiness Assessment tool in the Intune admin center.",
+          "Provide Global Administrator consent to grant Autopatch service permissions.",
+          "Review the automatically created 'Windows Autopatch Device Registration' Entra ID group.",
+          "Add target devices to the registration group so they are assigned to deployment rings."
+        ],
+        answer: "Check Licensing -> Run Readiness Assessment -> Grant Consent -> Review Registration Group -> Add Target Devices",
+        explanation: "Windows Autopatch is a managed service. You must first ensure your tenant is technically and financially ready. Once you grant Microsoft the necessary permissions, they provision the backend policies and groups. You then simply add devices to the master group, and Autopatch handles the ring distribution.",
+        moreDetails: "Autopatch will automatically sort devices into Test, First, Fast, and Broad rings.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-autopatch/operate/windows-autopatch-tenant-enrollment"
+      }
+    ]
+  },
+  {
+    id: 993,
+    term: "Multi-Select Deployment Scenarios",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 158,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following are valid methods to extract the hardware hash from a Windows device for Windows Autopilot enrollment? (Select TWO)",
+        options: [
+          "Running the Get-WindowsAutopilotInfo PowerShell script.",
+          "Exporting the hash from the BIOS/UEFI firmware menu.",
+          "Using the Microsoft Endpoint Configuration Manager (MECM) Autopilot hardware inventory task.",
+          "Typing 'hash.exe' in the Command Prompt."
+        ],
+        multiAnswers: [
+          "Running the Get-WindowsAutopilotInfo PowerShell script.",
+          "Using the Microsoft Endpoint Configuration Manager (MECM) Autopilot hardware inventory task."
+        ],
+        explanation: "The hardware hash (Device ID) can be retrieved manually using the <b>Get-WindowsAutopilotInfo</b> script or harvested at scale using <b>Configuration Manager</b> co-management inventory.",
+        moreDetails: "OEMs can also directly upload the hardware hash during the purchase process.",
+        otherOptions: "The BIOS/UEFI does not store the Autopilot hash format. 'hash.exe' is not a valid Windows command.",
+        link: "https://learn.microsoft.com/en-us/autopilot/add-devices"
+      },
+      {
+        id: 159,
+        type: "hard",
+        format: "multi-select",
+        question: "You are designing a Windows Autopilot Self-Deploying mode scenario. Which of the following requirements MUST be met for this specific mode to succeed? (Select THREE)",
+        options: [
+          "The device must have a physical TPM 2.0 chip that supports device attestation.",
+          "The device must be connected to an Ethernet (wired) network.",
+          "The deployment profile must be configured for Entra ID Join (not Hybrid).",
+          "The user must enter their Entra ID password.",
+          "The device must be running a Pro, Enterprise, or Education edition of Windows."
+        ],
+        multiAnswers: [
+          "The device must have a physical TPM 2.0 chip that supports device attestation.",
+          "The deployment profile must be configured for Entra ID Join (not Hybrid).",
+          "The device must be running a Pro, Enterprise, or Education edition of Windows."
+        ],
+        explanation: "Self-Deploying mode securely provisions a device without user credentials. It requires <b>TPM 2.0 attestation</b> to authenticate the hardware to Entra ID, must be <b>Entra ID Joined</b> only, and requires a supported business edition of Windows.",
+        moreDetails: "Because it lacks user authentication, it relies entirely on the TPM's cryptographic proof. It does not require a wired connection if Wi-Fi profiles are pushed or selected at OOBE, and users explicitly DO NOT enter passwords.",
+        otherOptions: "Wi-Fi is supported during OOBE. Passwords are not used in self-deploying mode.",
+        link: "https://learn.microsoft.com/en-us/autopilot/self-deploying"
+      },
+      {
+        id: 160,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following scenarios are supported use cases for the Microsoft Deployment Toolkit (MDT)? (Select TWO)",
+        options: [
+          "Creating a custom Windows 11 reference image (golden image).",
+          "Deploying Windows OS to bare-metal servers across the network via PXE boot.",
+          "Managing mobile devices like iOS and Android.",
+          "Pushing cloud-based Conditional Access policies."
+        ],
+        multiAnswers: [
+          "Creating a custom Windows 11 reference image (golden image).",
+          "Deploying Windows OS to bare-metal servers across the network via PXE boot."
+        ],
+        explanation: "MDT is a traditional imaging tool used to create <b>reference images</b> and deploy Windows via <b>PXE/WDS</b> to bare-metal hardware.",
+        moreDetails: "While Autopilot is the modern cloud approach, MDT is still supported for local, heavy-imaging scenarios.",
+        otherOptions: "MDT cannot manage mobile devices or cloud policies; those are Intune and Entra ID functions.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/get-started-with-the-microsoft-deployment-toolkit"
+      },
+      {
+        id: 161,
+        type: "easy",
+        format: "multi-select",
+        question: "When configuring a Windows Autopilot deployment profile, which of the following Out-of-Box Experience (OOBE) settings can you choose to HIDE from the end-user? (Select THREE)",
+        options: [
+          "Privacy settings.",
+          "End User License Agreement (EULA).",
+          "Account options (preventing local admin creation).",
+          "The Wi-Fi connection screen (if not plugged into Ethernet).",
+          "The 'Welcome to Windows' voiceover by Cortana."
+        ],
+        multiAnswers: [
+          "Privacy settings.",
+          "End User License Agreement (EULA).",
+          "Account options (preventing local admin creation)."
+        ],
+        explanation: "Autopilot profiles allow admins to streamline OOBE by hiding the <b>Privacy settings</b>, <b>EULA</b>, and controlling <b>Account type</b> (Standard vs Admin).",
+        moreDetails: "Cortana voiceover was disabled by default in newer Windows versions anyway. You cannot hide the Wi-Fi screen if the device has no internet connection, as internet is strictly required to download the Autopilot profile.",
+        otherOptions: "Wi-Fi cannot be hidden if needed for connection. Cortana voiceover is a deprecated/irrelevant setting.",
+        link: "https://learn.microsoft.com/en-us/autopilot/profiles"
+      },
+      {
+        id: 162,
+        type: "hard",
+        format: "multi-select",
+        question: "You need to migrate 500 devices from Windows 10 to Windows 11 using an In-Place Upgrade. Which tools can natively execute this upgrade at scale? (Select THREE)",
+        options: [
+          "Microsoft Intune (Feature update profiles).",
+          "Microsoft Endpoint Configuration Manager (Task Sequences).",
+          "Windows Autopatch.",
+          "User State Migration Tool (USMT).",
+          "Windows Autopilot."
+        ],
+        multiAnswers: [
+          "Microsoft Intune (Feature update profiles).",
+          "Microsoft Endpoint Configuration Manager (Task Sequences).",
+          "Windows Autopatch."
+        ],
+        explanation: "In-Place Upgrades can be driven by <b>Intune Feature Updates</b>, managed automatically via <b>Windows Autopatch</b>, or executed locally using <b>ConfigMgr Task Sequences</b>.",
+        moreDetails: "Autopilot is for provisioning a clean OS, not performing an in-place upgrade. USMT migrates data between separate OS installs; it does not perform the OS upgrade itself.",
+        otherOptions: "USMT moves data. Autopilot provisions new/reset devices.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-11"
+      }
+    ]
+  },
+  {
+    id: 997,
+    term: "Multi-Select (Select Two) Deployment Scenarios",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 163,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following built-in Windows 11 editions natively support Windows Autopilot enrollment? (Select TWO)",
+        options: [
+          "Windows 11 Home",
+          "Windows 11 Pro",
+          "Windows 11 Enterprise",
+          "Windows 11 IoT Core"
+        ],
+        multiAnswers: [
+          "Windows 11 Pro",
+          "Windows 11 Enterprise"
+        ],
+        explanation: "Windows Autopilot requires a business-class edition of Windows to perform Azure AD Join and MDM enrollment. <b>Windows Pro</b> and <b>Enterprise</b> (including Education/Pro for Workstations) are supported.",
+        moreDetails: "Windows Home does not support Azure AD Join or Autopilot. IoT Core is also unsupported.",
+        otherOptions: "Home and IoT Core editions lack the necessary MDM and Entra ID joining capabilities.",
+        link: "https://learn.microsoft.com/en-us/autopilot/software-requirements"
+      },
+      {
+        id: 164,
+        type: "hard",
+        format: "multi-select",
+        question: "When using the Enrollment Status Page (ESP) in Intune, which of the following scenarios will cause the ESP to fail and block the user from reaching the desktop? (Select TWO)",
+        options: [
+          "A required Win32 app assigned to the device fails to install.",
+          "An 'Available' app fails to install.",
+          "The device fails to acquire an Entra ID Primary Refresh Token (PRT).",
+          "A required Wi-Fi profile assigned to the user fails to apply during the Device setup phase."
+        ],
+        multiAnswers: [
+          "A required Win32 app assigned to the device fails to install.",
+          "The device fails to acquire an Entra ID Primary Refresh Token (PRT)."
+        ],
+        explanation: "The ESP is designed to block access if critical setup steps fail. If a <b>Required</b> app fails, or the device fails the underlying <b>Entra ID device authentication (PRT acquisition)</b>, the ESP will halt and display an error.",
+        moreDetails: "User-targeted policies (like a Wi-Fi profile for the user) failing during the Device phase won't block the device phase. Available apps are not tracked by ESP.",
+        otherOptions: "Available apps are ignored by ESP. User-targeted profiles don't block the device phase.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
+      },
+      {
+        id: 165,
+        type: "medium",
+        format: "multi-select",
+        question: "Which of the following represent valid deployment rings you should configure when managing Windows Update for Business (WUfB) via Intune? (Select TWO)",
+        options: [
+          "A 'Pilot' or 'Test' ring for IT staff to receive updates immediately (0-day deferral).",
+          "A 'Broad' ring for general users to receive updates after a deferral period (e.g., 7-14 days).",
+          "An 'Opt-out' ring where devices never receive quality updates.",
+          "A 'Pre-release' ring for installing Windows Insider Dev Channel builds on production servers."
+        ],
+        multiAnswers: [
+          "A 'Pilot' or 'Test' ring for IT staff to receive updates immediately (0-day deferral).",
+          "A 'Broad' ring for general users to receive updates after a deferral period (e.g., 7-14 days)."
+        ],
+        explanation: "A standard update strategy utilizes multiple rings to minimize risk. A <b>Pilot ring</b> with zero deferral validates the update, while a <b>Broad ring</b> defers the update for the general population until confidence is established.",
+        moreDetails: "Opting out entirely violates security baselines. Production servers should not run Insider builds.",
+        otherOptions: "Opting out of updates is insecure. Insider builds are not meant for production servers.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-deployment-rings-windows-10-updates"
       }
     ]
   }

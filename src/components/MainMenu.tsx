@@ -1,10 +1,19 @@
 import { BookOpen } from 'lucide-react';
+import { domain1Dataset } from '../data/domain-1-dataset';
+import { domain2Dataset } from '../data/domain-2-dataset';
+import { domain3Dataset } from '../data/domain-3-dataset';
+import { domain4Dataset } from '../data/domain-4-dataset';
 
 interface MainMenuProps {
   onSelectQuiz: (domain: number) => void;
 }
 
 export function MainMenu({ onSelectQuiz }: MainMenuProps) {
+  const d1Count = domain1Dataset.flatMap(t => t.questions).length;
+  const d2Count = domain2Dataset.flatMap(t => t.questions).length;
+  const d3Count = domain3Dataset.flatMap(t => t.questions).length;
+  const d4Count = domain4Dataset.flatMap(t => t.questions).length;
+
   return (
     <div className="max-w-4xl mx-auto w-full p-4 md:p-8 animate-in fade-in zoom-in-95 duration-500">
       <div className="mb-10 text-center">
@@ -31,7 +40,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Deploy Windows client
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>50 Questions</span>
+            <span>{d1Count} Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -53,7 +62,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage identity and compliance
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>50 Questions</span>
+            <span>{d2Count} Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -74,7 +83,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage, maintain, and protect devices
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>50 Questions</span>
+            <span>{d3Count} Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
@@ -96,7 +105,7 @@ export function MainMenu({ onSelectQuiz }: MainMenuProps) {
             Manage applications
           </p>
           <div className="mt-6 w-full flex items-center justify-between text-sm font-medium text-primary">
-            <span>50 Questions</span>
+            <span>{d4Count} Questions</span>
             <span className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
               Start Quiz &rarr;
             </span>
