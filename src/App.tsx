@@ -83,6 +83,11 @@ function App() {
     return () => clearInterval(timer);
   }, [view]);
 
+  // Scroll to top on view change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
+
   const generateRandomOrder = (domain: number) => {
     if (domain === 5) {
       // MD-102 exam weightings (approximate):

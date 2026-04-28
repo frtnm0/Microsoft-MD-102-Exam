@@ -877,6 +877,25 @@ export const domain4Dataset: TermData[] = [
     category: "Manage applications and updates",
     questions: [
       {
+        id: 451,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to package and deploy a custom Win32 application (.exe) using Microsoft Intune:",
+        options: [
+          "Organize the installer (.exe) and any dependent files into a single source folder.",
+          "Run the Microsoft Win32 Content Prep Tool to convert the source folder into an .intunewin file.",
+          "Upload the .intunewin file to the Intune admin center under 'Apps > Windows > Add'.",
+          "Configure the Install and Uninstall commands (e.g., app.exe /quiet).",
+          "Define the Detection Rules (e.g., checking for a specific registry key or file path).",
+          "Assign the app as Required or Available to a user/device group."
+        ],
+        answer: "Organize files -> Run Prep Tool -> Upload to Intune -> Configure Commands -> Define Detection Rules -> Assign",
+        explanation: "Deploying a Win32 app requires strict packaging. First, gather the files, use the Prep Tool to encrypt/compress them into an .intunewin package, upload it to the cloud, explicitly define how it installs and uninstalls via CLI, teach Intune how to detect its presence, and finally deploy it.",
+        moreDetails: "If the detection rule is incorrect, the deployment will fail or loop continuously.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add"
+      },
+      {
         id: 452,
         type: "medium",
         format: "order-steps",
@@ -913,6 +932,42 @@ export const domain4Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization-reference#group-id"
       },
       {
+        id: 454,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the typical flow of App Protection Policy (MAM-WE) enforcement when a user attempts to copy corporate data on a personal device:",
+        options: [
+          "User opens the managed Outlook app and authenticates.",
+          "The App Protection Policy downloads from Intune and applies to the application wrapper.",
+          "User opens an email containing sensitive corporate text.",
+          "User attempts to 'Copy' the text and 'Paste' it into a personal, unmanaged notes app.",
+          "The MAM policy intercepts the clipboard request and blocks the 'Paste' action."
+        ],
+        answer: "Authenticate -> Policy Applies -> Open Email -> Attempt Copy/Paste -> MAM Intercepts and Blocks",
+        explanation: "MAM operates at the application layer. Once the user authenticates, the app secures itself based on Intune rules. When the user attempts an unauthorized data transfer, the enlightened app blocks the OS-level clipboard action.",
+        moreDetails: "This prevents data leakage without Intune needing to manage the rest of the user's personal device.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
+      },
+      {
+        id: 455,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and deploy a Microsoft Store app (new) in Intune with a required system context:",
+        options: [
+          "Navigate to Apps > Windows > Add and select 'Microsoft Store app (new)'.",
+          "Search the Store repository for the target application and select it.",
+          "In the App information tab, set the 'Install behavior' to 'System'.",
+          "Configure any required assignments for target device groups.",
+          "The Intune Management Extension uses Windows Package Manager to download and install the app to the Program Files directory for all users."
+        ],
+        answer: "Select Store App -> Search Store -> Set Install Behavior to System -> Assign to Devices -> Winget Installs Globally",
+        explanation: "Deploying a new Store app (via winget integration) requires you to select the specific install behavior. 'System' means it installs for all users on the device, as opposed to 'User' which only installs into the active user's AppData profile.",
+        moreDetails: "Not all Store apps support 'System' context; some are designed explicitly as per-user applications.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft"
+      },
+      {
         id: 456,
         type: "medium",
         format: "order-steps",
@@ -929,6 +984,25 @@ export const domain4Dataset: TermData[] = [
         moreDetails: "This drastically reduces the packaging overhead for common third-party apps like Adobe Reader or Zoom.",
         otherOptions: "N/A",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft#update-store-apps"
+      },
+      {
+        id: 457,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure an App Protection Policy (MAM) to securely handle web links opened from within a managed Android application:",
+        options: [
+          "Navigate to Apps > App protection policies and create a new Android policy.",
+          "Target specific managed apps like Outlook and Teams.",
+          "Under Data Transfer > 'Restrict web content transfer with other apps', select 'Policy managed browsers'.",
+          "Ensure the Microsoft Edge app is assigned as an 'Available' or 'Required' app to the user.",
+          "When the user clicks a link in Outlook, they are forced to open it in Microsoft Edge.",
+          "Edge applies the same MAM policies, preventing the user from copying the webpage text to personal apps."
+        ],
+        answer: "Create Policy -> Target Outlook/Teams -> Restrict Web Content -> Ensure Edge is Deployed -> Link Opens in Edge -> Edge Protects Data",
+        explanation: "To prevent users from opening a sensitive corporate SharePoint link in their personal Chrome browser (where they could copy/paste data freely), you must force all web links from managed apps to open strictly in a MAM-enlightened browser like Microsoft Edge.",
+        moreDetails: "This extends the secure container from the email client directly into the web browsing session.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-android#data-transfer"
       }
     ]
   },

@@ -158,7 +158,7 @@ export function QuizCard({
 
   // Scroll to top automatically when question index changes or on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
   }, [currentIndex]);
 
   const handleDragEnd = (event: any) => {

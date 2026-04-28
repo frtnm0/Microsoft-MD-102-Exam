@@ -915,6 +915,23 @@ export const domain1Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/prepare-for-windows-deployment-with-mdt"
       },
       {
+        id: 152,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to perform a User State Migration Tool (USMT) hard-link migration during a PC refresh:",
+        options: [
+          "Run ScanState.exe with the /hardlink flag to capture user data.",
+          "Wipe the OS partition (leaving the migration store intact).",
+          "Install the new Windows operating system.",
+          "Run LoadState.exe with the /hardlink flag to restore user data."
+        ],
+        answer: "ScanState -> Wipe OS -> Install New OS -> LoadState",
+        explanation: "For a PC refresh using hard-links, you first run ScanState to create the hard-links, then carefully wipe only the OS (not the whole drive), install the new OS, and finally run LoadState.",
+        moreDetails: "Hard-link migration avoids physically copying files, saving vast amounts of time and disk space.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-hard-link-migration-store"
+      },
+      {
         id: 153,
         type: "hard",
         format: "order-steps",
@@ -931,6 +948,60 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "OEMs can automate the hardware hash upload, but for manual enrollment, the Get-WindowsAutopilotInfo PowerShell script is used.",
         otherOptions: "N/A",
         link: "https://learn.microsoft.com/en-us/autopilot/profiles"
+      },
+      {
+        id: 154,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the phases of the Autopilot Enrollment Status Page (ESP):",
+        options: [
+          "Device preparation (joining Entra ID, enrolling in Intune).",
+          "Device setup (installing security policies, certs, and device-targeted apps).",
+          "User sign-in.",
+          "Account setup (installing user-targeted apps and policies)."
+        ],
+        answer: "Device preparation -> Device setup -> User sign-in -> Account setup",
+        explanation: "The ESP first secures the physical hardware during 'Device preparation' and 'Device setup'. Then, the user provides their credentials, moving into 'Account setup' where user-specific settings apply.",
+        moreDetails: "A failure in the Device setup phase typically blocks the user from ever seeing the desktop if the ESP is configured to block.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
+      },
+      {
+        id: 155,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to perform a Windows Autopilot for pre-provisioned deployment (formerly White Glove):",
+        options: [
+          "IT Admin creates an Autopilot profile with 'Allow pre-provisioned deployment' set to Yes and assigns it.",
+          "Technician boots the new device and presses the Windows key five times at the OOBE screen.",
+          "Technician selects 'Windows Autopilot provisioning' and clicks 'Provision'.",
+          "The device downloads and installs device-targeted apps and policies, then displays a green success screen.",
+          "Technician clicks 'Reseal' and powers down the device to ship it to the user.",
+          "The user receives the device, powers it on, connects to Wi-Fi, and signs in to complete the user phase."
+        ],
+        answer: "Create Profile -> Press Win 5x -> Select Provision -> Device Setup -> Reseal -> User Sign-in",
+        explanation: "Pre-provisioning shifts the heavy lifting of installing massive apps to the OEM or IT partner. The technician enters the specialized flow by pressing the Windows key 5 times, completing the device phase, and resealing it so the end-user only has to do a quick sign-in.",
+        moreDetails: "This process requires TPM 2.0 and network connectivity. If the device phase fails, a red screen appears with diagnostic logs.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/autopilot/pre-provision"
+      },
+      {
+        id: 156,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to capture and restore user data during a PC replacement using the User State Migration Tool (USMT):",
+        options: [
+          "Run ScanState.exe on the old PC to collect user profiles, settings, and files.",
+          "Store the compressed migration store (.mig file) on a secure network share or external drive.",
+          "Install the fresh Windows OS on the new PC.",
+          "Join the new PC to the domain/Entra ID.",
+          "Run LoadState.exe on the new PC to apply the collected data to the target system."
+        ],
+        answer: "Run ScanState -> Store Data -> Install OS -> Join Domain -> Run LoadState",
+        explanation: "USMT operates in two primary phases. `ScanState` gathers the old data and puts it in a temporary location. Then, after the new OS is prepared and networked, `LoadState` unpacks the data onto the new machine.",
+        moreDetails: "USMT is often heavily automated within a Microsoft Deployment Toolkit (MDT) or Configuration Manager task sequence.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-overview"
       },
       {
         id: 157,

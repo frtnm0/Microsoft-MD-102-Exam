@@ -877,6 +877,25 @@ export const domain2Dataset: TermData[] = [
     category: "Manage devices and tenant applications",
     questions: [
       {
+        id: 251,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to deploy a Custom Compliance Policy in Microsoft Intune:",
+        options: [
+          "Write a PowerShell discovery script to evaluate the specific setting on the device.",
+          "Write a JSON file defining the rules and expected values for compliance.",
+          "Upload the PowerShell script to Intune (Compliance policies > Scripts).",
+          "Create a new custom Compliance Policy.",
+          "Select the uploaded discovery script and upload the JSON rules file.",
+          "Assign the policy to a device or user group."
+        ],
+        answer: "Write Script -> Write JSON -> Upload Script -> Create Policy -> Select Script & Upload JSON -> Assign",
+        explanation: "Custom compliance requires two components: the PowerShell script that runs on the device to discover the state, and the JSON file uploaded to the policy itself that tells Intune how to interpret the script's output.",
+        moreDetails: "The script must return a single line of JSON-formatted data. The Intune policy then compares that returned JSON against the JSON rules file provided during policy creation.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-custom-script"
+      },
+      {
         id: 252,
         type: "medium",
         format: "order-steps",
@@ -915,6 +934,24 @@ export const domain2Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-intune"
       },
       {
+        id: 254,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the typical device lifecycle phases when managing a corporately owned asset in Intune:",
+        options: [
+          "Enroll (Device is registered and management profile is installed via Autopilot/OOBE).",
+          "Configure (Wi-Fi, VPN, and security policies are pushed to the device).",
+          "Protect (Compliance policies evaluate health, Conditional Access secures apps).",
+          "Maintain (Proactive remediations run, apps are updated, remote assistance is provided).",
+          "Retire/Wipe (Device is wiped and unenrolled when it reaches end of life or is stolen)."
+        ],
+        answer: "Enroll -> Configure -> Protect -> Maintain -> Retire/Wipe",
+        explanation: "The MDM lifecycle begins with getting the device into the system (Enroll), setting it up (Configure), securing its data (Protect), keeping it healthy over time (Maintain), and finally disposing of it securely (Retire/Wipe).",
+        moreDetails: "Understanding this lifecycle is fundamental to endpoint administration and structuring how policies are organized.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/device-lifecycle"
+      },
+      {
         id: 255,
         type: "hard",
         format: "order-steps",
@@ -932,6 +969,25 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "If the Kerberos Server object is missing, users will be prompted for a password when trying to access on-prem file shares, even if their PIN is working for the desktop.",
         otherOptions: "N/A",
         link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/deploy/"
+      },
+      {
+        id: 256,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the flow of a Conditional Access policy utilizing a Terms of Use (ToU) agreement:",
+        options: [
+          "Administrator uploads a PDF containing the Terms of Use to Entra ID.",
+          "Administrator creates a Conditional Access policy requiring the ToU for specific apps.",
+          "User attempts to access a protected application (e.g., SharePoint).",
+          "Entra ID interrupts the authentication flow and presents the PDF.",
+          "User reads and accepts the Terms of Use.",
+          "Entra ID grants the access token and the user enters the application."
+        ],
+        answer: "Upload PDF -> Create Policy -> User Attempts Access -> Entra ID Interrupts -> User Accepts -> Token Granted",
+        explanation: "Terms of Use are enforced via Conditional Access. The document must be uploaded first, then bound to a CA policy. When a user triggers that policy, the auth flow halts, forces acceptance, records the audit trail, and then proceeds.",
+        moreDetails: "If the user declines, access is blocked and an event is logged in the Entra ID sign-in logs.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/terms-of-use"
       }
     ]
   },

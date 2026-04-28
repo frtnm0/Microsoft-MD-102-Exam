@@ -877,6 +877,25 @@ export const domain3Dataset: TermData[] = [
     category: "Protect devices and data",
     questions: [
       {
+        id: 351,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the steps to configure and enforce Microsoft Defender Antivirus Network Protection using Microsoft Intune:",
+        options: [
+          "Navigate to the Endpoint Security node in the Intune admin center.",
+          "Select 'Antivirus' and create a new policy.",
+          "Choose 'Windows 10, Windows 11, and Windows Server' and the 'Microsoft Defender Antivirus' profile.",
+          "Under the 'Real-time protection' category, locate the 'Enable network protection' setting.",
+          "Set the value to 'Enable' (or 'Audit Mode' for initial testing).",
+          "Assign the policy to the target device or user group."
+        ],
+        answer: "Navigate to Endpoint Security -> Select Antivirus -> Choose Profile -> Locate Network Protection -> Enable -> Assign",
+        explanation: "Network Protection is managed as a subset of the Endpoint Security Antivirus profile in Intune. You create the policy, configure the specific Real-time protection setting, and assign it.",
+        moreDetails: "It's highly recommended to use Audit Mode first to ensure it doesn't break custom internal web apps before switching to Enable.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/enable-network-protection"
+      },
+      {
         id: 352,
         type: "medium",
         format: "order-steps",
@@ -912,6 +931,24 @@ export const domain3Dataset: TermData[] = [
         moreDetails: "Without the network boundary definitions, MDAG doesn't know what to protect and typically won't enforce isolation properly.",
         otherOptions: "N/A",
         link: "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/microsoft-defender-application-guard/configure-md-app-guard"
+      },
+      {
+        id: 354,
+        type: "medium",
+        format: "order-steps",
+        question: "Arrange the steps to update an existing Intune Security Baseline to a newly released version:",
+        options: [
+          "Navigate to Endpoint security > Security baselines.",
+          "Select the specific baseline (e.g., Windows 10 Security Baseline) that shows an 'Update available' status.",
+          "Select the existing assigned profile and click 'Change Version'.",
+          "Choose to either keep your existing customizations or discard them for the new defaults.",
+          "Review the newly mapped settings and save the updated profile."
+        ],
+        answer: "Navigate to Baselines -> Select Baseline Type -> Click Change Version -> Choose Customization Handling -> Review and Save",
+        explanation: "Intune does not auto-update baselines. Administrators must manually initiate the 'Change Version' wizard on their existing profiles, carefully choosing whether to maintain their previous customizations or revert to the new Microsoft defaults.",
+        moreDetails: "It is highly recommended to test the new baseline on a small pilot group before updating the production profile.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/security-baselines-configure#change-the-baseline-version-for-a-profile"
       },
       {
         id: 355,
@@ -987,6 +1024,25 @@ export const domain3Dataset: TermData[] = [
         moreDetails: "The data processing is not real-time; new devices may take a couple of days to appear in the reports.",
         otherOptions: "N/A",
         link: "https://learn.microsoft.com/en-us/mem/analytics/enroll-intune"
+      },
+      {
+        id: 359,
+        type: "hard",
+        format: "order-steps",
+        question: "Arrange the onboarding process for Microsoft Defender for Endpoint (MDE) via Microsoft Intune:",
+        options: [
+          "Verify the Intune tenant is connected to the Microsoft Defender portal (Tenant Administration > Connectors).",
+          "Download the onboarding package from the Microsoft Defender portal (optional for specific flows).",
+          "Create an Endpoint Detection and Response (EDR) policy in Intune.",
+          "Select 'Auto from connector' as the onboarding package type within the policy.",
+          "Assign the EDR policy to Windows devices.",
+          "Verify the device appears as 'Onboarded' in the Defender device inventory."
+        ],
+        answer: "Verify Connector -> Download Package (optional) -> Create EDR Policy -> Select Auto -> Assign -> Verify Inventory",
+        explanation: "For Intune-managed devices, the simplest method is leveraging the native Service-to-Service connector. By creating an EDR policy and selecting 'Auto from connector', Intune automatically provisions the required registry keys and blobs to attach the device to your Defender workspace.",
+        moreDetails: "Without the EDR policy, the device will have Defender Antivirus running, but will not report telemetry to the Defender for Endpoint portal.",
+        otherOptions: "N/A",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure"
       },
       {
         id: 360,
