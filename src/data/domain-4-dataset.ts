@@ -1091,5 +1091,349 @@ export const domain4Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-android-for-work"
       }
     ]
+  },
+  {
+    id: 99,
+    term: "2026 Scenario Based Questions",
+    category: "Manage applications",
+    questions: [
+      {
+        id: 4001,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying a complex Win32 application during the Autopilot Enrollment Status Page (ESP). The application installer strictly requires a hard reboot to finish writing registry keys before any other application can install. If you configure the Win32 app 'Device restart behavior' to 'Force device restart', what happens during the ESP phase?",
+        options: [
+          "The ESP gracefully pauses, restarts the device, and seamlessly resumes the tracking of the remaining apps.",
+          "The ESP fails immediately because hard reboots initiated by Win32 apps break the ESP tracking sequence.",
+          "Intune ignores the restart command until the ESP completes and the user reaches the desktop.",
+          "The device bootloops until the user manually powers it off."
+        ],
+        answer: "The ESP fails immediately because hard reboots initiated by Win32 apps break the ESP tracking sequence.",
+        explanation: "During the Autopilot ESP, if a Win32 app installation triggers a hard, unmanaged reboot (often using exit code 1641 or 3010 without the proper Intune wrapper handling), the ESP tracking breaks, causing the deployment to fail.",
+        moreDetails: "To handle apps that require reboots during ESP, administrators must package the app carefully (using the Intune Win32 Prep Tool) to suppress the native installer reboot, and let Intune handle the soft reboot gracefully based on return codes, or avoid requiring that app during the ESP entirely.",
+        otherOptions: "The ESP does not gracefully resume from unexpected hard reboots. Intune cannot 'ignore' a hard reboot if the installer binary executes it. It doesn't bootloop, it just fails the ESP.",
+        link: "https://learn.microsoft.com/en-us/troubleshoot/mem/intune/app-management/troubleshoot-app-install"
+      },
+      {
+        id: 4002,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization hires contractors who use their own personal iPhones. They need access to corporate email via the Outlook app, but you cannot legally require them to enroll their personal devices into Intune MDM. How can you ensure corporate data cannot be copied from Outlook to their personal native iOS Notes app?",
+        options: [
+          "Deploy an iOS configuration profile via Apple Business Manager.",
+          "Create a Conditional Access policy requiring device compliance.",
+          "Create an Intune App Protection Policy (MAM-WE) targeting the Outlook app, with the 'Target to apps on all device types' set to 'Unmanaged'.",
+          "This is not possible; data protection on iOS requires full MDM enrollment."
+        ],
+        answer: "Create an Intune App Protection Policy (MAM-WE) targeting the Outlook app, with the 'Target to apps on all device types' set to 'Unmanaged'.",
+        explanation: "Mobile Application Management without Enrollment (MAM-WE) allows organizations to apply App Protection Policies directly to enlightened apps (like Microsoft Outlook) on personal devices without requiring the device to be managed by an MDM.",
+        moreDetails: "The policy creates a secure container around the Outlook app, preventing data leakage (like copy/paste) to unmanaged personal apps. Conditional Access can be used alongside this to enforce that users *must* use the protected Outlook app to access Exchange Online.",
+        otherOptions: "ABM requires device ownership/enrollment. Device compliance requires MDM enrollment. It IS possible using MAM-WE.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
+      },
+      {
+        id: 4003,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You need to deploy the 'Adobe Acrobat Reader' app from the Microsoft Store to all Windows 11 devices. You notice the legacy 'Microsoft Store for Business' tab is deprecated and no longer syncing. What is the modern approach to deploy this Store app natively through Intune?",
+        options: [
+          "Download the .appx bundle manually and upload it as a Line-of-Business (LOB) app.",
+          "Use the 'Microsoft Store app (new)' app type in Intune, which leverages the Windows Package Manager (winget) integration.",
+          "Deploy a PowerShell script that invokes the Microsoft Store API.",
+          "Create a Win32 app containing the installer downloaded from Adobe's website."
+        ],
+        answer: "Use the 'Microsoft Store app (new)' app type in Intune, which leverages the Windows Package Manager (winget) integration.",
+        explanation: "Following the retirement of the Microsoft Store for Business, the new integration in Intune uses the 'Microsoft Store app (new)' type. This natively relies on the Windows Package Manager (winget) to search, deploy, and update Store applications.",
+        moreDetails: "This method is far superior to LOB apps or scripts because Intune directly handles the installation and lifecycle updates silently in the background without needing offline files.",
+        otherOptions: "LOB apps are legacy for Store apps. PowerShell is unnecessary overhead. Downloading from Adobe bypasses the Store requirement entirely.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-windows"
+      },
+      {
+        id: 4004,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying Microsoft 365 Apps for enterprise to Windows 10 devices using the built-in Intune UI. The devices currently have legacy MSI versions of Office 2016 installed. You configure the policy to 'Remove other versions of Office (MSI)'. What happens to the user's legacy Visio 2016 MSI installation if you do NOT include Visio in the new deployment payload?",
+        options: [
+          "Visio 2016 is uninstalled, and the user loses Visio entirely.",
+          "Visio 2016 is left intact because it was not explicitly included in the new deployment.",
+          "Visio 2016 is automatically upgraded to Visio Plan 2.",
+          "The entire Microsoft 365 Apps installation fails due to a conflict with the legacy Visio MSI."
+        ],
+        answer: "Visio 2016 is uninstalled, and the user loses Visio entirely.",
+        explanation: "When you select 'Remove other versions of Office (MSI)' in the Intune Microsoft 365 Apps deployment configuration, the Office Deployment Tool (ODT) removes ALL MSI installations of Office products, including Project and Visio.",
+        moreDetails: "If you want the user to retain Visio functionality, you must either deploy the Click-to-Run version of Visio alongside the Microsoft 365 Apps, or use a custom XML configuration (instead of the Intune UI) to explicitly exclude Visio from the MSI removal process.",
+        otherOptions: "It is not left intact; the removal is aggressive. It does not auto-upgrade without a license/configuration. The installation doesn't fail; it succeeds by destroying the legacy app.",
+        link: "https://learn.microsoft.com/en-us/deployoffice/upgrade-from-msi-version"
+      },
+      {
+        id: 4005,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are using Intune Win32 App Supersedence to upgrade an application from v1.0 to v2.0. In the supersedence relationship, you toggle the 'Uninstall previous version' switch to 'No'. What is the expected behavior on the endpoint when v2.0 is deployed?",
+        options: [
+          "The installation fails because Win32 apps cannot exist side-by-side.",
+          "Intune runs the v1.0 uninstall command anyway as a safety measure.",
+          "Intune installs v2.0 over or alongside v1.0, relying on the v2.0 installer's native logic to handle the in-place upgrade.",
+          "Intune creates an isolated App-V bubble for v2.0."
+        ],
+        answer: "Intune installs v2.0 over or alongside v1.0, relying on the v2.0 installer's native logic to handle the in-place upgrade.",
+        explanation: "In Intune Win32 App Supersedence, setting 'Uninstall previous version' to 'No' means Intune will not trigger the v1.0 uninstall string. Instead, it assumes the v2.0 installer is capable of performing an in-place upgrade directly over the existing binaries.",
+        moreDetails: "This is common for many modern MSIs or EXEs that natively detect older versions and upgrade them. If the installer cannot handle in-place upgrades, the deployment might fail or result in duplicated entries in the Control Panel.",
+        otherOptions: "Win32 apps *can* exist side-by-side if the developer allowed it. Intune strictly follows the toggle; it won't run the uninstaller if set to 'No'. Intune Win32 does not use App-V virtualization.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-supersedence"
+      },
+      {
+        id: 4006,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying an internally developed Line-of-Business (LOB) application as an MSIX package via Intune to all Windows 11 devices. The application refuses to install, and the Intune console reports an error related to the certificate. What must you configure before deploying this custom MSIX package?",
+        options: [
+          "Deploy the self-signed certificate or internal PKI Root CA certificate used to sign the MSIX package to the 'Trusted Root Certification Authorities' store on the devices.",
+          "Change the Intune app type from 'Line-of-Business app' to 'Windows app (Win32)'.",
+          "Purchase an Enterprise App Management add-on license for Intune.",
+          "Disable Windows Defender SmartScreen via a configuration profile."
+        ],
+        answer: "Deploy the self-signed certificate or internal PKI Root CA certificate used to sign the MSIX package to the 'Trusted Root Certification Authorities' store on the devices.",
+        explanation: "MSIX packages (unlike standard MSIs or EXEs) strictly require a digital signature to install. The Windows OS must explicitly trust the certificate used to sign the package.",
+        moreDetails: "If the package was signed with a self-signed certificate or an internal corporate PKI that the endpoint does not yet know about, the installation will be blocked by the OS. You must push the Root CA or the self-signed cert to the endpoints (usually via an Intune Trusted Certificate profile) before deploying the app.",
+        otherOptions: "Win32 apps don't bypass the MSIX signature requirement if you are wrapping an MSIX. The Enterprise App add-on is for advanced catalogs, not basic MSIX deployment. Disabling SmartScreen lowers security and doesn't fix the underlying trust issue.",
+        link: "https://learn.microsoft.com/en-us/windows/msix/package/sign-app-package-using-signtool"
+      },
+      {
+        id: 4007,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your company provides fully managed Android Enterprise devices to factory floor workers. You deploy Microsoft Edge to these devices via Managed Google Play. You want Edge to automatically open the company's intranet portal as the homepage without the user having to configure anything. How do you achieve this in Intune?",
+        options: [
+          "Create a Windows Configuration profile and select the Android platform.",
+          "Create an App Configuration Policy targeted to 'Managed devices', select Microsoft Edge, and use the configuration designer to set the 'HomepageLocation' key.",
+          "Create an App Protection Policy (MAM) and set the 'Managed Browser' pin.",
+          "Publish a custom APK version of Edge."
+        ],
+        answer: "Create an App Configuration Policy targeted to 'Managed devices', select Microsoft Edge, and use the configuration designer to set the 'HomepageLocation' key.",
+        explanation: "App Configuration Policies allow administrators to push specific settings (like homepages, bookmarks, or server URLs) directly into applications that support them (like Microsoft Edge or Outlook).",
+        moreDetails: "By targeting 'Managed devices' (since these are fully managed Android Enterprise devices), Intune leverages the Managed Google Play API to inject the configuration into the app silently. The user receives a pre-configured browser upon launching it.",
+        otherOptions: "Windows config profiles don't apply to Android. App Protection Policies (MAM) protect data (DLP), they don't configure app UI features like homepages. Custom APKs are unmanageable and against best practices.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-use-android"
+      },
+      {
+        id: 4008,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have deployed a complex Win32 App via Intune. The installation command works perfectly, but Intune constantly reports the app as 'Failed' or 'Not Installed', and repeatedly attempts to reinstall it every time the device syncs. What is the root cause of this loop?",
+        options: [
+          "The 'Install behavior' is set to 'System' instead of 'User'.",
+          "The Detection Rule is incorrectly configured and cannot find the specified file, registry key, or MSI product code after the installation completes.",
+          "The user does not have local administrator rights.",
+          "The Intune Management Extension service on the device has crashed."
+        ],
+        answer: "The Detection Rule is incorrectly configured and cannot find the specified file, registry key, or MSI product code after the installation completes.",
+        explanation: "Intune uses Detection Rules to verify if a Win32 app successfully installed. After the installation command finishes executing, Intune immediately checks the detection rule.",
+        moreDetails: "If the rule is looking for a file that the installer didn't actually create (e.g., a typo in the path, or checking a 64-bit registry path instead of 32-bit), Intune concludes the installation failed. It will then retry the installation on the next sync cycle, causing an endless loop.",
+        otherOptions: "System/User context doesn't inherently cause a loop if the detection rule matches the context. If the user wasn't admin, the install would actually fail, not loop after succeeding. If the IME crashed, it wouldn't be attempting reinstalls.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
+      },
+      {
+        id: 4009,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization currently uses the Semi-Annual Enterprise Channel for Microsoft 365 Apps. You change the Intune deployment policy to use the Monthly Enterprise Channel. What happens on the endpoints that already have the Semi-Annual channel installed?",
+        options: [
+          "The devices completely uninstall Microsoft 365 Apps and reinstall the entire 3GB suite from the CDN.",
+          "The Office deployment tool performs a delta update, switching the registry keys and downloading only the necessary differential files to transition the channel in the background.",
+          "The devices remain on the Semi-Annual channel; channel changes require a manual wipe and load.",
+          "The user receives a prompt asking them which channel they prefer."
+        ],
+        answer: "The Office deployment tool performs a delta update, switching the registry keys and downloading only the necessary differential files to transition the channel in the background.",
+        explanation: "Microsoft 365 Apps (Click-to-Run) is designed to handle channel transitions gracefully. When Intune pushes the new configuration, the local Office Update engine updates its configuration.",
+        moreDetails: "The engine then reaches out to the Office CDN (or local cache) and downloads only the delta updates required to catch the binaries up to the Monthly Enterprise Channel version. It does not perform a destructive full uninstall/reinstall, saving massive amounts of bandwidth.",
+        otherOptions: "It does not reinstall the full suite. It does not require a manual wipe. Users are not prompted for administrative channel selections.",
+        link: "https://learn.microsoft.com/en-us/deployoffice/change-update-channels"
+      },
+      {
+        id: 4010,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You write a custom PowerShell script to act as a Detection Rule for a Win32 app in Intune. The script checks a complex WMI class. If the app is present, the script ends with `Write-Host 'App Found'`. If it is not present, it ends with `Write-Host 'App Missing'`. The Intune app always reports as 'Installed' even on fresh PCs. Why?",
+        options: [
+          "Detection scripts must be signed by a trusted Root CA.",
+          "Intune considers any script that exits with a code of 0 (success) AND outputs any string to STDOUT as a successful detection, regardless of what the string actually says.",
+          "Intune requires the script to explicitly return 'Exit 1' to signify an app is installed.",
+          "WMI classes cannot be queried under the 'System' execution context."
+        ],
+        answer: "Intune considers any script that exits with a code of 0 (success) AND outputs any string to STDOUT as a successful detection, regardless of what the string actually says.",
+        explanation: "The logic for Intune custom script detection rules is very specific: The app is detected (installed) ONLY if the script exits with an exit code of 0 AND writes *at least one character* to standard output (STDOUT).",
+        moreDetails: "Because your script writes 'App Missing' to STDOUT and exits normally (code 0) when the app is absent, Intune sees STDOUT content + Exit 0, and incorrectly assumes the app *is* installed. To fix this, the script should output nothing (or `Exit 1`) when the app is not found.",
+        otherOptions: "Signing is not strictly required. Exit 1 means 'Not Detected' (failure). WMI queries work perfectly fine in the System context.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
+      }
+    ]
+  },
+  {
+    id: 994,
+    term: "Advanced App Management Scenarios (2026 Updates)",
+    category: "Manage applications",
+    questions: [
+      {
+        id: 4001,
+        type: "hard",
+        question: "You package a 32-bit legacy application as an Intune Win32 app (.intunewin). The app installs successfully, but Intune repeatedly reports the installation as 'Failed' and attempts to reinstall it every time the device syncs. You configured a custom Registry detection rule looking for a key in `HKEY_LOCAL_MACHINE\\Software\\LegacyApp`. What is the most likely cause of this continuous reinstall loop?",
+        options: [
+          "The detection rule does not specify to search the 32-bit registry on 64-bit clients, so it is looking in the wrong location.",
+          "The Intune Management Extension service does not have permissions to read the registry.",
+          "The app is missing a digital signature.",
+          "Intune Win32 apps do not support Registry detection rules."
+        ],
+        answer: "The detection rule does not specify to search the 32-bit registry on 64-bit clients, so it is looking in the wrong location.",
+        explanation: "When a 32-bit application installs on a 64-bit OS, Windows redirects its registry keys to the `WOW6432Node` (e.g., `HKEY_LOCAL_MACHINE\\Software\\WOW6432Node\\LegacyApp`).",
+        moreDetails: "In Intune, if you set the 'Associated with a 32-bit app on 64-bit clients' setting to 'Yes' in the detection rule, Intune knows to look in the WOW6432Node. If set to 'No', it looks in the native 64-bit path, fails to find the key, assumes the app is not installed, and attempts a reinstall.",
+        otherOptions: "IME runs as SYSTEM and has full registry read access. Digital signatures aren't required for Intune deployment (just execution policies). Intune fully supports registry detection.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
+      },
+      {
+        id: 4002,
+        type: "hard",
+        question: "You deploy a Mobile Application Management (MAM) App Protection Policy to iOS devices to secure corporate data in Microsoft Outlook. The policy is targeted to unmanaged devices (BYOD). Users report they can copy text from a corporate email in Outlook and paste it into the native iOS Notes app. What setting in the App Protection Policy needs to be modified to prevent this?",
+        options: [
+          "Set 'Restrict cut, copy, and paste between other apps' to 'Policy managed apps'.",
+          "Set 'Send org data to other apps' to 'All apps'.",
+          "Require the device to be enrolled in Intune MDM.",
+          "Enable 'Require PIN for access' in the policy."
+        ],
+        answer: "Set 'Restrict cut, copy, and paste between other apps' to 'Policy managed apps'.",
+        explanation: "To prevent data leakage from corporate apps (like Outlook) to personal apps (like iOS Notes), the cut/copy/paste restriction must be set to 'Policy managed apps' or 'Blocked'.",
+        moreDetails: "This ensures the clipboard data is encrypted and can only be pasted into other apps protected by the same MAM policy (like Microsoft Word or Teams).",
+        otherOptions: "Setting 'Send org data' to 'All apps' ENABLES data leakage. You do NOT need full MDM enrollment for MAM policies to work (MAM-WE). A PIN protects the app launch, not the clipboard.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-ios"
+      },
+      {
+        id: 4003,
+        type: "hard",
+        question: "You want to deploy a complex engineering application using Intune. The vendor provides an MSI, an MST (transform file), and several licensing DLLs. You package them all into a single .intunewin file. When configuring the 'Install command' in Intune, how should you reference the MST file to ensure it applies during installation?",
+        options: [
+          "msiexec /i \"app.msi\" TRANSFORMS=\"app.mst\" /qn",
+          "setup.exe /apply app.mst",
+          "msiexec /a \"app.msi\" /t \"app.mst\"",
+          "Intune automatically applies the MST if it is in the same folder as the MSI."
+        ],
+        answer: "msiexec /i \"app.msi\" TRANSFORMS=\"app.mst\" /qn",
+        explanation: "When deploying an MSI with an MST (transform) file via Intune Win32, you must explicitly declare the transform file in the install command using the standard Windows Installer property `TRANSFORMS=\"filename.mst\"`.",
+        moreDetails: "Because all files in the .intunewin package are extracted to the same temporary folder on the client, you only need to provide the relative filename, not a full path. The `/qn` switch ensures it installs silently.",
+        otherOptions: "setup.exe syntax depends on the vendor, not MSI standards. `/a` is administrative install, not standard deployment. Intune does NOT automatically apply MSTs.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add"
+      },
+      {
+        id: 4004,
+        type: "hard",
+        question: "Your company has thousands of devices spread across multiple branch offices connected by slow WAN links. You deploy a 5GB Autodesk application via Intune Win32 apps. To prevent saturating the WAN links, you rely on Delivery Optimization (DO). However, devices in Branch A are downloading the app directly from Microsoft CDNs instead of peering with each other. What Intune policy must be configured correctly to force peering within the branch?",
+        options: [
+          "A Device Configuration profile defining the 'Delivery Optimization Group ID' or restricting peering to 'Same NAT/DHCP Option'.",
+          "An App Configuration policy setting the download mode to BITS.",
+          "A Conditional Access policy requiring location-based compliance.",
+          "A Windows Update for Business ring setting."
+        ],
+        answer: "A Device Configuration profile defining the 'Delivery Optimization Group ID' or restricting peering to 'Same NAT/DHCP Option'.",
+        explanation: "By default, DO peering might be restricted or unaware of the branch boundaries. To force devices in the same branch to peer with each other, administrators deploy a Device Configuration Profile configuring DO settings.",
+        moreDetails: "Common strategies include setting the Download Mode to 'LAN' (peering behind the same public IP/NAT) or using a custom 'Group ID' (derived from AD sites or DHCP options) so the DO cloud service knows exactly which devices are localized together.",
+        otherOptions: "BITS is an older technology; DO replaces it for Intune apps. Conditional Access and WUfB do not control Intune Win32 app P2P peering.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference"
+      },
+      {
+        id: 4005,
+        type: "hard",
+        question: "You deploy an App Configuration Policy targeted to 'Managed devices' for Microsoft Edge on iOS. The policy disables the ability to save passwords. A user enrolls their iPad in Intune (MDM), downloads Edge from the App Store, and signs in with their corporate Entra ID account. They find they can still save passwords. Why did the App Configuration Policy fail to apply?",
+        options: [
+          "The policy must be targeted to 'Managed apps' instead of 'Managed devices' for iOS.",
+          "App Configuration Policies for Edge are only supported on Android Enterprise.",
+          "The user did not restart the iPad after installing Edge.",
+          "The Edge app was not deployed as a 'Required' or 'Available' app from Intune; it was downloaded manually from the App Store."
+        ],
+        answer: "The Edge app was not deployed as a 'Required' or 'Available' app from Intune; it was downloaded manually from the App Store.",
+        explanation: "For an App Configuration Policy targeted to 'Managed devices' (MDM channel) to apply on iOS, the application MUST be deployed and managed by Intune. If the user downloads it directly from the App Store, it is an 'unmanaged' app.",
+        moreDetails: "Even though the device is enrolled in MDM, Intune cannot configure apps it doesn't own. The administrator must deploy Edge via Intune to force management, or use App Configuration Policies targeted to 'Managed apps' (MAM channel), which applies upon Entra ID sign-in regardless of how the app was installed.",
+        otherOptions: "Policies can be targeted to either, but the MDM channel requires the app to be managed. Edge configuration is supported on iOS. Restarting doesn't fix unmanaged app states.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-use-ios"
+      },
+      {
+        id: 4006,
+        type: "hard",
+        question: "You deploy a new application using the 'Microsoft Store app (new)' repository type in Intune (leveraging Windows Package Manager / winget). The application is assigned as 'Required' to a Device Group. After the sync, administrators can see the app, but standard users log in and cannot find the application. What configuration mistake was made?",
+        options: [
+          "The app was configured with 'Install behavior' set to 'User' instead of 'System', meaning it only installed for the primary user who was logged in during provisioning.",
+          "Standard users are blocked from running winget.exe via AppLocker.",
+          "Microsoft Store apps require an Entra ID Premium P2 license for standard users.",
+          "The device must be rebooted twice for Store apps to appear for standard users."
+        ],
+        answer: "The app was configured with 'Install behavior' set to 'User' instead of 'System', meaning it only installed for the primary user who was logged in during provisioning.",
+        explanation: "When deploying an app, 'Install behavior' dictates the context. If set to 'User', it installs into the `AppData` profile of the currently logged-in user. If assigned to a device group, it installs for whoever happens to be logged in at that moment (often an admin during staging). Subsequent standard users won't see it.",
+        moreDetails: "To ensure an application is available to ALL users who log into a specific machine, the 'Install behavior' must be set to 'System' (installing to Program Files).",
+        otherOptions: "Winget execution context is handled by the Intune agent (SYSTEM), not user AppLocker rules. P2 licensing is irrelevant. Reboots don't copy user-profile apps to other users.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-windows-10-app-deploy#install-context"
+      },
+      {
+        id: 4007,
+        type: "hard",
+        question: "You configure an Intune Win32 App deployment for 'App B'. In the 'Dependencies' section, you specify that 'App A' must be installed first. Furthermore, you set 'Automatically install' to 'Yes' for App A. What happens if App A fails to install during the deployment process?",
+        options: [
+          "App B attempts to install anyway, ignoring the dependency failure.",
+          "Intune continuously retries installing App A in an infinite loop.",
+          "App B is not evaluated and its installation is skipped. Intune reports the status as 'Not installed' or 'Failed' due to unmet dependencies.",
+          "The device initiates a forced reboot to clear the installation cache."
+        ],
+        answer: "App B is not evaluated and its installation is skipped. Intune reports the status as 'Not installed' or 'Failed' due to unmet dependencies.",
+        explanation: "Intune enforces dependency chains strictly. If a prerequisite application (App A) fails its installation or detection phase, the dependent application (App B) will not even attempt to install.",
+        moreDetails: "This prevents compound errors or corrupted installations. The Intune Management Extension will log the dependency failure and halt the chain.",
+        otherOptions: "It does not ignore dependencies (that defeats the purpose). It does not infinitely loop (it respects standard retry intervals). Reboots are not triggered by dependency failures.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-5-dependencies"
+      },
+      {
+        id: 4008,
+        type: "hard",
+        question: "Your organization uses Apple Business Manager (ABM) synchronized with Intune to deploy iOS Volume Purchase Program (VPP) apps. The VPP location token expires today. What is the immediate impact on existing iOS devices that already have VPP apps installed?",
+        options: [
+          "The installed VPP apps immediately crash and are uninstalled from the devices.",
+          "The installed VPP apps continue to function normally, but you cannot deploy new VPP apps or push updates to existing apps until the token is renewed.",
+          "Users will be prompted to enter their personal Apple ID passwords to keep using the apps.",
+          "The devices will unenroll from Intune MDM."
+        ],
+        answer: "The installed VPP apps continue to function normally, but you cannot deploy new VPP apps or push updates to existing apps until the token is renewed.",
+        explanation: "When a VPP token expires, the trust between Intune and Apple Business Manager is severed for administrative actions. Existing app licenses assigned to devices remain valid on the device itself, so users experience no interruption.",
+        moreDetails: "However, Intune cannot communicate with Apple to assign licenses to new users, push app updates, or sync the app catalog. Administrators must log into ABM, download a new token, and upload it to Intune to restore management.",
+        otherOptions: "Apps do not uninstall or crash. VPP apps are device-licensed, so personal Apple IDs are not involved. Token expiration does not unenroll devices.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/vpp-apps-ios#renew-a-vpp-token"
+      },
+      {
+        id: 4009,
+        type: "hard",
+        question: "You have a fleet of Android Enterprise Fully Managed devices. Your internal development team provides you with a custom, highly confidential Line-of-Business (LOB) .APK file. What is the most secure and Microsoft-recommended method to deploy this app to these devices via Intune?",
+        options: [
+          "Host the .APK on a public web server and send the URL to users via email.",
+          "Upload the .APK directly to the Intune portal as an 'Android line-of-business app'.",
+          "Publish the app privately via the Managed Google Play iframe within the Intune console.",
+          "Enable 'Install apps from unknown sources' via an Intune restriction policy and manually transfer the file via USB."
+        ],
+        answer: "Publish the app privately via the Managed Google Play iframe within the Intune console.",
+        explanation: "For Android Enterprise devices, the most secure and recommended method is to use the Managed Google Play infrastructure to host private apps.",
+        moreDetails: "By uploading the APK directly within the Intune Managed Google Play iframe, the app is hosted securely by Google, scanned for malware, and silently deployed via the Play Store infrastructure, without ever being exposed to the public Play Store or requiring 'Unknown Sources' to be enabled.",
+        otherOptions: "Direct APK uploads to Intune ('Android LOB app') are a legacy approach primarily for Android Device Administrator. Web servers and USB transfers are highly insecure and unmanageable.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-android-for-work#managed-google-play-private-lob-apps"
+      },
+      {
+        id: 4010,
+        type: "hard",
+        question: "You manage 500 Co-managed Windows 11 devices at a central headquarters. You want to deploy a 10GB Intune Win32 app to all devices. To drastically reduce internet bandwidth consumption, you configure a Microsoft Connected Cache (MCC) on your on-premises Configuration Manager Distribution Point. What client setting in Intune or ConfigMgr dictates that the Intune Management Extension should pull the Win32 app from the local MCC instead of the cloud?",
+        options: [
+          "Deploy a Delivery Optimization Device Configuration profile in Intune that sets the 'Cache Server Hostname' to the FQDN of the Distribution Point.",
+          "Enable the 'BranchCache' feature on the Distribution Point.",
+          "Move the 'Client Apps' co-management workload back to Configuration Manager.",
+          "Configure a VPN profile targeting the Intune Win32 app."
+        ],
+        answer: "Deploy a Delivery Optimization Device Configuration profile in Intune that sets the 'Cache Server Hostname' to the FQDN of the Distribution Point.",
+        explanation: "Microsoft Connected Cache acts as a local proxy for Delivery Optimization (DO) cloud traffic. To instruct Intune clients to look for the MCC server first, you must deploy a DO policy specifying the MCC server's IP or FQDN in the 'Cache Server Hostname' (DOCacheHost) setting.",
+        moreDetails: "When the Intune Management Extension attempts to download the Win32 app, it respects the DO policies, queries the local MCC server, and downloads the cached 10GB payload over the LAN, saving massive internet bandwidth.",
+        otherOptions: "BranchCache is a different legacy technology. Moving the workload to ConfigMgr defeats the purpose of using Intune Win32 apps. VPN profiles do not optimize download routing natively.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/core/plan-design/hierarchy/microsoft-connected-cache"
+      }
+    ]
   }
 ];

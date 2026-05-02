@@ -1231,5 +1231,349 @@ export const domain3Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/powershell/module/bitlocker/suspend-bitlocker"
       }
     ]
+  },
+  {
+    id: 99,
+    term: "2026 Scenario Based Questions",
+    category: "Manage, maintain, and protect devices",
+    questions: [
+      {
+        id: 3001,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You deploy Microsoft Defender for Endpoint Attack Surface Reduction (ASR) rules in 'Block' mode to all Windows 11 devices. Shortly after, your internal software developers report that their custom macro-enabled Excel templates and PowerShell scripts are failing to execute, severely impacting their work. Other departments are unaffected. What is the best way to resolve this while maintaining security?",
+        options: [
+          "Change the ASR rules from 'Block' to 'Audit' mode globally.",
+          "Create a new ASR policy targeted only to the developers, setting the conflicting rules (like 'Block Office applications from creating executable content') to 'Audit' mode or adding specific folder exclusions.",
+          "Disable Microsoft Defender Antivirus on the developers' machines.",
+          "Add the developers to the local Administrators group so they can bypass the ASR rules."
+        ],
+        answer: "Create a new ASR policy targeted only to the developers, setting the conflicting rules (like 'Block Office applications from creating executable content') to 'Audit' mode or adding specific folder exclusions.",
+        explanation: "ASR rules are highly effective but can easily break legitimate developer workflows (which often mimic malicious behavior, like scripts launching executables). You should never lower security globally when only a small subset of users is affected.",
+        moreDetails: "The correct approach is to use Intune targeting to apply a customized ASR policy to the developer group, utilizing exclusions for their specific work folders or setting specific rules to 'Audit' mode, while leaving the rest of the company in 'Block' mode.",
+        otherOptions: "Global changes weaken the entire organization. Disabling Defender entirely is a massive security risk. Local Admins cannot bypass ASR rules enforced by Intune MDM policies.",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack-surface-reduction"
+      },
+      {
+        id: 3002,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are configuring Windows Update for Business (WUfB) update rings in Intune. Your goal is to defer Windows 11 Feature Updates for the 'Broad' deployment group for as long as natively possible using the deferral settings to ensure application compatibility testing. What is the maximum number of days you can defer a Feature Update?",
+        options: [
+          "30 days",
+          "90 days",
+          "365 days",
+          "1095 days (3 years)"
+        ],
+        answer: "365 days",
+        explanation: "In Windows Update for Business (WUfB) via Intune, Feature Updates can be deferred for a maximum of 365 days.",
+        moreDetails: "Quality updates, on the other hand, can only be deferred for a maximum of 30 days. If an organization needs to pause feature updates for longer than 365 days, they must use the 'Feature updates for Windows 10 and later' policy to lock devices to a specific version, rather than relying on a deferral timer.",
+        otherOptions: "30 days is the limit for Quality Updates. 90 days and 3 years are incorrect limits for native Intune WUfB deferrals.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-settings"
+      },
+      {
+        id: 3003,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You configure a BitLocker Endpoint Security profile in Intune to require 'Silently encrypt device'. However, on a batch of newly enrolled legacy laptops, the silent encryption fails, and users are prompted to manually start the BitLocker drive encryption wizard. What is the most likely reason for this failure?",
+        options: [
+          "The users are not local administrators on the laptops.",
+          "The laptops lack a compatible TPM chip (e.g., they have TPM 1.2 or no TPM), which is required for silent encryption.",
+          "The laptops are connected to a Wi-Fi network instead of a wired Ethernet network.",
+          "The Intune policy was assigned to 'Devices' instead of 'Users'."
+        ],
+        answer: "The laptops lack a compatible TPM chip (e.g., they have TPM 1.2 or no TPM), which is required for silent encryption.",
+        explanation: "Silent BitLocker encryption requires specific hardware readiness. Most notably, the device must have a TPM (Trusted Platform Module) version 1.2 or 2.0 (2.0 is highly recommended/required for modern standby devices) that is ready and unlocked.",
+        moreDetails: "If the TPM is missing, disabled in BIOS, or requires a physical presence check to clear/take ownership (often seen on legacy hardware), the silent encryption process will fail and gracefully fall back to prompting the user.",
+        otherOptions: "Silent encryption specifically *solves* the issue of standard users not being local admins (it elevates automatically). Network connection type does not affect encryption. Device vs User targeting doesn't cause this specific hardware-level failure.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/encrypt-devices"
+      },
+      {
+        id: 3004,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A developer frequently needs to install unsigned drivers and modify restricted system registry keys, which require local administrator rights. You want to avoid giving them permanent local admin access (via LAPS or group membership) to maintain a zero-trust posture. Which Intune feature allows you to grant them temporary, approved access specifically for these tasks?",
+        options: [
+          "Windows Local Administrator Password Solution (LAPS)",
+          "Endpoint Privilege Management (EPM)",
+          "Privileged Identity Management (PIM)",
+          "User Account Control (UAC) Bypass profiles"
+        ],
+        answer: "Endpoint Privilege Management (EPM)",
+        explanation: "Endpoint Privilege Management (EPM) is an Intune feature that allows standard users to perform tasks that require elevated privileges (like installing software or modifying the registry) without giving them broad local administrator rights.",
+        moreDetails: "EPM works by defining rules that elevate specific executables or processes, or by allowing users to request temporary elevation which is then audited. LAPS provides the actual local admin password, which is broader access. PIM is for Entra ID/Azure roles, not local endpoint processes.",
+        otherOptions: "LAPS gives full local admin access (even if temporary, it's unrestricted while logged in). PIM is for cloud directory roles. UAC Bypass profiles do not exist in Intune natively.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/epm-overview"
+      },
+      {
+        id: 3005,
+        type: "hard",
+        format: "multiple-choice",
+        question: "An employee reports their company-owned laptop was stolen at an airport. The laptop contains highly sensitive customer data. You need to ensure the data is immediately inaccessible the next time the device connects to the internet. Which remote action must you initiate from the Intune console?",
+        options: [
+          "Retire",
+          "Autopilot Reset",
+          "Wipe (with 'Wipe device, but keep enrollment state and associated user account' unchecked)",
+          "Fresh Start (with 'Retain user data' checked)"
+        ],
+        answer: "Wipe (with 'Wipe device, but keep enrollment state and associated user account' unchecked)",
+        explanation: "A 'Wipe' action restores the device to its factory default settings, permanently deleting all user data, applications, and settings. This is the correct action for a lost or stolen device to prevent data breach.",
+        moreDetails: "'Retire' only removes corporate data (apps/profiles pushed by Intune) but leaves personal user data intact, which is insufficient for a stolen corporate device. 'Autopilot Reset' retains the MDM enrollment to quickly give the device to a *new* employee, which is useless if the device is stolen.",
+        otherOptions: "Retire leaves user data. Autopilot reset is for repurposing internally. Fresh Start with retained data obviously fails the requirement to secure the data.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe"
+      },
+      {
+        id: 3006,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have configured Delivery Optimization (DO) via Intune to use 'Group ID' download mode (Option 2) to reduce WAN bandwidth. However, you notice that devices in the New York office are downloading Windows Updates from peers in the London office over the costly site-to-site VPN. How do you prevent peers from sharing across the WAN link while keeping DO enabled?",
+        options: [
+          "Change the DO download mode to 'Internet' (Option 3).",
+          "Configure the Intune DO policy setting 'Restrict Peer Selection By' to 'Subnet mask'.",
+          "Set the 'Maximum Download Bandwidth' to 1 Kbps.",
+          "Disable Delivery Optimization and use Microsoft Connected Cache exclusively."
+        ],
+        answer: "Configure the Intune DO policy setting 'Restrict Peer Selection By' to 'Subnet mask'.",
+        explanation: "By default, 'Group ID' mode allows any devices sharing the same Entra ID tenant or explicit Group ID to peer with each other, regardless of their physical network location.",
+        moreDetails: "To constrain peer-to-peer sharing to local LAN segments and prevent WAN traversal, you must configure 'Restrict Peer Selection By' to 'Subnet mask'. This forces the DO client to only peer with devices on the exact same local IP subnet.",
+        otherOptions: "Internet mode allows peering with random PCs globally. Throttling bandwidth doesn't solve the routing logic flaw. Disabling DO entirely loses the benefits of local peering.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference"
+      },
+      {
+        id: 3007,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You enable Windows Defender Credential Guard via Intune on all Windows 11 devices to protect against Pass-the-Hash attacks. The next day, users report that a critical legacy accounting application can no longer authenticate to its on-premises database. What authentication protocol is Credential Guard likely blocking?",
+        options: [
+          "Kerberos v5",
+          "NTLMv2",
+          "SAML 2.0",
+          "NTLMv1 or WDigest"
+        ],
+        answer: "NTLMv1 or WDigest",
+        explanation: "Credential Guard leverages virtualization-based security (VBS) to isolate secrets. By design, it strictly blocks legacy, insecure authentication protocols like NTLMv1, MS-CHAPv2, and WDigest.",
+        moreDetails: "If an older application relies on these deprecated protocols to authenticate, it will break when Credential Guard is enabled. The application or backend server must be upgraded to support NTLMv2 or, preferably, Kerberos.",
+        otherOptions: "Kerberos v5 and NTLMv2 are modern, secure protocols that are fully supported and protected by Credential Guard. SAML is a cloud/web identity protocol not handled by the local LSA secrets.",
+        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/how-it-works"
+      },
+      {
+        id: 3008,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization wants to transition from manually managing Windows Update for Business (WUfB) rings to using Windows Autopatch to automate the patching of Windows, Microsoft 365 Apps, and Edge. What specific diagnostic data setting must be enabled in Intune for Autopatch to function?",
+        options: [
+          "Diagnostic data must be set to 'Off'.",
+          "Diagnostic data must be set to 'Required' (formerly Basic) or 'Optional' (formerly Full).",
+          "Windows Error Reporting must be disabled.",
+          "Desktop Analytics log collection must be configured to 'Verbose'."
+        ],
+        answer: "Diagnostic data must be set to 'Required' (formerly Basic) or 'Optional' (formerly Full).",
+        explanation: "Windows Autopatch relies heavily on Microsoft's telemetry and data analytics to determine device readiness, monitor update success, and automatically halt deployments if issues are detected.",
+        moreDetails: "If Windows diagnostic data is set to 'Off', Autopatch cannot see the health of the endpoints and will not manage them. The minimum requirement is 'Required' diagnostic data.",
+        otherOptions: "Setting it to 'Off' breaks the service. Disabling error reporting harms analytics. Desktop Analytics is a deprecated service (replaced by Endpoint Analytics).",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-autopatch/prepare/windows-autopatch-prerequisites"
+      },
+      {
+        id: 3009,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You configure an Intune BitLocker policy requiring a startup PIN. However, on your fleet of modern, thin-and-light Windows 11 tablets, the policy applies successfully but the users are never prompted to create a PIN, and the device boots straight to the Windows login screen. Why?",
+        options: [
+          "The tablets use Modern Standby (InstantGo), which silently ignores pre-boot PINs by default to support background network connectivity.",
+          "The users do not have Azure AD Premium P2 licenses.",
+          "BitLocker PINs are only supported on Windows Enterprise, not Windows Pro.",
+          "The tablets are missing a physical keyboard, which disables PIN entry."
+        ],
+        answer: "The tablets use Modern Standby (InstantGo), which silently ignores pre-boot PINs by default to support background network connectivity.",
+        explanation: "Devices that support Modern Standby (also known as InstantGo or connected standby) are designed to behave like smartphones, receiving emails and updates while asleep.",
+        moreDetails: "A pre-boot BitLocker PIN breaks this behavior because it stops the boot process entirely. Therefore, Windows natively suppresses the PIN requirement on these devices. To enforce a PIN on Modern Standby devices, you must explicitly enable the specific policy 'Enable use of BitLocker authentication requiring preboot keyboard input on slates'.",
+        otherOptions: "Licensing doesn't affect hardware PIN behavior. PINs are supported on Pro. On-screen touch keyboards are supported in the pre-boot environment.",
+        link: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bitlocker-device-encryption-overview-windows-10"
+      },
+      {
+        id: 3010,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are reviewing Endpoint Analytics in Intune and notice the 'Startup performance' score has plummeted across the organization. Drilling into the data, you see a specific third-party VPN agent's service is causing a 45-second delay during the 'Core boot' phase. How can you leverage Intune to automatically fix this without waiting for a vendor patch?",
+        options: [
+          "Use Proactive Remediations to deploy a PowerShell script that changes the VPN service startup type from 'Automatic' to 'Automatic (Delayed Start)'.",
+          "Deploy a Win32 App supersedence rule to downgrade the VPN client.",
+          "Configure an Endpoint Security Firewall rule to block the VPN until the desktop loads.",
+          "Change the Windows Autopilot deployment profile to 'Self-Deploying'."
+        ],
+        answer: "Use Proactive Remediations to deploy a PowerShell script that changes the VPN service startup type from 'Automatic' to 'Automatic (Delayed Start)'.",
+        explanation: "Proactive Remediations are script packages (Detection and Remediation) used to find and fix common support issues natively through the Intune Management Extension before the user even notices.",
+        moreDetails: "In this scenario, changing a heavy service to 'Delayed Start' moves its execution out of the critical Core Boot path, instantly improving the startup performance score and user experience. Proactive Remediations are perfect for this targeted, automated fix.",
+        otherOptions: "Downgrading might reintroduce security flaws. Blocking the firewall doesn't stop the service from hanging the boot sequence. Autopilot profiles have nothing to do with daily boot performance.",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/proactive-remediations"
+      }
+    ]
+  },
+  {
+    id: 993,
+    term: "Advanced Device Management Scenarios (2026 Updates)",
+    category: "Manage, maintain, and protect devices",
+    questions: [
+      {
+        id: 3001,
+        type: "hard",
+        question: "You deploy a BitLocker endpoint security policy via Intune requiring silent encryption (Warning for other disk encryption = Block). However, the policy fails with error code 0x803100b2 ('The drive cannot be encrypted because it contains unencrypted DMA ports'). How can you modify the Intune policy to allow silent encryption on these devices without entirely disabling DMA protection?",
+        options: [
+          "Set the 'Allow Warning for Other Disk Encryption' setting to 'Not Configured'.",
+          "Configure the 'Disable new DMA devices when this computer is locked' setting to 'Yes' and set 'Block Direct Memory Access' to 'Not Configured'.",
+          "Enable 'Allow standard users to enable encryption during Autopilot'.",
+          "Switch the encryption method from XTS-AES 256 to XTS-AES 128."
+        ],
+        answer: "Configure the 'Disable new DMA devices when this computer is locked' setting to 'Yes' and set 'Block Direct Memory Access' to 'Not Configured'.",
+        explanation: "Silent encryption often fails on hardware with external DMA ports (like Thunderbolt) because Windows blocks automatic encryption to prevent DMA attacks. By configuring 'Disable new DMA devices when this computer is locked', Windows satisfies the security requirement and allows silent encryption to proceed.",
+        moreDetails: "You can also explicitly configure the 'Block Direct Memory Access' setting to False (or 'Allowed') in an Endpoint Protection profile to bypass this check, though it lowers the security posture. DMA protection ensures that malicious devices cannot read memory directly over Thunderbolt/PCIe.",
+        otherOptions: "Allowing warnings defeats silent encryption. Standard users setting is for OOBE, not DMA. Cipher strength (128 vs 256) has no impact on DMA port checks.",
+        link: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/ts-bitlocker-intune-issues"
+      },
+      {
+        id: 3002,
+        type: "hard",
+        question: "Your organization uses Windows Autopatch to manage updates. You notice that a group of developers' machines are receiving feature updates significantly later than the 'Broad' ring, despite being assigned to it. Upon investigation, you find these devices also have a legacy Windows Update for Business (WUfB) profile assigned that defers feature updates by 180 days. Which update setting takes precedence?",
+        options: [
+          "Windows Autopatch dynamically overwrites all legacy WUfB policies on the client.",
+          "The legacy WUfB deferral policy of 180 days takes precedence, causing a conflict and delaying the Autopatch schedule.",
+          "The client device blue screens due to conflicting update rings.",
+          "The user is prompted to choose which update schedule to follow."
+        ],
+        answer: "The legacy WUfB deferral policy of 180 days takes precedence, causing a conflict and delaying the Autopatch schedule.",
+        explanation: "Windows Autopatch relies on specific WUfB settings deployed via Intune. If an administrator accidentally leaves a legacy WUfB profile deployed to the same devices with longer deferral periods, Windows will honor the stricter/longer deferral setting, breaking the Autopatch SLA.",
+        moreDetails: "Microsoft explicitly advises administrators to unassign or delete any existing WUfB feature update and quality update rings from devices that are being onboarded into Windows Autopatch to prevent these exact policy conflicts.",
+        otherOptions: "Autopatch does not automatically magically delete your Intune profiles. The device does not crash. The user is never prompted for MDM conflict resolution.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-autopatch/prepare/windows-autopatch-conflicts"
+      },
+      {
+        id: 3003,
+        type: "hard",
+        question: "You author a custom PowerShell script for Proactive Remediations (Endpoint Analytics) to clear the Google Chrome cache in the `Appdata\\Local` folder. The script works perfectly when tested locally, but when deployed via Intune, it fails to clear the cache. The Intune logs show the script executed successfully. What is the most likely reason for the failure?",
+        options: [
+          "The script was not signed with a trusted code-signing certificate.",
+          "The script is configured to run using the 'System' credentials rather than the 'Logged-on credentials'.",
+          "Endpoint Analytics does not support PowerShell version 5.1.",
+          "The devices do not have an active Microsoft 365 E5 license."
+        ],
+        answer: "The script is configured to run using the 'System' credentials rather than the 'Logged-on credentials'.",
+        explanation: "If a Proactive Remediation script needs to modify files within a specific user's profile (like AppData), the setting 'Run this script using the logged-on credentials' MUST be set to 'Yes'.",
+        moreDetails: "If run as System, the script executes in the context of the Local System account and will attempt to clear the cache in `C:\\Windows\\System32\\config\\systemprofile\\AppData`, which is not the actual user's profile, leading to silent failure.",
+        otherOptions: "Unsigned scripts can run if execution policy allows (or is bypassed). Intune fully supports PS 5.1. E5 is not strictly required for basic script execution if properly licensed for Intune.",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/proactive-remediations"
+      },
+      {
+        id: 3004,
+        type: "hard",
+        question: "You deploy Microsoft Defender for Endpoint (MDE) to Windows clients using the Intune Endpoint Detection and Response (EDR) policy. However, the devices are not appearing in the Microsoft Defender portal. You verify the Intune policy shows 'Succeeded'. You run the MDE Client Analyzer tool on a failing device. What is the most common network-related cause for this silent onboarding failure?",
+        options: [
+          "The devices are blocking ICMP Echo Requests (ping) to the Azure datacenter.",
+          "The corporate firewall is performing TLS inspection on traffic to *.ods.opinsights.azure.com without having the correct root certificate distributed.",
+          "The devices do not have a static IPv4 address assigned.",
+          "Port 3389 is blocked on the local Windows Firewall."
+        ],
+        answer: "The corporate firewall is performing TLS inspection on traffic to *.ods.opinsights.azure.com without having the correct root certificate distributed.",
+        explanation: "MDE relies on specific URLs for telemetry and command-and-control. If a corporate firewall or proxy performs SSL/TLS inspection (HTTPS interception) on this traffic without properly trusting the certificates, the MDE sensor will fail to communicate with the cloud, silently failing the onboarding.",
+        moreDetails: "Microsoft recommends bypassing TLS inspection entirely for MDE URLs to ensure telemetry integrity and prevent onboarding failures.",
+        otherOptions: "ICMP is not required for MDE. Static IPs are irrelevant. Port 3389 is RDP and has nothing to do with MDE telemetry.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/configure-proxy-internet"
+      },
+      {
+        id: 3005,
+        type: "hard",
+        question: "A critical Line-of-Business (LOB) application suddenly stops working for all users after a new Intune policy is deployed. The application uses complex VBA macros embedded in Excel files to communicate with a local database. Which Intune policy is the most likely culprit?",
+        options: [
+          "An Attack Surface Reduction (ASR) rule set to 'Block' for 'Block all Office applications from creating child processes'.",
+          "A Windows Update for Business policy that upgraded Office to the 64-bit version.",
+          "A Device Restriction policy that disabled the Microsoft Store.",
+          "A BitLocker policy that enforced full disk encryption."
+        ],
+        answer: "An Attack Surface Reduction (ASR) rule set to 'Block' for 'Block all Office applications from creating child processes'.",
+        explanation: "Attack Surface Reduction (ASR) rules are highly effective at stopping malware, but they frequently break legacy applications that rely on Office macros executing external commands, spawning scripts, or creating child processes.",
+        moreDetails: "When deploying ASR rules, it is a critical best practice to deploy them in 'Audit mode' first. You then review the MDE Advanced Hunting logs to identify legitimate business applications that are being caught, and add exclusions for them before switching the rule to 'Block'.",
+        otherOptions: "While 64-bit Office can break macros, Intune WUfB doesn't force architecture changes. Store restrictions and BitLocker do not interfere with Excel VBA execution.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-deployment-test"
+      },
+      {
+        id: 3006,
+        type: "hard",
+        question: "Your organization uses Microsoft Defender for Endpoint (MDE). You want to isolate highly sensitive 'R&D' laptops into a specific MDE Device Group that applies stricter automated investigation and remediation (AIR) policies. You manage these devices via Intune. What is the most automated way to assign these devices to the correct MDE Device Group?",
+        options: [
+          "Manually search for the devices in the MDE portal and type 'R&D' in the tags field.",
+          "Use an Intune Device Configuration profile (Settings Catalog) to deploy a custom Registry key containing the 'R&D' device tag.",
+          "Create an Entra ID dynamic group and sync it directly to the MDE Device Group.",
+          "Run a PowerShell script manually on each laptop to modify the local hosts file."
+        ],
+        answer: "Use an Intune Device Configuration profile (Settings Catalog) to deploy a custom Registry key containing the 'R&D' device tag.",
+        explanation: "MDE device tags can be injected automatically by creating a specific registry key (`HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows Advanced Threat Protection\\DeviceTagging`). Intune can deploy this via the Settings Catalog natively.",
+        moreDetails: "Once the tag (e.g., 'R&D') is deployed via Intune to the R&D device group, the MDE portal reads the registry key, tags the device, and a dynamic rule in the MDE portal automatically places it into the corresponding high-security Device Group.",
+        otherOptions: "Manual tagging is not automated. Entra ID groups cannot be used directly as MDE Device Groups (MDE relies on its own RBAC/Group structure based on tags, OS, or domains). Hosts file has nothing to do with MDE tagging.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/machine-tags"
+      },
+      {
+        id: 3007,
+        type: "hard",
+        question: "A recent Windows Quality Update deployed via Windows Update for Business (WUfB) causes a critical line-of-business application to crash with a Blue Screen of Death (BSOD) across your organization. What is the fastest native Intune method to resolve this for affected devices and prevent it from installing on others?",
+        options: [
+          "Deploy a Win32 app containing a PowerShell script executing `wusa.exe /uninstall /kb:XXXXXX`.",
+          "Use the 'Uninstall' feature located within the specific Windows 10/11 Update Ring profile in Intune.",
+          "Wipe all affected devices and redeploy via Autopilot.",
+          "Change the WUfB quality update deferral setting from 0 days to 365 days."
+        ],
+        answer: "Use the 'Uninstall' feature located within the specific Windows 10/11 Update Ring profile in Intune.",
+        explanation: "Intune provides a native 'Uninstall' remote action directly within the Update Ring profile properties. Selecting 'Uninstall' for Quality updates commands all devices in that ring to revert the latest quality update and pauses further installations of that update.",
+        moreDetails: "This native feature is far more reliable and faster than deploying custom uninstallation scripts, as it leverages the built-in Windows Update rollback mechanisms.",
+        otherOptions: "Scripting wusa.exe is error-prone. Wiping is drastic and unacceptable. Changing deferral to 365 days prevents future updates but doesn't uninstall the already applied bad update.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-for-business-configure#uninstall"
+      },
+      {
+        id: 3008,
+        type: "hard",
+        question: "You need to deploy a specific legacy Active Directory ADMX policy setting that is not natively available in the Intune Settings Catalog or Administrative Templates. You possess the raw ADMX and ADML files. How can you deploy this setting using Intune?",
+        options: [
+          "Upload the ADMX file directly to a 'Custom Configuration' profile as an OMA-URI payload.",
+          "Import the ADMX file into the 'Imported Administrative templates' section in Intune, then create a profile using the imported template.",
+          "You cannot deploy custom ADMX files via Intune; you must use Configuration Manager.",
+          "Convert the ADMX file to a .ppkg Provisioning Package."
+        ],
+        answer: "Import the ADMX file into the 'Imported Administrative templates' section in Intune, then create a profile using the imported template.",
+        explanation: "Intune natively supports the ingestion of third-party or custom ADMX/ADML files via the 'Imported Administrative templates' feature. Once imported, administrators can configure the settings via a standard GUI profile, just like native templates.",
+        moreDetails: "Previously, this required complex Custom OMA-URI string manipulation (ADMX ingestion), but the modern approach natively parses the uploaded XML and generates a user-friendly configuration interface.",
+        otherOptions: "Custom OMA-URI was the old, complex way. Intune fully supports custom ADMX. PPKG conversion is unnecessary and complex.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/administrative-templates-import-custom"
+      },
+      {
+        id: 3009,
+        type: "hard",
+        question: "You deploy a strict Microsoft Defender Firewall policy via Intune that blocks all inbound traffic. However, a local IT technician manually creates a local firewall rule on their laptop allowing inbound port 8080. When testing, the technician finds port 8080 is still successfully blocked. Which Intune setting ensures the local rule was ignored?",
+        options: [
+          "Set 'Firewall rule merging' to 'Not Configured'.",
+          "Set 'Firewall rule merging' to 'Block'.",
+          "Enable 'Stealth Mode'.",
+          "Set 'IPsec Exemptions' to 'Block'."
+        ],
+        answer: "Set 'Firewall rule merging' to 'Block'.",
+        explanation: "The 'Firewall rule merging' setting dictates whether local firewall rules (created by users or local admins) are evaluated alongside MDM-deployed rules. If set to 'Block' (or 'Disable'), the firewall exclusively honors the Intune policies, and all local rules are completely ignored.",
+        moreDetails: "This is a critical security posture requirement for Enterprise environments to prevent local administrators from bypassing central firewall policies.",
+        otherOptions: "Not Configured allows merging by default. Stealth mode drops ICMP/unsolicited packets but doesn't override local port rules. IPsec exemptions relate to encrypted traffic bypasses.",
+        link: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/best-practices-configuring"
+      },
+      {
+        id: 3010,
+        type: "hard",
+        question: "A helpdesk agent attempts to initiate a Remote Help session with a user. The Intune portal shows the action as successful, but the user's Remote Help app launches and immediately displays an error stating 'You do not have access to this application.' What is the most likely cause?",
+        options: [
+          "The user does not have local administrator privileges.",
+          "The user is not assigned the premium Remote Help add-on license.",
+          "A Conditional Access policy is blocking access to the 'Remote Help' cloud application.",
+          "The user's device is missing the Intune Management Extension."
+        ],
+        answer: "A Conditional Access policy is blocking access to the 'Remote Help' cloud application.",
+        explanation: "Remote Help authenticates against Entra ID and is treated as a cloud application. If a Conditional Access policy explicitly blocks access to this app (e.g., due to coming from an untrusted IP or failing a compliance check), the app will launch but fail authentication.",
+        moreDetails: "Because Remote Help relies on identity verification to establish trust between the helper and the user, strict CA policies can inadvertently block the support session.",
+        otherOptions: "Standard users can receive Remote Help (admin is only needed for elevation). The user does not need the premium license (only the helper/tenant needs it). IME is not required for the standalone Remote Help app execution.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#conditional-access"
+      }
+    ]
   }
 ];

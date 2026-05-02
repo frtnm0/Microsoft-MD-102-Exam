@@ -1092,5 +1092,349 @@ export const domain2Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/location-condition"
       }
     ]
+  },
+  {
+    id: 99,
+    term: "2026 Scenario Based Questions",
+    category: "Manage identity and compliance",
+    questions: [
+      {
+        id: 2001,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your company has a strict Conditional Access policy that requires devices to be 'Hybrid Microsoft Entra joined' to access SharePoint Online. You are rolling out a new Bring Your Own Device (BYOD) program where users enroll their personal Windows 11 devices via Intune. When BYOD users try to access SharePoint, they are blocked. Why is this happening, and how should you adjust the policy?",
+        options: [
+          "BYOD devices are marked as personal, which automatically fails Conditional Access; change the device ownership to Corporate.",
+          "BYOD devices perform a Microsoft Entra registration, not a Hybrid Join; update the Conditional Access policy to require 'Require device to be marked as compliant' instead.",
+          "The users do not have Azure AD Premium P2 licenses; assign the licenses to allow BYOD access.",
+          "Intune is blocking the connection because it detects a non-domain network; deploy a VPN profile."
+        ],
+        answer: "BYOD devices perform a Microsoft Entra registration, not a Hybrid Join; update the Conditional Access policy to require 'Require device to be marked as compliant' instead.",
+        explanation: "Personal BYOD devices cannot be 'Hybrid Microsoft Entra joined' because that status explicitly requires the device to be joined to a local on-premises Active Directory domain. BYOD devices are typically 'Microsoft Entra registered'.",
+        moreDetails: "To allow secure BYOD access, organizations should use Intune Compliance Policies to ensure the device meets security standards, and then configure Conditional Access to 'Require device to be marked as compliant' rather than requiring Hybrid join.",
+        otherOptions: "Changing ownership to Corporate doesn't magically join them to the on-prem domain. Licensing is not the cause of this specific CA failure. VPNs are unrelated to the CA Hybrid join requirement.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant"
+      },
+      {
+        id: 2002,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have deployed Windows Local Administrator Password Solution (Windows LAPS) natively integrated with Microsoft Entra ID. You configure an Intune endpoint security policy to rotate the LAPS password every 7 days. However, the passwords are not rotating. You discover a legacy GPO for the old Microsoft LAPS is still applied to these Hybrid joined devices. What is the expected behavior?",
+        options: [
+          "The Intune policy takes precedence because MDM wins over GPO by default in Windows 11.",
+          "Windows LAPS goes into an error state because it detects conflicting management sources (GPO vs MDM), pausing all password rotations.",
+          "The local LAPS client merges the policies and uses the most restrictive setting (e.g., shortest rotation time).",
+          "The GPO overwrites the Intune policy locally, causing the password to rotate to the on-premises AD instead of Entra ID."
+        ],
+        answer: "Windows LAPS goes into an error state because it detects conflicting management sources (GPO vs MDM), pausing all password rotations.",
+        explanation: "Windows LAPS has a built-in safeguard: if it detects that it is being configured by multiple conflicting management authorities (like both Intune MDM policies and local GPOs), it enters a blocked/error state.",
+        moreDetails: "When in this state, Windows LAPS will not rotate the password or back it up to either Entra ID or on-premises AD until the administrator removes the conflicting policy (usually the legacy GPO).",
+        otherOptions: "MDMWinsOverGP does not apply automatically to LAPS in this specific conflict safeguard scenario. Policies do not merge. The GPO doesn't simply win; the service halts to prevent identity corruption.",
+        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-policy-conflicts"
+      },
+      {
+        id: 2003,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A user reports that their custom dictionary, taskbar layout, and Windows theme are no longer syncing to their new Windows 11 device. The organization recently disabled Enterprise State Roaming (ESR) and transitioned fully to OneDrive Known Folder Move (KFM). What is the reason for this issue?",
+        options: [
+          "OneDrive KFM syncs files (Desktop, Documents, Pictures), not Windows OS settings or app configurations.",
+          "The user's OneDrive quota is full, pausing the sync of OS settings.",
+          "OneDrive KFM requires a specific Intune policy to sync the AppData folder where the taskbar layout is stored.",
+          "The new device is not marked as compliant in Intune."
+        ],
+        answer: "OneDrive KFM syncs files (Desktop, Documents, Pictures), not Windows OS settings or app configurations.",
+        explanation: "Enterprise State Roaming (ESR) was responsible for syncing Windows settings like themes, taskbar layouts, passwords, and custom dictionaries. OneDrive Known Folder Move (KFM) ONLY redirects and syncs user data folders (Desktop, Documents, Pictures).",
+        moreDetails: "With the deprecation of ESR in Windows 11, organizations must rely on other methods (like Intune configuration profiles or user experience virtualization) if they wish to mandate specific taskbar layouts, as OneDrive KFM does not handle OS state.",
+        otherOptions: "It is not a quota issue. Intune policies configure KFM, but KFM cannot natively sync AppData/OS settings in the way ESR did. Compliance is irrelevant to this specific sync mechanism.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/enterprise-state-roaming-windows-settings-reference"
+      },
+      {
+        id: 2004,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization is moving away from Hybrid Microsoft Entra Join to native Microsoft Entra Join for all new laptops. A critical legacy on-premises web application requires Kerberos authentication. Leadership is concerned that Entra Joined devices won't be able to access this application. Is this concern valid?",
+        options: [
+          "Yes, native Entra Joined devices cannot use Kerberos because they do not have a computer object in the on-premises Active Directory.",
+          "No, as long as Microsoft Entra Connect is syncing on-premises identities to the cloud, the Entra Joined device can obtain Kerberos Ticket Granting Tickets (TGTs) for the user.",
+          "Yes, the application must be rewritten to support SAML or OIDC before Entra Joined devices can access it.",
+          "No, but only if you configure an Always-On VPN that initiates before the user logs into Windows."
+        ],
+        answer: "No, as long as Microsoft Entra Connect is syncing on-premises identities to the cloud, the Entra Joined device can obtain Kerberos Ticket Granting Tickets (TGTs) for the user.",
+        explanation: "Microsoft Entra Joined devices *can* achieve single sign-on (SSO) to on-premises resources that rely on Active Directory (like Kerberos or NTLM).",
+        moreDetails: "This works because when a synchronized user signs into the Entra Joined device, the device uses the user's synchronized identity (via Entra Connect/Cloud Sync) to communicate with the local Domain Controller to request a Kerberos TGT, assuming there is line-of-sight to the DC.",
+        otherOptions: "The device itself lacks an on-prem computer object, but the *user* authenticates, which is what matters for Kerberos SSO to the app. Rewriting the app is not required. Pre-logon VPN is not strictly required if line-of-sight is established post-logon.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/device-sso-to-on-premises-resources"
+      },
+      {
+        id: 2005,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have a Conditional Access policy blocking access to Microsoft 365 for non-compliant devices. You configure an Intune compliance policy requiring BitLocker, with a 'Mark device noncompliant' grace period of 3 days. A user's device suddenly decrypts its drive. What happens when the user tries to access Exchange Online immediately after decryption?",
+        options: [
+          "Access is blocked immediately because the hardware state changed, overriding the grace period.",
+          "Access is granted. The device enters 'In Grace Period' status, and Conditional Access treats 'In Grace Period' as compliant for the next 3 days.",
+          "Access is blocked, and the device is instantly wiped via Intune auto-remediation.",
+          "Access is granted, but the user is forced into a read-only mode for Exchange Online."
+        ],
+        answer: "Access is granted. The device enters 'In Grace Period' status, and Conditional Access treats 'In Grace Period' as compliant for the next 3 days.",
+        explanation: "When a compliance policy includes a grace period, a device failing that specific setting is marked as 'In Grace Period' rather than immediately 'Noncompliant'.",
+        moreDetails: "Crucially, Microsoft Entra Conditional Access policies treat the 'In Grace Period' state as equivalent to 'Compliant'. Therefore, the user will not be blocked from accessing resources until the 3-day timer expires and the status officially changes to 'Noncompliant'.",
+        otherOptions: "Hardware changes do not override the explicitly defined Intune grace period. Auto-wiping does not happen for simple compliance failures. There is no native 'read-only' mode triggered by grace periods.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/actions-for-noncompliance"
+      },
+      {
+        id: 2006,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying Windows Hello for Business in a Hybrid Microsoft Entra environment. You do not have Active Directory Federation Services (AD FS) infrastructure, and you want to use the Cloud Trust model. Which critical on-premises component must be deployed and configured to support Cloud Trust?",
+        options: [
+          "A standalone Certificate Authority (CA) to issue user certificates.",
+          "Microsoft Entra Kerberos Server object in the on-premises Active Directory.",
+          "An always-on VPN to establish trust before login.",
+          "A Read-Only Domain Controller (RODC) placed in the Azure DMZ."
+        ],
+        answer: "Microsoft Entra Kerberos Server object in the on-premises Active Directory.",
+        explanation: "Windows Hello for Business Cloud Trust relies on Microsoft Entra ID issuing Kerberos Ticket Granting Tickets (TGTs) on behalf of the on-premises Active Directory.",
+        moreDetails: "To facilitate this, you must run the Azure AD Kerberos PowerShell module to create an 'AzureADKerberos' computer object in your on-premises AD. This allows Entra ID to encrypt TGTs that the on-premises DCs can decrypt, granting SSO to local resources without needing complex PKI/Certificate trust or AD FS infrastructure.",
+        otherOptions: "Cloud Trust explicitly removes the need for complex PKI (Certificate Trust) or AD FS (Key Trust). A VPN is not fundamentally required for the trust model itself. An RODC in Azure is not related to Hello Cloud Trust.",
+        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/deploy/hybrid-cloud-trust"
+      },
+      {
+        id: 2007,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are writing a custom Intune Compliance Policy using a PowerShell script to check for a specific proprietary registry key. You upload the PowerShell script and create the policy. However, all targeted devices are immediately marked as 'Noncompliant' or 'Error'. The Intune Management Extension logs show the script executed successfully. What is the most likely reason for the compliance failure?",
+        options: [
+          "The script is not digitally signed by a public CA.",
+          "The local PowerShell execution policy on the devices is set to 'Restricted'.",
+          "The PowerShell script is not returning the output in the strictly required compressed JSON format.",
+          "Custom compliance scripts must be written in VBScript, not PowerShell."
+        ],
+        answer: "The PowerShell script is not returning the output in the strictly required compressed JSON format.",
+        explanation: "For an Intune custom compliance PowerShell script to work, it must output its final result as a specifically formatted JSON string using `Write-Output` (e.g., `return @{ 'SettingName' = $value } | ConvertTo-Json -Compress`).",
+        moreDetails: "If the script just returns 'True' or exits with a code, Intune cannot parse the result against the JSON discovery file you uploaded during policy creation, resulting in an evaluation error and noncompliant state.",
+        otherOptions: "Intune bypasses the local execution policy for its own scripts. Signing is good practice but not the absolute cause of a parsing error if execution succeeded. VBScript is not supported for custom compliance.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-custom-script"
+      },
+      {
+        id: 2008,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization uses Windows LAPS natively with Microsoft Entra ID. A Helpdesk technician uses the Intune portal to manually rotate the LAPS password for a specific device because they suspect the password was compromised. However, the device is completely powered off and offline. What is the immediate state of the password?",
+        options: [
+          "The password immediately updates in Entra ID, and the old password on the device is invalidated immediately.",
+          "The rotation request is queued in Intune. Entra ID retains the current password until the device powers on, receives the MDM sync, rotates the password locally, and securely posts the new password back to Entra ID.",
+          "The password rotation fails instantly because the device is unreachable.",
+          "Entra ID generates a new password, but the device must be wiped upon next boot."
+        ],
+        answer: "The rotation request is queued in Intune. Entra ID retains the current password until the device powers on, receives the MDM sync, rotates the password locally, and securely posts the new password back to Entra ID.",
+        explanation: "Windows LAPS is an endpoint-driven process. The device itself is responsible for generating the new local password and securely uploading it to Entra ID.",
+        moreDetails: "When a rotation is requested via Intune, Intune simply queues an MDM command. The Entra ID password record does not change until the device comes online, processes the command, generates the new password, and successfully transmits it to the cloud. Therefore, the old password remains valid and viewable until that sync occurs.",
+        otherOptions: "Entra ID does not generate the password itself. It does not fail instantly, it queues. The old password isn't magically invalidated offline.",
+        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-scenarios-azure-active-directory"
+      },
+      {
+        id: 2009,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have an Intune Device Enrollment Restriction policy set to 'Block' personally owned Windows devices. A user purchases a Windows 11 laptop from Best Buy for work and tries to enroll it using the 'Access work or school' settings page. The enrollment is blocked. You need to allow this specific device to enroll without allowing all personal devices. What is the most efficient administrative action?",
+        options: [
+          "Create a Conditional Access policy excluding this user.",
+          "Add the device's hardware hash to the Windows Autopilot devices list, which automatically categorizes it as Corporate.",
+          "Change the global enrollment restriction to 'Allow' temporarily.",
+          "Instruct the user to use a local account instead of a Microsoft account."
+        ],
+        answer: "Add the device's hardware hash to the Windows Autopilot devices list, which automatically categorizes it as Corporate.",
+        explanation: "If an organization blocks personal device enrollment, Intune relies on Corporate Identifiers to determine if a device is company-owned.",
+        moreDetails: "Registering the hardware hash into the Autopilot service explicitly flags the device as a 'Corporate' owned device in Entra/Intune. When the user attempts to enroll it again, the enrollment restriction policy will evaluate it as Corporate and allow the enrollment, without needing to open personal enrollment globally.",
+        otherOptions: "CA policies don't override Intune MDM enrollment restrictions directly in this manner. Opening global restrictions is insecure. Local accounts cannot enroll in Entra ID.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/corporate-identifiers-add"
+      },
+      {
+        id: 2010,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You want to allow users to access SharePoint Online from unmanaged, personal home computers via a web browser, but you must prevent them from downloading, printing, or syncing any documents. How can you achieve this using Microsoft's modern security stack?",
+        options: [
+          "Configure a Conditional Access policy with a Session Control routing traffic through Microsoft Defender for Cloud Apps (App Enforced Restrictions) to block downloads.",
+          "Deploy an Intune App Protection Policy (MAM) to the Microsoft Edge browser on their unmanaged PCs.",
+          "Require the devices to Hybrid Entra Join before accessing SharePoint.",
+          "Disable downloading globally in the SharePoint Admin Center for all users."
+        ],
+        answer: "Configure a Conditional Access policy with a Session Control routing traffic through Microsoft Defender for Cloud Apps (App Enforced Restrictions) to block downloads.",
+        explanation: "To restrict actions (like downloading or printing) within a web session on an unmanaged device, you must use Conditional Access Session Controls integrated with Microsoft Defender for Cloud Apps (formerly MCAS).",
+        moreDetails: "This sets up a reverse proxy. The CA policy detects the device is unmanaged, and applies a 'Use app enforced restrictions' or custom Defender for Cloud Apps policy that inspects the session in real-time, allowing viewing but blocking the download of files.",
+        otherOptions: "MAM is primarily for mobile devices (iOS/Android), not full desktop browsers on unmanaged PCs. Hybrid join blocks access entirely (which violates the requirement to *allow* access). Global SharePoint blocks affect managed devices too.",
+        link: "https://learn.microsoft.com/en-us/defender-cloud-apps/proxy-intro-aad"
+      }
+    ]
+  },
+  {
+    id: 992,
+    term: "Advanced Identity & Compliance Scenarios (2026 Updates)",
+    category: "Manage identity and compliance",
+    questions: [
+      {
+        id: 2001,
+        type: "hard",
+        question: "Your organization uses Conditional Access to require a 'Compliant Device' to access Microsoft 365 apps. You deploy a new Intune compliance policy with a custom script that checks for a specific registry key. A user reports they are blocked from accessing email immediately after enrolling their new device. The Intune portal shows the device compliance state as 'Not evaluated'. How should you configure the compliance policy settings to prevent this immediate blocking while the custom script runs?",
+        options: [
+          "Set 'Mark devices with no compliance policy assigned as' to Compliant.",
+          "Configure a grace period in the compliance policy, setting 'Mark device noncompliant' to 1 or 2 days instead of 'Immediately'.",
+          "Exclude the user from the Conditional Access policy permanently.",
+          "Change the Conditional Access policy to 'Require Hybrid Entra ID joined device' instead."
+        ],
+        answer: "Configure a grace period in the compliance policy, setting 'Mark device noncompliant' to 1 or 2 days instead of 'Immediately'.",
+        explanation: "By configuring an action for noncompliance with a grace period (e.g., mark noncompliant after 1 day), the device is considered in a 'grace period' state, which Conditional Access treats as compliant, allowing the user access while the Intune Management Extension runs the custom script.",
+        moreDetails: "Custom compliance scripts can take several hours to evaluate upon first enrollment. If the action is set to 'Immediately', Conditional Access will block access until the script returns a result. A grace period provides a smooth onboarding experience.",
+        otherOptions: "The policy IS assigned, so 'no policy assigned' setting won't help. Excluding the user defeats security. Changing to Hybrid Join doesn't solve the compliance evaluation delay.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/actions-for-noncompliance"
+      },
+      {
+        id: 2002,
+        type: "hard",
+        question: "You have deployed Windows Local Administrator Password Solution (Windows LAPS) for Entra ID. A Helpdesk technician is trying to retrieve the local admin password for a device named 'Laptop-01' from the Entra ID portal, but the 'Local administrator password recovery' tab is greyed out. The technician has the 'Helpdesk Administrator' Entra ID role. What is the precise reason for this issue?",
+        options: [
+          "The device is offline and cannot communicate with Entra ID.",
+          "The 'Helpdesk Administrator' role does not have the 'microsoft.directory/deviceLocalCredentials/password/read' permission by default.",
+          "Windows LAPS requires the device to be co-managed with Configuration Manager.",
+          "The password has already been read by another administrator and cannot be read twice."
+        ],
+        answer: "The 'Helpdesk Administrator' role does not have the 'microsoft.directory/deviceLocalCredentials/password/read' permission by default.",
+        explanation: "By default, only highly privileged roles like Global Administrator or Cloud Device Administrator can read LAPS passwords. To allow Helpdesk staff to read them, you must create a Custom Role with the 'microsoft.directory/deviceLocalCredentials/password/read' permission.",
+        moreDetails: "This strict RBAC requirement ensures that local admin passwords are not overly exposed. You can also scope this custom role to specific Administrative Units (AUs) to limit which devices the helpdesk can access.",
+        otherOptions: "The device being offline doesn't stop the portal from showing the last backed-up password. LAPS is natively supported in Entra ID without ConfigMgr. Passwords can be read multiple times until rotated.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/windows-laps-manage"
+      },
+      {
+        id: 2003,
+        type: "hard",
+        question: "You configure a Device Cleanup Rule in Intune to delete devices that haven't checked in for 90 days. A user goes on maternity leave for 4 months. When they return, their Intune device record is gone. However, they can still log in to the laptop, but it cannot access company resources due to Conditional Access. What is the status of the device in Entra ID?",
+        options: [
+          "The Entra ID device record is also automatically deleted when Intune deletes its record.",
+          "The Entra ID device record remains active, but the device is no longer managed by Intune, causing it to fail the 'Require device to be marked as compliant' Conditional Access control.",
+          "The Entra ID device record is moved to the 'Deleted Objects' container for 30 days.",
+          "The device automatically converts to a 'Registered' state instead of 'Joined'."
+        ],
+        answer: "The Entra ID device record remains active, but the device is no longer managed by Intune, causing it to fail the 'Require device to be marked as compliant' Conditional Access control.",
+        explanation: "Intune Device Cleanup Rules ONLY delete the record from Intune. They do not automatically delete the corresponding device object in Entra ID.",
+        moreDetails: "Because the Intune record is gone, the device cannot be evaluated for compliance. Therefore, any Conditional Access policy requiring a compliant device will block access. To clean up Entra ID, you must use a separate process (like PowerShell or Entra ID stale device scripts).",
+        otherOptions: "Entra ID records are not automatically deleted by Intune cleanup. It doesn't move to deleted objects automatically. It retains its join state, just loses management.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe#delete-devices-from-the-intune-portal"
+      },
+      {
+        id: 2004,
+        type: "hard",
+        question: "An organization is using Defender for Cloud Apps to monitor unsanctioned applications. You want to automatically block access to any app marked as 'Unsanctioned' on all managed Windows endpoints, regardless of whether they are on the corporate network. Which integration must you enable in the Intune and Defender portals to achieve this?",
+        options: [
+          "Enable the 'Microsoft Defender for Endpoint' integration in Intune and turn on 'Enforce network protection' to block unsanctioned apps.",
+          "Configure a VPN profile in Intune that routes all traffic through an Azure Firewall.",
+          "Deploy a custom proxy PAC file via Intune to redirect all browser traffic.",
+          "Enable 'Block access to apps in the Microsoft Defender for Cloud Apps catalog' directly in the Conditional Access portal."
+        ],
+        answer: "Enable the 'Microsoft Defender for Endpoint' integration in Intune and turn on 'Enforce network protection' to block unsanctioned apps.",
+        explanation: "Defender for Cloud Apps integrates natively with Microsoft Defender for Endpoint (MDE). When an app is tagged as 'Unsanctioned', MDE's Network Protection feature intercepts the traffic at the endpoint and blocks it, even off-network.",
+        moreDetails: "This requires Intune to deploy a configuration profile enabling Network Protection in 'Block' mode. This creates a seamless cloud-to-endpoint blocking mechanism without requiring traditional proxies or VPNs.",
+        otherOptions: "VPNs and PAC files are legacy approaches. Conditional Access evaluates logins to Entra-integrated apps, not raw network traffic to random unsanctioned web apps.",
+        link: "https://learn.microsoft.com/en-us/defender-cloud-apps/mde-integration"
+      },
+      {
+        id: 2005,
+        type: "hard",
+        question: "A Hybrid Entra ID joined device loses its trust relationship with the on-premises Active Directory domain. The user cannot log in. An administrator removes the device from the local domain and rejoins it. What happens to the device's existing Intune enrollment and Entra ID Hybrid Join state?",
+        options: [
+          "The device seamlessly reconnects to Intune using its existing certificates without administrative intervention.",
+          "The Intune enrollment is broken, and a duplicate Entra ID device object will be created. The device must be wiped or manually re-enrolled.",
+          "The device automatically converts from Hybrid Joined to purely Entra ID Joined.",
+          "Intune automatically detects the new domain SID and patches the enrollment profile."
+        ],
+        answer: "The Intune enrollment is broken, and a duplicate Entra ID device object will be created. The device must be wiped or manually re-enrolled.",
+        explanation: "Breaking the local AD trust and rejoining the domain generates a new computer SID. Entra Connect syncs this as a completely new device object to Entra ID, creating a duplicate.",
+        moreDetails: "The existing Intune enrollment is tied to the old Entra ID object and the old PRT (Primary Refresh Token). The device will no longer receive Intune policies, and the enrollment is effectively orphaned. IT must manually clean up the old records and re-trigger enrollment via Group Policy or wipe the device.",
+        otherOptions: "It does not reconnect seamlessly. It does not convert to Entra ID joined (it's still joined to on-prem AD). Intune cannot patch SID changes.",
+        link: "https://learn.microsoft.com/en-us/troubleshoot/entra/identity/hybrid/duplicate-device-objects-hybrid-join"
+      },
+      {
+        id: 2006,
+        type: "hard",
+        question: "Your organization uses Entra ID Privileged Identity Management (PIM). A Helpdesk technician needs to elevate their permissions to 'Intune Administrator' to troubleshoot a critical issue. However, they complain that PIM is requiring them to provide a ticket number and use the Authenticator app, slowing them down. Where are these requirements enforced?",
+        options: [
+          "In the Conditional Access policy targeting the Intune portal.",
+          "In the Entra ID PIM Role settings for the 'Intune Administrator' role.",
+          "In the Intune Tenant Administration RBAC settings.",
+          "In the Microsoft Defender for Identity portal."
+        ],
+        answer: "In the Entra ID PIM Role settings for the 'Intune Administrator' role.",
+        explanation: "PIM allows global administrators to configure specific activation requirements for each Entra ID role. These settings, such as requiring MFA, requiring justification (ticket number), or requiring approval, are configured directly on the Role within the PIM interface.",
+        moreDetails: "This ensures that standing access is eliminated and that every elevation event is securely audited and verified, regardless of the user's initial login conditions.",
+        otherOptions: "Conditional access can enforce MFA at login, but PIM enforces it at activation. Intune RBAC doesn't control Entra ID PIM activation rules.",
+        link: "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-how-to-change-default-settings"
+      },
+      {
+        id: 2007,
+        type: "hard",
+        question: "You deploy Windows LAPS (Local Administrator Password Solution) via Intune. You configure the 'Post-authentication actions' policy to 'Reset the password and logoff the managed account' with a grace period of 8 hours. A technician logs into a server using the LAPS local admin account at 8:00 AM. They disconnect their session but leave it running. What happens exactly at 4:00 PM?",
+        options: [
+          "The server is abruptly powered off.",
+          "The LAPS password is automatically rotated in Entra ID, and the technician's active local admin session is forcibly logged off.",
+          "The technician receives a warning prompt allowing them to extend the grace period by 1 hour.",
+          "Nothing happens until the technician manually logs off, at which point the password rotates."
+        ],
+        answer: "The LAPS password is automatically rotated in Entra ID, and the technician's active local admin session is forcibly logged off.",
+        explanation: "The 'Post-authentication actions' setting in Windows LAPS natively enforces security hygiene. If set to reset and logoff, once the configured grace period (8 hours) expires after the initial authentication, Windows will forcibly terminate that user's session and rotate the password immediately.",
+        moreDetails: "This mitigates the risk of 'pass-the-hash' attacks or unauthorized access from orphaned administrative sessions left running by negligent technicians.",
+        otherOptions: "It logs off the user, it doesn't power off the whole server. There are no extension prompts for LAPS post-auth actions. It does not wait for manual logoff if the grace period is reached.",
+        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/laps/laps-scenarios-post-authentication-actions"
+      },
+      {
+        id: 2008,
+        type: "hard",
+        question: "A user reports their laptop was stolen. You immediately disable their Entra ID account and issue a remote Wipe command from Intune. However, you are concerned the thief might access locally cached corporate emails if the device doesn't connect to the internet to receive the wipe command. What Entra ID action should you take immediately to invalidate their active tokens?",
+        options: [
+          "Delete the Intune device record.",
+          "Select 'Revoke sessions' in the user's Entra ID profile.",
+          "Reset their password.",
+          "Add them to a blocked Conditional Access group."
+        ],
+        answer: "Select 'Revoke sessions' in the user's Entra ID profile.",
+        explanation: "Revoking sessions in Entra ID forces an immediate revocation of the user's Primary Refresh Token (PRT) and any active session cookies.",
+        moreDetails: "While the device might be offline, the moment it attempts to authenticate to any Microsoft 365 service (like Outlook trying to sync), the revoked PRT will be rejected, instantly cutting off access to cloud resources even before the Wipe command is processed.",
+        otherOptions: "Deleting the Intune record orphans the device. Resetting the password doesn't immediately invalidate the PRT (it can take up to an hour for continuous access evaluation). Conditional access also relies on token refresh cycles.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/users/users-revoke-access"
+      },
+      {
+        id: 2009,
+        type: "hard",
+        question: "You want to enforce strict security for your IT administrators. You create a Conditional Access policy targeting the 'Intune Administrator' directory role. You want to ensure that if an administrator leaves their desk unlocked, someone else cannot easily use their active session to modify Intune policies. Which Session Control should you configure?",
+        options: [
+          "Disable persistent browser session.",
+          "Sign-in frequency - Periodic reauthentication (e.g., every 1 hour).",
+          "Use Conditional Access App Control (Block downloads).",
+          "Require Hybrid Entra ID joined device."
+        ],
+        answer: "Sign-in frequency - Periodic reauthentication (e.g., every 1 hour).",
+        explanation: "The 'Sign-in frequency' session control allows you to define the maximum time period before a user is forced to re-authenticate (provide their password/MFA again), regardless of their session activity.",
+        moreDetails: "Setting this to a short duration (like 1 hour) for highly privileged roles drastically reduces the window of opportunity for session hijacking or unauthorized physical access to an unlocked workstation.",
+        otherOptions: "Persistent browser session only applies after closing the browser. App control for blocking downloads doesn't stop policy modification. Hybrid join restricts where they can log in, not session duration.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-session-lifetime"
+      },
+      {
+        id: 2010,
+        type: "hard",
+        question: "A Windows 11 device is marked as 'Noncompliant' in Intune because it fails the 'Require BitLocker' compliance setting. The user checks the device and confirms BitLocker is fully encrypted and active on the C: drive. The Intune device sync completes successfully, but the status remains Noncompliant. What is the most likely cause of this discrepancy?",
+        options: [
+          "The device Health Attestation Service (DHA) evaluation has not yet synced the updated BitLocker state to Intune.",
+          "The user used a 128-bit encryption cipher instead of 256-bit.",
+          "The device is missing a TPM chip.",
+          "Intune cannot detect BitLocker status on Windows 11 Home editions."
+        ],
+        answer: "The device Health Attestation Service (DHA) evaluation has not yet synced the updated BitLocker state to Intune.",
+        explanation: "Intune's BitLocker compliance checks often rely on the Device Health Attestation (DHA) service, which evaluates the boot state of the device. The DHA report is generated on boot and sent to the DHA service, which then syncs with Intune.",
+        moreDetails: "Even if the drive is encrypted, if the device hasn't rebooted recently, or the DHA sync hasn't completed, Intune will rely on stale attestation data. A simple reboot often forces the DHA report to generate and resolve the false noncompliant state.",
+        otherOptions: "While cipher strength can be a policy, the generic 'Require BitLocker' check just looks for active encryption. If it has no TPM, BitLocker can still be software-based. Windows Home doesn't support full BitLocker (only Device Encryption), but the scenario states it IS fully encrypted.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/health-attestation"
+      }
+    ]
   }
 ];

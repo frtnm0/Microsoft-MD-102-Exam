@@ -1131,5 +1131,434 @@ export const domain1Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-deployment-rings-windows-10-updates"
       }
     ]
+  },
+  {
+    id: 99,
+    term: "2026 Scenario Based Questions",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1001,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization is deploying 500 new laptops using Windows Autopilot Pre-provisioned deployment. During the technician flow, several devices fail at the 'Securing your hardware' step with an error indicating TPM attestation timeout. The devices have TPM 2.0. What is the most likely cause, and how should you resolve it?",
+        options: [
+          "The devices are running Windows 10 Home; upgrade them to Windows 11 Pro.",
+          "The TPM 2.0 firmware contains known vulnerabilities and is blocked by Microsoft; update the OEM firmware.",
+          "The devices do not have internet access; connect them to a proxy server.",
+          "The user does not have an Intune license assigned; assign an Intune license to the technician."
+        ],
+        answer: "The TPM 2.0 firmware contains known vulnerabilities and is blocked by Microsoft; update the OEM firmware.",
+        explanation: "In Autopilot Pre-provisioned (and Self-Deploying) modes, strict TPM attestation is required. If the TPM firmware is outdated or has known vulnerabilities (like the Infineon flaw), the Microsoft attestation service will reject it, causing a timeout or error.",
+        moreDetails: "Updating the OEM firmware resolves the attestation block. It is not a licensing issue because the technician flow does not require user credentials or user licenses at that stage.",
+        otherOptions: "Autopilot requires Pro/Enterprise, but Home would fail earlier. Internet access is required, but a proxy wouldn't fix a specific TPM attestation error if internet is otherwise working.",
+        link: "https://learn.microsoft.com/en-us/autopilot/troubleshoot-device-enrollment"
+      },
+      {
+        id: 1002,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A company acquired a startup and wants to provide the startup's developers with access to internal on-premises file servers. The developers are scattered globally and use their own personal MacBooks. You decide to deploy Windows 365 Cloud PCs. Which edition and configuration must you use to allow routing to the on-premises file servers?",
+        options: [
+          "Windows 365 Business with a custom image.",
+          "Windows 365 Enterprise using an Azure Network Connection (ANC).",
+          "Windows 365 Enterprise deployed entirely on the Microsoft Hosted Network.",
+          "Windows 365 Business with a Site-to-Site VPN configured on the Cloud PC."
+        ],
+        answer: "Windows 365 Enterprise using an Azure Network Connection (ANC).",
+        explanation: "To route traffic from a Cloud PC back to an on-premises network, you must use Windows 365 Enterprise and configure an Azure Network Connection (ANC).",
+        moreDetails: "The ANC binds the Cloud PC's virtual NIC to an Azure vNet that the organization controls, which can then be connected to on-premises via Azure VPN Gateway or ExpressRoute. Windows 365 Business does not support ANCs.",
+        otherOptions: "Business does not support ANC. Enterprise on Microsoft Hosted Network cannot natively reach on-premises without third-party VPN software installed inside the VM, which isn't the native architectural solution.",
+        link: "https://learn.microsoft.com/en-us/windows-365/enterprise/azure-network-connections"
+      },
+      {
+        id: 1003,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are attempting an in-place upgrade from Windows 10 to Windows 11 using Intune Feature Updates. However, a group of machines continually rolls back to Windows 10. The Intune console simply reports 'Failed'. Which local tool should you run on the affected endpoints to diagnose the exact cause of the rollback?",
+        options: [
+          "Event Viewer (System Log)",
+          "SetupDiag.exe",
+          "Windows Performance Analyzer (WPA)",
+          "MDMDiagReport"
+        ],
+        answer: "SetupDiag.exe",
+        explanation: "SetupDiag is a standalone diagnostic tool (included natively in Windows 11, and available for Windows 10) that parses Windows Setup log files to determine why an upgrade failed or rolled back.",
+        moreDetails: "It specifically examines files like setupact.log and setuperr.log, matching them against known rules to identify driver incompatibilities, third-party antivirus blocks, or disk space issues causing the rollback.",
+        otherOptions: "Event Viewer is too generic. WPA is for performance profiling. MDMDiagReport is for Intune MDM policy failures, not the OS setup engine itself.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/upgrade/setupdiag"
+      },
+      {
+        id: 1004,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You need to migrate 200 users from old desktops to new laptops. Due to strict compliance laws, no user data can be stored on external drives or cloud services (like OneDrive) during the transition. Both the old and new devices are connected to the same gigabit LAN. Which USMT configuration provides the most efficient migration in this scenario?",
+        options: [
+          "Use a Hard-Link Migration Store on the old desktops.",
+          "Use ScanState to output to a network share, and LoadState to pull from it.",
+          "Use a compressed Migration Store on a local secondary partition.",
+          "Use the Windows Easy Transfer wizard over a crossover cable."
+        ],
+        answer: "Use ScanState to output to a network share, and LoadState to pull from it.",
+        explanation: "Because the migration is from old hardware to new hardware (PC Replacement), a Hard-Link store cannot be used (it only works for wipe-and-load on the same physical disk). Therefore, storing the state on a secure network share is the only viable option that avoids external drives or cloud storage.",
+        moreDetails: "USMT can encrypt the store on the network share for compliance. A Hard-Link store is impossible between two distinct physical PCs.",
+        otherOptions: "Hard-Link requires the same physical volume. Secondary partition also requires the same physical PC. Windows Easy Transfer is deprecated.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-migration-store-types"
+      },
+      {
+        id: 1005,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization uses Co-management with Microsoft Configuration Manager and Intune. You recently moved the 'Client apps' workload slider to Intune. However, a newly deployed Intune Win32 app is not installing on a subset of devices. What is the most likely cause?",
+        options: [
+          "The devices are running Windows 10 Enterprise.",
+          "The Configuration Manager client agent is broken or disabled on those devices.",
+          "The Intune Win32 app size exceeds 8GB.",
+          "The 'Client apps' workload requires the 'Device Configuration' workload to be moved to Intune first."
+        ],
+        answer: "The Configuration Manager client agent is broken or disabled on those devices.",
+        explanation: "Even when the 'Client apps' workload is moved to Intune, Intune Win32 app deployment heavily relies on the Intune Management Extension (IME). In a co-managed environment, the IME relies on the health of the Configuration Manager client to function correctly and evaluate workloads.",
+        moreDetails: "If the SCCM client is broken, the device might not correctly recognize that the workload has shifted, causing the IME to halt app deployments to avoid conflicts.",
+        otherOptions: "Windows 10 Enterprise is supported. The default Win32 app limit is 8GB, but the question doesn't imply it's oversized. Workloads can be moved independently.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads"
+      },
+      {
+        id: 1006,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization is hiring 500 remote workers who live in rural areas with low-bandwidth internet. You need to deploy laptops to them using Windows Autopilot. To minimize the amount of data downloaded over their home networks during initial setup, which Autopilot strategy is most appropriate?",
+        options: [
+          "Use Autopilot User-Driven Mode with Delivery Optimization configured for 'Internet' peers.",
+          "Use Autopilot Pre-provisioned deployment (White Glove) at the corporate office before shipping the devices.",
+          "Use Autopilot Self-Deploying mode shipped directly from the OEM.",
+          "Use Windows 365 Business instead of physical laptops."
+        ],
+        answer: "Use Autopilot Pre-provisioned deployment (White Glove) at the corporate office before shipping the devices.",
+        explanation: "Autopilot Pre-provisioned deployment (formerly White Glove) allows IT staff or the OEM to pre-load all policies, applications, and configurations onto the device on a high-speed corporate network.",
+        moreDetails: "When the remote user receives the pre-provisioned device, they simply turn it on and log in. The device only needs to sync the user-specific payload and identity token, drastically reducing the bandwidth required over their slow home network.",
+        otherOptions: "User-Driven and Self-Deploying modes download the entire payload (gigabytes of apps) over the user's home connection. Delivery Optimization 'Internet' peers won't help enough on rural connections. Windows 365 doesn't solve the issue of setting up the physical thin-client.",
+        link: "https://learn.microsoft.com/en-us/autopilot/pre-provision"
+      },
+      {
+        id: 1007,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You want to integrate your existing on-premises Microsoft Configuration Manager environment with the Microsoft Intune cloud. You want helpdesk staff to be able to initiate a device restart or run a script on a Configuration Manager client directly from the web-based Intune admin center, without moving the 'Device Configuration' workload to Intune. Which feature must you configure?",
+        options: [
+          "Co-management Workload transition",
+          "Tenant Attach",
+          "Cloud Management Gateway (CMG)",
+          "Endpoint Analytics"
+        ],
+        answer: "Tenant Attach",
+        explanation: "Tenant Attach instantly connects your Configuration Manager environment to the Intune tenant without needing to enroll the devices in Intune MDM or shift any co-management workloads.",
+        moreDetails: "Once Tenant Attach is enabled, Configuration Manager devices synchronize into the Intune admin portal. Helpdesk staff can then perform actions like Resource Explorer, CMPivot, scripts, and endpoint restarts directly from the cloud console.",
+        otherOptions: "Co-management workloads move the authority of management (e.g., updates or apps). CMG allows managing internet-facing clients, but doesn't project them into the Intune web console natively like Tenant Attach. Endpoint analytics is for telemetry.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/tenant-attach/"
+      },
+      {
+        id: 1008,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are setting up Windows 10/11 Subscription Activation to step up devices from Pro to Enterprise. However, when users sign in, the devices remain on Windows Pro. Checking the event logs (Event ID 82) reveals a failure to acquire the subscription token. You verify the users have E5 licenses assigned. What is a common cause for this token acquisition failure during the initial login?",
+        options: [
+          "The devices are running Windows 11 Pro Education.",
+          "A Conditional Access policy is requiring Multi-Factor Authentication (MFA) for the 'Universal Store Service APIs and Web Application' cloud app.",
+          "The local Active Directory schema has not been extended for Windows 11.",
+          "The devices are connected to an IPv6 network."
+        ],
+        answer: "A Conditional Access policy is requiring Multi-Factor Authentication (MFA) for the 'Universal Store Service APIs and Web Application' cloud app.",
+        explanation: "Subscription Activation relies on the device quietly reaching out to the Microsoft Universal Store API in the background using the user's Entra ID token to verify the E3/E5 license.",
+        moreDetails: "If a Conditional Access policy enforces MFA on all cloud apps (including the Universal Store API), the background token acquisition fails silently because it cannot present an interactive MFA prompt to the user at that specific OS-level layer. The API must be excluded from strict MFA requirements.",
+        otherOptions: "Pro Education can step up to Enterprise Education. AD Schema is irrelevant for cloud Subscription Activation. IPv6 does not break the licensing API.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-10-subscription-activation#troubleshoot"
+      },
+      {
+        id: 1009,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are using the Microsoft Deployment Toolkit (MDT) combined with Windows Deployment Services (WDS) to PXE boot clients. PXE boot works perfectly for clients on the same VLAN as the WDS server, but clients on a different VLAN fail to find the boot server. How should you resolve this network boundary issue?",
+        options: [
+          "Install a separate WDS server on every VLAN.",
+          "Configure DHCP Scope Options 66 and 67 on the router for the remote VLAN.",
+          "Configure IP Helpers (DHCP Relay) on the router for the remote VLAN to forward UDP port 67/68 and port 4011 traffic to the WDS server.",
+          "Enable IGMP Snooping on the network switches."
+        ],
+        answer: "Configure IP Helpers (DHCP Relay) on the router for the remote VLAN to forward UDP port 67/68 and port 4011 traffic to the WDS server.",
+        explanation: "PXE relies on broadcast DHCP traffic, which routers drop by default, preventing clients on remote VLANs from discovering the WDS server.",
+        moreDetails: "Microsoft explicitly recommends using IP Helpers (DHCP Relay agents) over DHCP Scope Options 66/67. IP Helpers correctly forward the PXE broadcast requests to the WDS server. Using DHCP Options is unsupported for UEFI clients and can cause routing failures.",
+        otherOptions: "Multiple WDS servers is inefficient. DHCP options 66/67 are deprecated and not recommended by Microsoft for UEFI. IGMP snooping is for multicast imaging, not the initial PXE boot discovery.",
+        link: "https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/os-deployment/boot-from-pxe-server"
+      },
+      {
+        id: 1010,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are testing Windows Autopilot Self-Deploying mode using Generation 2 virtual machines in Hyper-V. The deployment repeatedly fails with an error '0x800705b4' (Timeout) during the TPM attestation phase, even though you have enabled the virtual TPM (vTPM) on the VM. Why is this failing?",
+        options: [
+          "Hyper-V virtual TPMs do not support the specific hardware-based Endorsement Key (EK) certificate attestation required by Microsoft's Autopilot service.",
+          "Generation 2 VMs use UEFI, which is incompatible with Self-Deploying mode.",
+          "You must allocate at least 4 virtual processors to process the encryption rapidly.",
+          "The vTPM is running version 1.2, but Autopilot requires 2.0."
+        ],
+        answer: "Hyper-V virtual TPMs do not support the specific hardware-based Endorsement Key (EK) certificate attestation required by Microsoft's Autopilot service.",
+        explanation: "Autopilot Self-Deploying mode strictly requires TPM 2.0 with device attestation. The attestation process requires the TPM to have a valid Endorsement Key (EK) certificate injected by a physical manufacturer (OEM).",
+        moreDetails: "Virtual TPMs created in Hyper-V or other hypervisors do not possess a trusted hardware EK certificate chained to a known OEM root CA. Therefore, the Microsoft Autopilot service rejects the virtual TPM during the attestation phase, making it impossible to test Self-Deploying mode purely in a VM.",
+        otherOptions: "Gen 2 VMs (UEFI) are fully supported. Processor count doesn't cause attestation failure. Hyper-V vTPMs *are* version 2.0, but lack the physical EK cert.",
+        link: "https://learn.microsoft.com/en-us/autopilot/self-deploying#requirements"
+      },
+      {
+        id: 1011,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are managing Windows 11 upgrades via Intune. You want to ensure that if a critical line-of-business application breaks after the upgrade, users have 30 days to roll back to Windows 10, instead of the default 10 days. Which Intune policy must you configure to achieve this?",
+        options: [
+          "Feature updates for Windows 10 and later",
+          "Update rings for Windows 10 and later",
+          "Quality updates for Windows 10 and later",
+          "Windows Autopatch deployment rings"
+        ],
+        answer: "Update rings for Windows 10 and later",
+        explanation: "The setting to configure the 'Set feature update uninstall period' (rollback window) is located within the 'Update rings for Windows 10 and later' profile in Intune.",
+        moreDetails: "While you use the 'Feature updates' policy to target the specific Windows 11 version, the underlying behavior of the update engine (including the rollback timer, which can be extended from 10 to 60 days) is governed by the Update Ring assigned to the device.",
+        otherOptions: "Feature updates profile sets the target version but lacks the rollback timer setting. Quality updates handle monthly cumulative patches. Autopatch manages rings automatically but the specific manual setting is in the native Update Ring profile.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-settings"
+      },
+      {
+        id: 1012,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A user's Windows Autopilot-enrolled laptop suffers a complete hardware failure, requiring the OEM to replace the motherboard. After the repair, the device boots up but fails to enter the Autopilot OOBE sequence. Instead, it presents a standard consumer Windows setup screen. Why did this happen, and how do you fix it?",
+        options: [
+          "The hard drive was wiped; you must re-image it with a custom WIM file.",
+          "The motherboard replacement changed the device's hardware hash; you must deregister the old hash and upload the new hash to the Autopilot service.",
+          "The device lost its Intune license; reassign the license to the device object.",
+          "The OEM installed Windows 11 Home; upgrade it to Pro using a provisioning package."
+        ],
+        answer: "The motherboard replacement changed the device's hardware hash; you must deregister the old hash and upload the new hash to the Autopilot service.",
+        explanation: "Autopilot heavily relies on a device's unique hardware hash, which is strongly tied to motherboard components (like the TPM and SMBIOS UUID).",
+        moreDetails: "When a motherboard is replaced, the hardware hash changes entirely. The Microsoft Autopilot service no longer recognizes the repaired device. The IT admin (or the OEM repair center) must deregister the original device from Intune/Autopilot, capture the new hardware hash, and upload it before the device will recognize its Autopilot profile again.",
+        otherOptions: "Wiping the drive doesn't break Autopilot if the hash matches. Devices don't hold Intune licenses natively (users do, or device licenses are separate but not the cause here). While Windows Home could be an issue, the primary reason a repaired device drops Autopilot is the hash change.",
+        link: "https://learn.microsoft.com/en-us/autopilot/autopilot-motherboard-replacement"
+      },
+      {
+        id: 1013,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A Windows 10 PC encounters a blue screen error and can no longer boot into the operating system. The hard drive is encrypted with BitLocker, but you have the recovery key. You need to migrate the user's data to a new PC using the User State Migration Tool (USMT). How can you perform an offline migration?",
+        options: [
+          "Boot the broken PC into Windows PE, unlock the drive using `manage-bde`, and run `ScanState.exe` with the `/offline` switch.",
+          "Remove the hard drive, plug it into the new PC via USB, and run `LoadState.exe` directly against the external drive.",
+          "Use the Microsoft Diagnostics and Recovery Toolset (DaRT) to push the data to OneDrive.",
+          "Offline migration is not supported by USMT; the OS must be bootable."
+        ],
+        answer: "Boot the broken PC into Windows PE, unlock the drive using `manage-bde`, and run `ScanState.exe` with the `/offline` switch.",
+        explanation: "USMT fully supports offline migrations. If the OS cannot boot, you can boot the machine using Windows PE (Preinstallation Environment).",
+        moreDetails: "Once in WinPE, you must first unlock the BitLocker volume using the recovery key and the `manage-bde` command. Then, you execute `ScanState.exe` with the `/offline` parameter pointing to the Windows directory on the unlocked drive. This extracts the user state into a migration store without needing the host OS to be running.",
+        otherOptions: "LoadState cannot pull directly from a raw external drive without ScanState creating a store first. DaRT is a recovery tool but doesn't natively do USMT migrations to OneDrive. Offline migration IS supported.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-offline-migration-reference"
+      },
+      {
+        id: 1014,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying a custom Windows 11 image to a fleet of new NVMe-equipped workstations using the Microsoft Deployment Toolkit (MDT). The deployment fails immediately after the 'Install Operating System' step with a BSOD (INACCESSIBLE_BOOT_DEVICE). The WinPE phase booted and formatted the drive perfectly. What is the most likely driver configuration issue in MDT?",
+        options: [
+          "The NVMe mass storage drivers were injected into the WinPE boot image but were not assigned to the 'Inject Drivers' step for the actual Windows OS.",
+          "The WinPE boot image is 32-bit, but the OS is 64-bit.",
+          "The workstations require a BIOS update to support Windows 11.",
+          "The Task Sequence is missing the 'Format and Partition Disk' step."
+        ],
+        answer: "The NVMe mass storage drivers were injected into the WinPE boot image but were not assigned to the 'Inject Drivers' step for the actual Windows OS.",
+        explanation: "In MDT, driver injection happens in two distinct phases: drivers for WinPE (to see the network and disks during setup) and drivers for the full OS.",
+        moreDetails: "Because WinPE successfully formatted the drive, it had the correct NVMe storage drivers. However, when the machine rebooted into the newly applied Windows OS image to finish setup, it blue-screened. This means the 'Inject Drivers' step in the Task Sequence failed to copy those critical NVMe drivers into the actual OS driver store.",
+        otherOptions: "MDT handles cross-architecture deployments fine if configured. A BIOS update wouldn't cause a specific boot device BSOD if WinPE saw it. If it formatted the drive, the format step exists.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/deploy-a-windows-10-image-using-mdt#step-5-inject-drivers"
+      },
+      {
+        id: 1015,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your environment is co-managed. You recently moved the 'Endpoint Protection' workload to Intune. You configure a Microsoft Defender Antivirus policy in Intune to enable Real-time Protection, but the Intune portal shows the policy is in a 'Conflict' state. Upon checking the endpoint, Real-time protection is disabled. What is the most likely cause of this conflict?",
+        options: [
+          "A legacy Group Policy Object (GPO) applied to the domain-joined device is explicitly disabling Real-time Protection.",
+          "The Intune policy is assigned to a User group instead of a Device group.",
+          "The device needs to be rebooted to switch the workload.",
+          "Configuration Manager requires a specific client setting to release the Defender APIs to Intune."
+        ],
+        answer: "A legacy Group Policy Object (GPO) applied to the domain-joined device is explicitly disabling Real-time Protection.",
+        explanation: "Even when a workload is moved to Intune via Co-management, local Active Directory Group Policy Objects (GPOs) still apply to the device.",
+        moreDetails: "By default, GPO settings take precedence over Intune MDM policies unless the `MDMWinsOverGP` policy is explicitly configured. If an old GPO is configuring Defender, it will conflict with the Intune policy, causing the Intune portal to report a conflict and the GPO setting to win locally.",
+        otherOptions: "User vs Device assignment doesn't cause a conflict status on its own. Rebooting doesn't resolve policy conflicts. Co-management gracefully handles the API handoff without special client settings.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/custom-settings-windows-10#mdmwinsovergp"
+      }
+    ]
+  },
+  {
+    id: 991,
+    term: "Advanced Scenarios (2026 MD-102 Updates)",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1001,
+        type: "hard",
+        question: "You are implementing Windows Autopilot for pre-provisioned deployment (formerly White Glove). A technician boots a new laptop and presses the Windows key five times, but the pre-provisioning screen fails with a 'hardware mismatch' error. The device was recently repaired by the OEM and the motherboard was replaced. What is the most efficient way to resolve this issue?",
+        options: [
+          "Delete the Intune device record and ask the user to manually join Entra ID.",
+          "Deregister the old hardware hash from the Intune Autopilot devices list, capture the new hash, and upload it.",
+          "Reinstall Windows 11 using a USB drive and bypass Autopilot.",
+          "Assign a new Intune license to the technician performing the pre-provisioning."
+        ],
+        answer: "Deregister the old hardware hash from the Intune Autopilot devices list, capture the new hash, and upload it.",
+        explanation: "When a motherboard is replaced, the hardware hash changes. The device must be deregistered and re-registered with the new hash for Autopilot to recognize it.",
+        moreDetails: "Autopilot pre-provisioning strictly relies on the hardware hash for identity. A motherboard replacement invalidates the existing hash, causing a mismatch during the TPM attestation phase of pre-provisioning.",
+        otherOptions: "Deleting the Intune record doesn't fix the Autopilot registration. Reinstalling Windows doesn't fix the hash. The technician's license is irrelevant to the hardware hash.",
+        link: "https://learn.microsoft.com/en-us/autopilot/autopilot-motherboard-replacement"
+      },
+      {
+        id: 1002,
+        type: "hard",
+        question: "Your organization uses Windows 365 Enterprise. You create a provisioning policy to deploy Cloud PCs to a new group of users. However, the provisioning fails with an 'Azure Network Connection (ANC) health check failed' error. Upon investigation, you find the ANC is failing the 'DNS resolution' check. The Cloud PCs need to resolve on-premises Active Directory domains. What is the most likely cause?",
+        options: [
+          "The Azure Virtual Network (vNet) is configured to use Azure-provided DNS instead of custom DNS servers pointing to the on-premises domain controllers.",
+          "The users do not have a valid Intune license assigned.",
+          "The Cloud PC gallery image is outdated and missing network drivers.",
+          "The on-premises Active Directory Domain Services (AD DS) does not have Entra Connect Sync installed."
+        ],
+        answer: "The Azure Virtual Network (vNet) is configured to use Azure-provided DNS instead of custom DNS servers pointing to the on-premises domain controllers.",
+        explanation: "For Windows 365 Enterprise to connect to on-premises resources and join a domain (Hybrid Entra ID join), the Azure vNet MUST use custom DNS servers that can resolve the on-premises AD domain.",
+        moreDetails: "If the vNet uses default Azure-provided DNS, it cannot resolve private on-premises DNS zones, causing the ANC health check to fail before provisioning even begins.",
+        otherOptions: "Licensing and image issues would cause different errors (like provisioning timeout or entitlement errors). Entra Connect Sync is required for Hybrid Join, but DNS resolution is checked at the network layer first.",
+        link: "https://learn.microsoft.com/en-us/windows-365/enterprise/health-checks#dns-resolution"
+      },
+      {
+        id: 1003,
+        type: "hard",
+        question: "You are planning a massive in-place upgrade from Windows 10 to Windows 11 using Intune Feature Update policies. Several devices in the 'Marketing' group consistently fail the upgrade and rollback to Windows 10. The setupdiag.exe tool reveals that a legacy marketing application is blocking the upgrade. You cannot uninstall this app before the upgrade. How can you ensure the upgrade proceeds automatically while handling this incompatible app?",
+        options: [
+          "Deploy a custom OMA-URI policy to ignore all application compatibility warnings during the upgrade.",
+          "Use a custom action script (SetupConfig.ini or setupcomplete.cmd) to migrate or bypass the application's registry keys during the upgrade.",
+          "Switch from Intune Feature Updates to an MDT Task Sequence and use the 'Wipe and Load' method.",
+          "Disable Windows Defender SmartScreen temporarily during the upgrade window."
+        ],
+        answer: "Use a custom action script (SetupConfig.ini or setupcomplete.cmd) to migrate or bypass the application's registry keys during the upgrade.",
+        explanation: "Windows Setup allows for custom actions during feature upgrades via SetupConfig.ini or by running scripts at specific phases (like pre-commit or post-commit) to handle incompatible software.",
+        moreDetails: "Administrators can leverage Intune to stage these scripts on the endpoints. These scripts can temporarily disable the app's services, modify registry keys to trick the compatibility checker, or uninstall/reinstall the app seamlessly during the upgrade process.",
+        otherOptions: "You cannot simply 'ignore' hard compatibility blockers via OMA-URI. Wipe and load works but is not an 'in-place upgrade' and destroys user state. SmartScreen has nothing to do with OS upgrade app compatibility.",
+        link: "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-custom-actions"
+      },
+      {
+        id: 1004,
+        type: "hard",
+        question: "A remote user's device is co-managed (Intune and Configuration Manager). The user reports severe OS corruption and needs a fresh start. You initiate an 'Autopilot Reset' from the Intune console. What will be the state of the Configuration Manager client after the reset successfully completes?",
+        options: [
+          "The Configuration Manager client will be completely uninstalled, and the device will be Intune-only.",
+          "The Configuration Manager client remains installed and fully functional, retaining its unique GUID and site assignment.",
+          "The device will blue screen because Autopilot Reset is not supported on co-managed devices.",
+          "The Configuration Manager client is removed, but a new installation is automatically triggered via an Intune Win32 app deployment."
+        ],
+        answer: "The Configuration Manager client remains installed and fully functional, retaining its unique GUID and site assignment.",
+        explanation: "An Autopilot Reset removes personal files, apps, and settings, but it intentionally preserves the Entra ID join, Intune enrollment, AND the Configuration Manager client state (if co-managed).",
+        moreDetails: "This is a key advantage of Autopilot Reset over a standard Windows Wipe. It ensures that the management stack (both Intune and ConfigMgr) is immediately ready for the next user without requiring a full re-provisioning cycle.",
+        otherOptions: "Autopilot Reset explicitly protects the ConfigMgr client from being wiped. It does not uninstall it or require reinstallation.",
+        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-reset#what-does-windows-autopilot-reset-do"
+      },
+      {
+        id: 1005,
+        type: "hard",
+        question: "You are migrating a fleet of Windows 10 devices to modern management. The devices are currently managed exclusively by on-premises Configuration Manager. You enable Co-management in ConfigMgr and set the 'Client apps' workload to Intune. However, Intune Win32 apps are not deploying to the clients. What is the most likely missing step?",
+        options: [
+          "The devices must be Hybrid Entra ID joined and registered in Intune before they can receive Intune policies.",
+          "You must uninstall the Configuration Manager Software Center.",
+          "Intune Win32 apps require the device to be upgraded to Windows 11.",
+          "You must disable the 'Application Management' Client Setting in Configuration Manager."
+        ],
+        answer: "The devices must be Hybrid Entra ID joined and registered in Intune before they can receive Intune policies.",
+        explanation: "Co-management requires the device to have a presence in both on-premises AD/ConfigMgr and the cloud (Entra ID/Intune). If the devices are not Hybrid Entra ID joined and successfully enrolled in Intune, the workload shift means nothing.",
+        moreDetails: "Simply moving the slider in the ConfigMgr console tells the ConfigMgr client to stop processing that workload, but if the Intune Management Extension cannot authenticate and pull policies from Intune (due to lack of Entra ID/Intune enrollment), the workload falls into a black hole.",
+        otherOptions: "Software Center coexists with Company Portal. Windows 11 is not required. You do not disable the client setting; Co-management handles the orchestration dynamically.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/how-to-prepare-win10"
+      },
+      {
+        id: 1006,
+        type: "hard",
+        question: "You are configuring a Hybrid Entra ID joined Windows Autopilot deployment (user-driven mode). The device successfully completes the TPM attestation and downloads the Autopilot profile, but fails with error 0x80180014 during the 'Device preparation' phase. What is the most likely cause of this failure?",
+        options: [
+          "The Intune Connector for Active Directory is offline or lacks permissions to create computer objects in the specified on-premises OU.",
+          "The device is not connected to a physical Ethernet cable.",
+          "The user's Entra ID password has expired.",
+          "The Autopilot profile is configured to hide the EULA."
+        ],
+        answer: "The Intune Connector for Active Directory is offline or lacks permissions to create computer objects in the specified on-premises OU.",
+        explanation: "In a Hybrid Autopilot deployment, Intune must request the Intune Connector (installed on an on-premises server) to create the computer object in local Active Directory (Offline Domain Join). If this connector is down or lacks delegation permissions to the target OU, the process fails early.",
+        moreDetails: "The ODJ (Offline Domain Join) blob cannot be generated, causing the ESP to halt at the 'Device preparation' step before any policies or apps are applied.",
+        otherOptions: "Wi-Fi is supported for Autopilot. Expired passwords fail at authentication, not device prep. Hiding the EULA is a standard supported configuration.",
+        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-hybrid"
+      },
+      {
+        id: 1007,
+        type: "hard",
+        question: "A user is provisioning a Windows 365 Enterprise Cloud PC. They are physically located in the United Kingdom, but when they log in, the Cloud PC's Windows display language is set to US English and the timezone is PST. How can you ensure Cloud PCs automatically match the user's localized requirements upon provisioning?",
+        options: [
+          "Create a custom script in Intune to scrape the user's IP address and change the region settings dynamically.",
+          "Configure the 'Language and region' settings directly within the Windows 365 Provisioning Policy in Intune.",
+          "Instruct the user to change their location settings in the Entra ID 'My Account' portal before provisioning.",
+          "Windows 365 Enterprise only supports US English; localization requires Azure Virtual Desktop."
+        ],
+        answer: "Configure the 'Language and region' settings directly within the Windows 365 Provisioning Policy in Intune.",
+        explanation: "Administrators can configure the Language and Region setting within the Windows 365 Provisioning policy, allowing the Cloud PC to automatically download the correct language pack and set the locale during the automated provisioning process.",
+        moreDetails: "This prevents users from having to manually download language packs or change time zones, providing a seamless localized experience immediately upon first login.",
+        otherOptions: "Custom scripts are unnecessary since this is a native feature. Entra ID account portals don't dictate Cloud PC OS language natively. W365 fully supports localization.",
+        link: "https://learn.microsoft.com/en-us/windows-365/enterprise/provisioning-policy-language"
+      },
+      {
+        id: 1008,
+        type: "hard",
+        question: "You are deploying Windows 11 feature updates via Intune to a fleet of older 32GB storage tablets. The updates are consistently failing due to insufficient disk space. What Intune configuration should you deploy prior to the update to maximize the chances of success without manual intervention?",
+        options: [
+          "Deploy a custom PowerShell script that deletes the C:\\Windows\\System32 folder.",
+          "Configure a Storage Sense policy in Intune to aggressively clean temporary files, empty the recycle bin, and hydrate OneDrive files to the cloud.",
+          "Deploy an Intune Win32 app that installs a third-party disk cleaning utility.",
+          "Increase the virtual memory paging file size via an OMA-URI."
+        ],
+        answer: "Configure a Storage Sense policy in Intune to aggressively clean temporary files, empty the recycle bin, and hydrate OneDrive files to the cloud.",
+        explanation: "Intune can manage Storage Sense settings natively via the Settings Catalog. By configuring it to run daily, delete temp files, and push unused OneDrive files back to 'online-only' (dehydration), you can automatically free up critical gigabytes of space required for the Windows 11 upgrade engine.",
+        moreDetails: "This is the Microsoft-recommended, native, and safe way to clear disk space proactively across a fleet.",
+        otherOptions: "Deleting System32 destroys the OS. Third-party tools are unnecessary and introduce security risks. Increasing the paging file reduces available storage space.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/settings-catalog"
+      },
+      {
+        id: 1009,
+        type: "hard",
+        question: "You are using the Microsoft Deployment Toolkit (MDT) to deploy Windows 10 to a lab of 50 identical computers via PXE boot. You want to fully automate the Lite Touch Installation (LTI) so it never prompts for the local administrator password or computer name. Which file must you edit, and what variables must you include?",
+        options: [
+          "Unattend.xml: Add `AdminPassword` and `ComputerName` to the OOBE phase.",
+          "CustomSettings.ini: Set `SkipAdminPassword=YES`, `AdminPassword=YourPwd`, `SkipComputerName=YES`, and `OSDComputerName=Lab-%SERIALNUMBER%`.",
+          "Bootstrap.ini: Set `FullyAutomate=True`.",
+          "Sysprep.inf: Set `AutoAdminLogon=1`."
+        ],
+        answer: "CustomSettings.ini: Set `SkipAdminPassword=YES`, `AdminPassword=YourPwd`, `SkipComputerName=YES`, and `OSDComputerName=Lab-%SERIALNUMBER%`.",
+        explanation: "In MDT, the `CustomSettings.ini` file controls the behavior of the Lite Touch Deployment Wizard. By setting the `Skip...` variables to `YES` and providing the corresponding values, the wizard bypasses those screens, enabling a Zero Touch-like experience.",
+        moreDetails: "Using dynamic variables like `%SERIALNUMBER%` or `%MACADDRESS%` allows you to automatically generate unique computer names without manual input.",
+        otherOptions: "Unattend.xml is used by Windows Setup, but MDT's wizard intercepts these prompts first. Bootstrap.ini handles the initial PE connection. Sysprep is for image capture, not deployment wizard automation.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/configure-mdt-settings"
+      },
+      {
+        id: 1010,
+        type: "hard",
+        question: "During a Windows Autopilot deployment, a massive 15GB CAD application assigned as a 'Required' Win32 app is causing the Enrollment Status Page (ESP) to hit its timeout limit, failing the deployment. The app is not required for the user to start working immediately. How can you resolve this without removing the app assignment?",
+        options: [
+          "Change the app assignment from 'Required' to 'Available'.",
+          "Ensure the CAD app is NOT selected in the ESP setting 'Block device use until these required apps are installed if they are assigned to the user/device'.",
+          "Increase the ESP timeout to 24 hours.",
+          "Convert the Win32 app to an MSIX package."
+        ],
+        answer: "Ensure the CAD app is NOT selected in the ESP setting 'Block device use until these required apps are installed if they are assigned to the user/device'.",
+        explanation: "By explicitly selecting only critical apps (like VPN clients or AV) in the 'Block device use...' ESP setting, the device will allow the user to reach the desktop once those specific critical apps install.",
+        moreDetails: "The massive 15GB CAD application will continue to download and install silently in the background while the user is already productive on the desktop, preventing the ESP timeout failure.",
+        otherOptions: "Making it 'Available' requires manual user intervention to install. Increasing timeout to 24h is a terrible user experience. MSIX doesn't solve the file size/download time bottleneck.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
+      }
+    ]
   }
 ];
