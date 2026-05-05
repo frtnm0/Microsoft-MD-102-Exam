@@ -27,6 +27,7 @@ function App() {
   const [questionOrder, setQuestionOrder] = useState<number[]>([]);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Flatten the dataset to get all questions based on randomized order and selected domain
   const quizQuestions = React.useMemo(() => {
@@ -126,7 +127,11 @@ function App() {
   };
 
   const handleHomeClick = () => {
-    setView('menu');
+    if (view === 'quiz') {
+      setShowCancelModal(true);
+    } else {
+      setView('menu');
+    }
   };
 
   const handleAnswerSubmit = (answer: string, isCorrect: boolean, shuffledOptions: string[]) => {
@@ -168,6 +173,8 @@ function App() {
     setAnswers({});
     setCurrentIndex(0);
     setElapsedTime(0);
+    setQuestionOrder([]);
+    setShowCancelModal(false);
     setView('menu');
   };
 
@@ -177,8 +184,33 @@ function App() {
   if (!isLoaded) return null; // Prevent hydration mismatch / flash
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans relative">
       <Header onHomeClick={handleHomeClick} />
+      
+      {showCancelModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-card text-card-foreground border rounded-lg p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-xl font-bold mb-2">Cancel Quiz?</h3>
+            <p className="text-muted-foreground mb-6">
+              Are you sure you want to cancel the current quiz session? All your current progress will be lost.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className="px-4 py-2 border rounded font-medium hover:bg-accent transition-colors"
+              >
+                Continue Quiz
+              </button>
+              <button
+                onClick={handleResetHome}
+                className="px-4 py-2 bg-red-600 text-white font-medium rounded hover:bg-red-700 transition-colors shadow-sm"
+              >
+                Yes, Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <main className="flex-grow flex flex-col">
         {view === 'menu' && (

@@ -6,22 +6,7 @@ export const domain2Dataset: TermData[] = [
     term: "Device Configuration Profiles",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 201,
-        type: "easy",
-        question: "What is the primary purpose of a <b>Device Configuration Profile</b> in Microsoft Intune?",
-        options: [
-          "To wipe a device when it is lost or stolen.",
-          "To push settings and features to devices, such as Wi-Fi, VPN, and device restrictions.",
-          "To purchase licenses for Microsoft 365.",
-          "To monitor network traffic for security threats."
-        ],
-        answer: "To push settings and features to devices, such as Wi-Fi, VPN, and device restrictions.",
-        explanation: "<b>Device configuration profiles</b> allow administrators to add and configure settings and then push these settings to devices in the organization. This includes configuring Wi-Fi networks, VPN connections, email profiles, and various device restrictions.",
-        moreDetails: "These profiles are a core part of Mobile Device Management (MDM), ensuring that devices conform to organizational standards without requiring manual configuration by the end user.",
-        otherOptions: "Wiping devices is a remote action. Licensing is handled in Entra/Microsoft 365 admin centers. Network monitoring is handled by security tools like Defender for Endpoint.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profiles"
-      },
+
       {
         id: 202,
         type: "medium",
@@ -180,38 +165,8 @@ export const domain2Dataset: TermData[] = [
     term: "Conditional Access Policies",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 211,
-        type: "easy",
-        question: "What is the primary function of Entra ID <b>Conditional Access</b>?",
-        options: [
-          "To route network traffic conditionally based on bandwidth.",
-          "To act as an if-then statement engine that evaluates signals (who, where, what device) to enforce access controls (allow, block, require MFA).",
-          "To license users conditionally based on their department.",
-          "To deploy applications to devices conditionally."
-        ],
-        answer: "To act as an if-then statement engine that evaluates signals (who, where, what device) to enforce access controls (allow, block, require MFA).",
-        explanation: "<b>Conditional Access</b> is Microsoft's Zero Trust policy engine. It analyzes signals like user identity, location, device compliance state, and app sensitivity to make real-time access decisions.",
-        moreDetails: "For example, 'IF a user tries to access Exchange Online from an unknown location, THEN require Multi-Factor Authentication.'",
-        otherOptions: "It is an identity-driven security boundary, not a network router, licensing tool, or application deployment mechanism.",
-        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview"
-      },
-      {
-        id: 212,
-        type: "medium",
-        question: "How do Intune Device Compliance Policies interact with Entra ID Conditional Access?",
-        options: [
-          "Conditional Access overrides Compliance Policies.",
-          "Compliance Policies use Conditional Access to push Windows Updates.",
-          "Intune calculates the device compliance state and passes it to Entra ID, allowing Conditional Access to block access if the device is not marked as compliant.",
-          "They do not interact; they are completely separate systems."
-        ],
-        answer: "Intune calculates the device compliance state and passes it to Entra ID, allowing Conditional Access to block access if the device is not marked as compliant.",
-        explanation: "Intune acts as the compliance engine. When a Conditional Access policy is configured to 'Require device to be marked as compliant', Entra ID checks the device's status in Intune during the authentication flow.",
-        moreDetails: "If Intune says the device is compliant, access is granted. If Intune says it is noncompliant, Conditional Access blocks the user from reaching the cloud app, forming a powerful Zero Trust architecture.",
-        otherOptions: "They are deeply integrated. CA does not push updates, nor does it override compliance (it relies on it).",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/conditional-access"
-      },
+
+
       {
         id: 213,
         type: "hard",
@@ -282,22 +237,6 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "This provides a zero-touch enrollment experience, linking the identity join directly with the mobile device management enrollment.",
         otherOptions: "Company Portal is typically for BYOD. Provisioning packages and scripts are manual interventions.",
         link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enroll"
-      },
-      {
-        id: 217,
-        type: "medium",
-        question: "You want to prevent employees from enrolling their personal (BYOD) Windows laptops into Intune, while still allowing company-owned devices to enroll. Which Intune feature should you use?",
-        options: [
-          "Device Compliance Policies",
-          "Enrollment Device Platform Restrictions",
-          "App Protection Policies",
-          "Conditional Access"
-        ],
-        answer: "Enrollment Device Platform Restrictions",
-        explanation: "<b>Enrollment restrictions</b> allow administrators to block specific platforms (e.g., block iOS entirely) or block personally owned devices from enrolling in Intune.",
-        moreDetails: "Intune determines if a device is 'personally owned' versus 'corporate-owned' based on how it enrolls (e.g., Autopilot devices and pre-imported hardware hashes are automatically corporate-owned).",
-        otherOptions: "Compliance policies evaluate enrolled devices. App protection secures apps, not enrollment. CA restricts access based on enrollment, but doesn't block the enrollment action itself.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/enrollment-restrictions-set"
       },
       {
         id: 218,
@@ -387,22 +326,6 @@ export const domain2Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
       },
       {
-        id: 223,
-        type: "hard",
-        question: "When configuring a Win32 app in Intune, what is the purpose of a 'Detection Rule'?",
-        options: [
-          "To detect if the user has an active internet connection.",
-          "To detect if the application contains malware before installing.",
-          "To allow the Intune Management Extension to verify whether the app successfully installed or is already present on the device.",
-          "To detect if the user has an appropriate license."
-        ],
-        answer: "To allow the Intune Management Extension to verify whether the app successfully installed or is already present on the device.",
-        explanation: "<b>Detection rules</b> (checking for a specific file, registry key, or MSI product code) are mandatory for Win32 apps. They tell the Intune agent how to prove that the application is actually installed.",
-        moreDetails: "If the detection rule finds the artifact, Intune reports a 'Success' status and won't attempt to install it again. If the detection rule fails after the installer runs, Intune reports an installation failure.",
-        otherOptions: "Detection rules are purely for installation state validation, not malware scanning, licensing, or network checks.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
-      },
-      {
         id: 224,
         type: "medium",
         question: "Microsoft strongly recommends NOT mixing Win32 apps and Line-of-Business (LOB) apps during which critical Windows deployment phase?",
@@ -418,22 +341,6 @@ export const domain2Dataset: TermData[] = [
         otherOptions: "The conflict specifically breaks the critical OOBE Autopilot provisioning phase.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-app-management#prerequisites"
       },
-      {
-        id: 225,
-        type: "easy",
-        question: "If you assign an application to a user group as 'Available for enrolled devices', how does the end-user get the application?",
-        options: [
-          "It installs automatically in the background.",
-          "The user must open the Intune Company Portal app and manually click 'Install'.",
-          "It is emailed to them as an attachment.",
-          "They must download it from the public Microsoft Store."
-        ],
-        answer: "The user must open the Intune Company Portal app and manually click 'Install'.",
-        explanation: "An <b>Available</b> assignment means the app is completely optional. It is published to the organization's private <b>Company Portal</b>, where the user can browse and choose to install it on demand.",
-        moreDetails: "Conversely, a 'Required' assignment forces the app to install silently in the background without user interaction.",
-        otherOptions: "Automatic installation is 'Required'. It is not emailed. It is hosted in the Company Portal, not the public Store.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-deploy"
-      }
     ]
   },
   {
@@ -441,22 +348,6 @@ export const domain2Dataset: TermData[] = [
     term: "App Protection Policies (MAM)",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 226,
-        type: "easy",
-        question: "What is the primary benefit of Intune <b>App Protection Policies (MAM)</b>?",
-        options: [
-          "They prevent users from installing personal apps like Facebook on their phones.",
-          "They protect and isolate corporate data inside specific managed applications, even on unmanaged, personal devices.",
-          "They encrypt the entire hard drive of a device.",
-          "They deploy applications to devices."
-        ],
-        answer: "They protect and isolate corporate data inside specific managed applications, even on unmanaged, personal devices.",
-        explanation: "<b>App Protection Policies</b> (Mobile Application Management or MAM) secure the organization's data at the app level. You can protect corporate data inside apps like Outlook or Word, without needing to enroll or control the user's entire personal device (MDM).",
-        moreDetails: "This is the cornerstone of modern BYOD security, balancing corporate data protection with user privacy.",
-        otherOptions: "MAM does not prevent personal app installation or encrypt the whole device (that requires MDM). It protects data, rather than deploying the apps themselves.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
-      },
       {
         id: 227,
         type: "medium",
@@ -489,38 +380,6 @@ export const domain2Dataset: TermData[] = [
         otherOptions: "It is a security timer, not a battery optimizer or an immediate block.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-android#conditional-launch"
       },
-      {
-        id: 229,
-        type: "medium",
-        question: "For an application to be targeted by Intune App Protection Policies, it must integrate with what Microsoft technology?",
-        options: [
-          "The Intune App SDK or the Intune App Wrapping Tool.",
-          "Microsoft Defender for Endpoint.",
-          "Windows Defender Firewall.",
-          "Azure Virtual Desktop."
-        ],
-        answer: "The Intune App SDK or the Intune App Wrapping Tool.",
-        explanation: "MAM policies cannot be applied to just any app in the app store. The application must be enlightened, meaning the developer has integrated the <b>Intune App SDK</b>, or an administrator has used the <b>App Wrapping Tool</b> on a custom line-of-business app.",
-        moreDetails: "All core Microsoft 365 apps (Outlook, Word, Teams, Edge) natively include the Intune SDK. Many third-party partners (like Zoom or Adobe) also build the SDK into their enterprise apps.",
-        otherOptions: "Defender and AVD are unrelated to making mobile apps compatible with MAM data restrictions.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/developer/app-sdk-get-started"
-      },
-      {
-        id: 230,
-        type: "easy",
-        question: "An employee leaves the company, and they were using their personal phone for work (BYOD) via MAM. What action should the IT admin take in Intune to secure the data?",
-        options: [
-          "Initiate a Full Device Wipe.",
-          "Initiate an App Selective Wipe.",
-          "Change the user's device PIN.",
-          "Brick the phone."
-        ],
-        answer: "Initiate an App Selective Wipe.",
-        explanation: "An <b>App Selective Wipe</b> removes only the corporate data securely stored within the MAM-protected apps (like corporate emails in Outlook), leaving all the user's personal apps, photos, and data completely untouched.",
-        moreDetails: "Because it's a BYOD device, a Full Device Wipe would illegally/unethically destroy the user's personal property. Selective wipe is the precise tool for this scenario.",
-        otherOptions: "Full wipe destroys personal data. Intune cannot brick phones or change personal device PINs on unenrolled MAM devices.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-selective-wipe"
-      }
     ]
   },
   {
@@ -529,38 +388,6 @@ export const domain2Dataset: TermData[] = [
     category: "Manage devices and tenant applications",
     questions: [
       {
-        id: 231,
-        type: "easy",
-        question: "What is the purpose of an <b>App Configuration Policy</b> in Intune?",
-        options: [
-          "To provide apps with pre-configured settings (like server URLs or user preferences) so the user doesn't have to enter them manually.",
-          "To block users from opening specific apps.",
-          "To deploy the app installation files.",
-          "To wipe corporate data from the app."
-        ],
-        answer: "To provide apps with pre-configured settings (like server URLs or user preferences) so the user doesn't have to enter them manually.",
-        explanation: "<b>App Configuration Policies</b> allow administrators to push settings directly into an app. This improves user experience and security by preventing end-users from having to type in complex server addresses or toggle specific privacy settings.",
-        moreDetails: "For example, you can use an App Configuration Policy to automatically populate a user's UPN in the Outlook login screen, or configure a specific homepage in Microsoft Edge.",
-        otherOptions: "Blocking apps is App Protection/Endpoint Security. Deploying apps is App Assignment. Wiping data is a Remote Action.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-overview"
-      },
-      {
-        id: 232,
-        type: "medium",
-        question: "App Configuration Policies can be delivered through two different channels based on device management state. What are they?",
-        options: [
-          "Managed Devices (MDM) channel and Managed Apps (MAM) channel.",
-          "Wi-Fi channel and Cellular channel.",
-          "Windows channel and Linux channel.",
-          "Active Directory channel and Local Workgroup channel."
-        ],
-        answer: "Managed Devices (MDM) channel and Managed Apps (MAM) channel.",
-        explanation: "Intune can deliver App Configuration Policies to apps on <b>Managed Devices</b> (where the OS is enrolled in Intune via MDM) or to <b>Managed Apps</b> (where the device is unmanaged BYOD, but the app itself is managed via MAM App Protection Policies).",
-        moreDetails: "This flexibility ensures that you can configure corporate apps like Outlook regardless of whether the organization owns the physical phone or not.",
-        otherOptions: "The other options are nonsensical network or OS boundaries.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-overview#managed-device-and-managed-app-routing"
-      },
-      {
         id: 233,
         type: "hard",
         question: "When creating an App Configuration Policy for an iOS/iPadOS managed device, what format can you use to input complex, custom configuration keys provided by a third-party app developer?",
@@ -568,7 +395,7 @@ export const domain2Dataset: TermData[] = [
           "A PowerShell script.",
           "An XML data file.",
           "A JSON file or the Configuration Designer (Key/Value pairs).",
-          "A CSV spreadsheet."
+          "A CSV spreadsheet file."
         ],
         answer: "A JSON file or the Configuration Designer (Key/Value pairs).",
         explanation: "For Managed Device app configuration, Intune provides a <b>Configuration Designer</b> (where you manually type Keys, Value Types, and Values) or an option to enter/upload the raw data via <b>JSON format</b>.",
@@ -576,38 +403,6 @@ export const domain2Dataset: TermData[] = [
         otherOptions: "PowerShell is for OS scripting. XML is used for Windows OMA-URI, but iOS/Android app config relies on JSON/Plists mapped to the designer.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-use-ios"
       },
-      {
-        id: 234,
-        type: "medium",
-        question: "In an App Configuration Policy, how can you dynamically populate a setting with the specific logged-in user's email address without hardcoding it for hundreds of users?",
-        options: [
-          "Write a custom API integration.",
-          "Use configuration tokens (e.g., {{mail}} or {{userprincipalname}}).",
-          "You must create a separate policy for every single user.",
-          "Ask the user to type it in."
-        ],
-        answer: "Use configuration tokens (e.g., {{mail}} or {{userprincipalname}}).",
-        explanation: "Intune supports <b>configuration tokens</b> (variables enclosed in double curly braces) within App Configuration Policies. When the policy applies, Intune dynamically replaces the token with the actual data from the user's Entra ID profile.",
-        moreDetails: "Common tokens include `{{mail}}`, `{{userprincipalname}}`, `{{partialupn}}`, and device tokens like `{{serialnumber}}`. This allows a single policy to scale across thousands of users.",
-        otherOptions: "Creating separate policies is unscalable. Asking the user defeats the purpose of the policy.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-use-ios#tokens-used-in-the-property-list"
-      },
-      {
-        id: 235,
-        type: "easy",
-        question: "Which Microsoft application is most commonly managed via App Configuration Policies to ensure users only browse the internet securely, potentially forcing a VPN connection or setting a corporate homepage?",
-        options: [
-          "Microsoft Edge",
-          "Microsoft Paint",
-          "Notepad",
-          "Calculator"
-        ],
-        answer: "Microsoft Edge",
-        explanation: "<b>Microsoft Edge</b> for mobile devices is heavily managed using App Configuration Policies. Administrators use it to configure the homepage, disable incognito mode, configure bookmarks, and enforce Azure AD Application Proxy access.",
-        moreDetails: "This ensures that when a user clicks a link in a managed Outlook email, it opens securely within managed Edge, keeping the data within the corporate boundary.",
-        otherOptions: "Paint, Notepad, and Calculator are local utilities, not managed enterprise mobile apps.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/manage-microsoft-edge"
-      }
     ]
   },
   {
@@ -615,38 +410,6 @@ export const domain2Dataset: TermData[] = [
     term: "Device Lifecycle and Remote Actions",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 236,
-        type: "easy",
-        question: "A company laptop has been stolen. Which Intune remote action should you trigger to permanently delete all corporate and personal data, applications, and settings, returning the device to factory defaults?",
-        options: [
-          "Retire",
-          "Wipe",
-          "Sync",
-          "Remote Lock"
-        ],
-        answer: "Wipe",
-        explanation: "The <b>Wipe</b> action restores a device to its factory default settings. It securely and permanently deletes all user data, applications, and settings on the device.",
-        moreDetails: "Wipe is the 'nuclear option' used when a device is lost, stolen, or being completely disposed of. The device will be removed from Intune management once the wipe completes.",
-        otherOptions: "Retire removes only corporate data. Sync forces a check-in. Remote Lock simply locks the screen.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe"
-      },
-      {
-        id: 237,
-        type: "medium",
-        question: "What is the difference between the 'Wipe' action and the 'Retire' action in Intune?",
-        options: [
-          "Wipe destroys the physical hardware; Retire disables the user account.",
-          "Wipe removes all data and resets the OS; Retire removes only managed corporate data and apps, leaving the user's personal data intact.",
-          "Wipe is for Windows; Retire is for iOS.",
-          "There is no difference; they are synonymous."
-        ],
-        answer: "Wipe removes all data and resets the OS; Retire removes only managed corporate data and apps, leaving the user's personal data intact.",
-        explanation: "<b>Retire</b> is specifically designed for BYOD (Bring Your Own Device) scenarios. When an employee leaves, 'Retire' removes the MDM profile, Wi-Fi profiles, corporate email, and managed apps, but absolutely does not touch personal photos or apps. <b>Wipe</b> destroys everything on the device.",
-        moreDetails: "Using Wipe on a personal BYOD device is generally a violation of user privacy and company policy.",
-        otherOptions: "They do not destroy hardware. They both work across multiple OS platforms.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe#retire"
-      },
       {
         id: 238,
         type: "hard",
@@ -663,38 +426,6 @@ export const domain2Dataset: TermData[] = [
         otherOptions: "Fresh Start removes OEM bloatware and unenrolls it if 'retain user data' isn't checked. Retire unenrolls the device. Delete just removes the record from the Intune console.",
         link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe#windows-autopilot-reset"
       },
-      {
-        id: 239,
-        type: "medium",
-        question: "An IT administrator makes an urgent change to a compliance policy and needs a specific remote Windows device to evaluate the new policy immediately, rather than waiting 8 hours for the standard check-in. Which action should they use?",
-        options: [
-          "Send Custom Notification",
-          "Sync",
-          "Restart",
-          "Update Windows Defender Signatures"
-        ],
-        answer: "Sync",
-        explanation: "The <b>Sync</b> device action forces the selected device to immediately connect with Intune to check in and receive any pending policies, app deployments, or remote actions.",
-        moreDetails: "This is a daily tool for Intune administrators troubleshooting policy application or deploying urgent configurations.",
-        otherOptions: "Notifications just send a message. Restart reboots the PC. Updating signatures only updates the antivirus, not Intune policies.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/device-sync"
-      },
-      {
-        id: 240,
-        type: "easy",
-        question: "A user forgot the PIN to their corporate-owned Android tablet. Which remote action in Intune allows the administrator to assist them?",
-        options: [
-          "Bypass Activation Lock",
-          "Remove Passcode",
-          "Locate Device",
-          "BitLocker Key Rotation"
-        ],
-        answer: "Remove Passcode",
-        explanation: "For managed Android and iOS devices, administrators can use the <b>Remove Passcode</b> (or Reset Passcode) remote action to clear the forgotten PIN, allowing the user to access the device and set a new one.",
-        moreDetails: "This action requires the device to be powered on and connected to the internet. It is not supported on all enrollment types (e.g., heavily restricted BYOD profiles may prevent IT from clearing personal passcodes).",
-        otherOptions: "Activation Lock is an Apple theft-deterrent feature. Locate Device finds GPS. BitLocker is for Windows encryption.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/device-passcode-reset"
-      }
     ]
   },
   {
@@ -702,22 +433,6 @@ export const domain2Dataset: TermData[] = [
     term: "Endpoint Analytics",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 241,
-        type: "easy",
-        question: "What is the primary goal of <b>Endpoint Analytics</b> in Microsoft Intune?",
-        options: [
-          "To scan devices for malware and viruses.",
-          "To provide metrics and insights that help IT understand and improve the end-user experience on their devices.",
-          "To track exactly which websites employees are visiting.",
-          "To process payroll and HR analytics."
-        ],
-        answer: "To provide metrics and insights that help IT understand and improve the end-user experience on their devices.",
-        explanation: "<b>Endpoint Analytics</b> focuses on the 'User Experience'. It helps IT identify hardware or software issues slowing down users—like long boot times or crashing applications—before the users even complain to the helpdesk.",
-        moreDetails: "It shifts IT from being reactive (waiting for tickets) to being proactive in resolving environmental issues.",
-        otherOptions: "Malware is Defender. Web tracking is proxy/Defender for Cloud Apps. Payroll is HR.",
-        link: "https://learn.microsoft.com/en-us/mem/analytics/overview"
-      },
       {
         id: 242,
         type: "medium",
@@ -790,38 +505,6 @@ export const domain2Dataset: TermData[] = [
     category: "Manage devices and tenant applications",
     questions: [
       {
-        id: 246,
-        type: "easy",
-        question: "What is the primary advantage of using the <b>Endpoint Security</b> node in the Intune console rather than standard Device Configuration profiles?",
-        options: [
-          "It is the only place to deploy applications.",
-          "It provides a dedicated, simplified interface specifically for security administrators to manage features like Antivirus, Firewall, and Disk Encryption without seeing unrelated OS settings.",
-          "It bypasses Entra ID authentication.",
-          "It is free, whereas Configuration Profiles require premium licenses."
-        ],
-        answer: "It provides a dedicated, simplified interface specifically for security administrators to manage features like Antivirus, Firewall, and Disk Encryption without seeing unrelated OS settings.",
-        explanation: "The <b>Endpoint security</b> node organizes security-specific settings (Defender, BitLocker, Firewall, ASR) into distinct profiles. This allows an organization to implement Role-Based Access Control (RBAC) so that Security Teams can manage security policies without accidentally altering general device settings (like Wi-Fi or Start Menu layouts).",
-        moreDetails: "The underlying MDM settings are the same, but the administrative experience is optimized for SecOps.",
-        otherOptions: "It doesn't deploy apps, bypass auth, or have different licensing costs than the rest of Intune.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security"
-      },
-      {
-        id: 247,
-        type: "medium",
-        question: "Which Endpoint Security policy type would you use to enforce silent BitLocker encryption on Windows laptops without requiring any user interaction?",
-        options: [
-          "Antivirus policy",
-          "Disk encryption policy",
-          "Firewall policy",
-          "Account protection policy"
-        ],
-        answer: "Disk encryption policy",
-        explanation: "The <b>Disk encryption</b> policy manages built-in OS encryption methods like BitLocker for Windows and FileVault for macOS.",
-        moreDetails: "Administrators can configure these profiles to silently enable BitLocker, automatically backing up the recovery keys to Entra ID, ensuring compliance without prompting the end-user to create a PIN or save a key to a USB.",
-        otherOptions: "Antivirus handles malware. Firewall handles network ports. Account protection handles Windows Hello/Identity.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-disk-encryption"
-      },
-      {
         id: 248,
         type: "hard",
         question: "You want to prevent malicious Office macros from launching child processes or downloading executable content. Which Endpoint Security feature provides this specific granular control?",
@@ -836,22 +519,6 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "ASR rules can be configured in 'Audit mode' to monitor impact before switching them to 'Block mode' to actively stop the malicious behavior.",
         otherOptions: "Firewalls block network traffic. BitLocker encrypts data at rest. EDR provides post-breach monitoring, whereas ASR is pre-breach prevention.",
         link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-asr"
-      },
-      {
-        id: 249,
-        type: "medium",
-        question: "What is the purpose of the 'Account protection' policies in the Endpoint security node?",
-        options: [
-          "To reset user passwords automatically every 30 days.",
-          "To manage identity and sign-in security features on the device, such as Windows Hello for Business and Credential Guard.",
-          "To protect bank account numbers stored in Excel files.",
-          "To create new user accounts in Entra ID."
-        ],
-        answer: "To manage identity and sign-in security features on the device, such as Windows Hello for Business and Credential Guard.",
-        explanation: "<b>Account protection</b> policies help secure the user's identity on the device. This includes configuring Windows Hello for Business (biometrics/PIN instead of passwords) and enabling Credential Guard (using virtualization-based security to protect NTLM hashes and Kerberos tickets from Pass-the-Hash attacks).",
-        moreDetails: "These policies are critical for establishing a passwordless and credential-theft-resistant environment.",
-        otherOptions: "Password resets are Entra ID policies. Data protection is DLP/MIP. Account creation is Entra ID.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-account-protection"
       },
       {
         id: 250,
@@ -876,25 +543,6 @@ export const domain2Dataset: TermData[] = [
     term: "Identity and Compliance Scenario Steps",
     category: "Manage devices and tenant applications",
     questions: [
-      {
-        id: 252,
-        type: "medium",
-        format: "order-steps",
-        question: "Arrange the steps an administrator takes to block legacy authentication across the organization using Conditional Access:",
-        options: [
-          "Navigate to Microsoft Entra ID > Security > Conditional Access.",
-          "Create a new Conditional Access policy.",
-          "Target 'All users' (excluding emergency break-glass accounts).",
-          "Set the 'Client apps' condition to select 'Other clients' (Legacy authentication protocols).",
-          "Under 'Grant' controls, select 'Block access'.",
-          "Set the policy state to 'On' (or 'Report-only' for initial testing)."
-        ],
-        answer: "Navigate to CA -> Create Policy -> Target Users -> Set Condition (Legacy Clients) -> Set Block -> Turn On",
-        explanation: "Blocking legacy auth is a standard CA policy flow: identify the target (all users minus break-glass), set the condition (legacy clients like POP/IMAP), apply the control (Block), and enable the policy.",
-        moreDetails: "Always exclude at least one global administrator (break-glass account) to prevent accidentally locking out the entire tenant if a policy is misconfigured.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/block-legacy-authentication"
-      },
       {
         id: 253,
         type: "hard",
@@ -1434,6 +1082,220 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "Even if the drive is encrypted, if the device hasn't rebooted recently, or the DHA sync hasn't completed, Intune will rely on stale attestation data. A simple reboot often forces the DHA report to generate and resolve the false noncompliant state.",
         otherOptions: "While cipher strength can be a policy, the generic 'Require BitLocker' check just looks for active encryption. If it has no TPM, BitLocker can still be software-based. Windows Home doesn't support full BitLocker (only Device Encryption), but the scenario states it IS fully encrypted.",
         link: "https://learn.microsoft.com/en-us/mem/intune/protect/health-attestation"
+      }
+    ]
+  },
+  {
+    id: 13,
+    term: "Policy Conflicts & Resolutions",
+    category: "Manage devices and tenant applications",
+    questions: [
+      {
+        id: 2011,
+        type: "easy",
+        format: "multiple-choice",
+        question: "A Windows 11 device is Hybrid Entra ID joined. A local Active Directory Group Policy (GPO) sets the desktop wallpaper. An Intune Device Configuration profile is assigned to the same device and sets a different desktop wallpaper. Assuming no custom conflict resolution policies are in place, which wallpaper will the user see?",
+        options: [
+          "The wallpaper configured by Intune.",
+          "The wallpaper configured by the GPO.",
+          "Neither; the user will see a black screen due to the conflict.",
+          "The device will alternate wallpapers on each reboot."
+        ],
+        answer: "The wallpaper configured by the GPO.",
+        explanation: "By default, in a Hybrid joined environment, legacy local Active Directory Group Policy Objects (GPOs) take precedence over modern Intune Mobile Device Management (MDM) policies.",
+        moreDetails: "This default behavior ensures that existing on-premises security postures are not inadvertently broken when a device is newly enrolled into Intune.",
+        otherOptions: "Intune does not win by default. The OS does not crash or alternate settings; it simply enforces the GPO.",
+        link: "https://learn.microsoft.com/en-us/windows/client-management/mdm/group-policy-and-mdm"
+      },
+      {
+        id: 2012,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to ensure that Intune configuration profiles always take precedence over local Active Directory GPOs when a direct conflict occurs. Which specific Windows configuration service provider (CSP) setting must you deploy?",
+        options: [
+          "ControlPolicyConflict/MDMWinsOverGP",
+          "DeviceManagement/EnableGPOOverride",
+          "Security/AllowMDMOverGPO",
+          "System/PolicyPrecedence"
+        ],
+        answer: "ControlPolicyConflict/MDMWinsOverGP",
+        explanation: "The <b>ControlPolicyConflict/MDMWinsOverGP</b> CSP setting is explicitly designed to alter the default conflict resolution behavior on Windows 10 and 11.",
+        moreDetails: "When this specific Intune custom OMA-URI or Settings Catalog policy is applied to a device, the Windows MDM client is instructed to enforce the MDM policy payload over any overlapping Group Policy setting, facilitating a smoother transition to cloud management.",
+        otherOptions: "The other listed CSP paths are fabricated.",
+        link: "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-controlpolicyconflict"
+      },
+      {
+        id: 2013,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A user belongs to the 'Sales' group and the 'Managers' group. The Sales group is assigned a Device Configuration profile that disables the device camera. The Managers group is assigned a profile that allows the camera. Both profiles are applied to the user's Intune-managed device. What is the resulting state in Intune?",
+        options: [
+          "The camera is allowed (Permissive wins).",
+          "The camera is disabled (Restrictive wins).",
+          "The setting enters a 'Conflict' state and the camera setting is not modified on the device.",
+          "Intune prompts the user to choose."
+        ],
+        answer: "The setting enters a 'Conflict' state and the camera setting is not modified on the device.",
+        explanation: "For standard Device Configuration profiles, Intune does not automatically evaluate 'restrictive vs permissive' logic.",
+        moreDetails: "If two profiles send differing explicit values to the exact same CSP setting, Intune marks the assignment as a <b>'Conflict'</b> in the admin console. Because the MDM engine cannot determine which profile is more important, it drops the payload, and the local setting remains unmodified until an administrator manually resolves the targeting overlap.",
+        otherOptions: "Permissive/Restrictive logic applies to compliance and app protection, not general configuration profiles.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profile-troubleshoot#conflicts-and-resolutions"
+      },
+      {
+        id: 2014,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A device is targeted by two different Compliance Policies. Policy A requires a minimum OS version of 10.0.19045. Policy B requires a minimum OS version of 10.0.22621. How does Intune evaluate the final compliance state of the device?",
+        options: [
+          "Intune applies the most restrictive setting (10.0.22621).",
+          "Intune applies the least restrictive setting (10.0.19045).",
+          "Intune flags a conflict and marks the device as 'Non-compliant'.",
+          "Intune flags a conflict and marks the device as 'Compliant' by default."
+        ],
+        answer: "Intune applies the most restrictive setting (10.0.22621).",
+        explanation: "Unlike Configuration profiles which fail into a 'Conflict' state, <b>Compliance Policies</b> are evaluated with a built-in security hierarchy.",
+        moreDetails: "When two compliance policies apply to the same device and configure the exact same requirement, Intune merges them and ensures the <b>most restrictive</b> setting always wins to guarantee maximum security posture. In this case, 10.0.22621 is the higher (more restrictive) hurdle.",
+        otherOptions: "Compliance policies do not error out into a 'Conflict' state over differing values; they simply enforce the strictest requirement.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-policy-create-windows#conflicts-between-compliance-policies"
+      },
+      {
+        id: 2015,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A user's iOS device is targeted by two different Intune App Protection Policies (MAM) for Microsoft Word. Policy 1 blocks copy/paste to unmanaged apps. Policy 2 allows copy/paste to unmanaged apps. How does Intune resolve this conflict?",
+        options: [
+          "The most recently created policy takes precedence.",
+          "The policy with the highest assigned priority number takes precedence.",
+          "The most restrictive setting always wins automatically.",
+          "Intune removes the app from the device."
+        ],
+        answer: "The most restrictive setting always wins automatically.",
+        explanation: "Similar to Compliance Policies, <b>App Protection Policies (MAM)</b> resolve overlaps natively without administrator intervention by prioritizing data security.",
+        moreDetails: "If a user is assigned multiple app protection policies for the same platform and app, Intune evaluates the settings and applies the <b>most restrictive</b> configuration (in this case, blocking copy/paste).",
+        otherOptions: "App Protection policies do not use an admin-defined 'priority number' system like Enrollment Restrictions do.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy#policy-conflicts"
+      },
+      {
+        id: 2016,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You assign a Device Configuration profile to the 'All Users' group, but you explicitly add the 'Executives' group to the 'Excluded groups' list for that same assignment. An executive logs into a newly enrolled Windows 11 device. Will the profile apply?",
+        options: [
+          "Yes, because Include assignments always override Exclude assignments.",
+          "No, because Exclude assignments always take precedence over Include assignments.",
+          "Yes, because Device Configuration profiles only apply to device groups.",
+          "It depends on which group was created first in Entra ID."
+        ],
+        answer: "No, because Exclude assignments always take precedence over Include assignments.",
+        explanation: "In Intune assignment logic, <b>Exclude</b> always takes precedence over Include.",
+        moreDetails: "If a user or device exists in both an included group and an excluded group for the same policy assignment, the exclusion wins, and the policy payload is not delivered to that specific user or device.",
+        otherOptions: "Include does not override Exclude. Configuration profiles can absolutely be assigned to user groups.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profile-assign#exclude-groups-from-a-profile-assignment"
+      },
+      {
+        id: 2017,
+        type: "hard",
+        format: "multiple-choice",
+        question: "When managing Apple devices via Intune, how are conflicts between two overlapping Apple configuration profiles handled locally on the iOS/iPadOS device itself (assuming Intune pushes both profiles successfully)?",
+        options: [
+          "The most restrictive setting is typically enforced by the iOS/iPadOS operating system.",
+          "The last installed profile overwrites the previous one.",
+          "The device prompts the user to resolve the conflict.",
+          "The device unenrolls from MDM to protect itself."
+        ],
+        answer: "The most restrictive setting is typically enforced by the iOS/iPadOS operating system.",
+        explanation: "If Intune pushes multiple valid `.mobileconfig` payloads to an Apple device that happen to overlap, the device itself evaluates the rules locally.",
+        moreDetails: "Apple's native MDM framework dictates that when a device receives conflicting profile restrictions, the <b>most restrictive</b> setting is enforced by the OS (e.g., if one profile allows the camera and one blocks it, the camera is disabled).",
+        otherOptions: "It is not based on installation order, and the device does not prompt the user.",
+        link: "https://support.apple.com/guide/deployment/payload-variables-dep1e479aeb/web"
+      },
+      {
+        id: 2018,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A device is co-managed by Intune and Configuration Manager (SCCM). The 'Device configuration' workload slider in SCCM is set to 'Configuration Manager'. However, an Intune administrator deploys an Intune device configuration profile to the device. What is the result?",
+        options: [
+          "The device applies both policies, resolving conflicts via MDMWinsOverGP.",
+          "The Intune policy is completely ignored because SCCM currently owns that specific workload.",
+          "The Intune policy applies, and the SCCM client is automatically uninstalled.",
+          "SCCM sends an alert and disables the Intune enrollment."
+        ],
+        answer: "The Intune policy is completely ignored because SCCM currently owns that specific workload.",
+        explanation: "In a co-managed state, the workload sliders act as the absolute authority toggle for the device.",
+        moreDetails: "If SCCM owns the 'Device configuration' workload, the local MDM client on the Windows device will actively ignore configuration profiles sent from Intune until the workload slider in the SCCM console is shifted to 'Pilot Intune' or 'Intune'.",
+        otherOptions: "MDMWinsOverGP applies to Group Policy, not SCCM baselines. The SCCM client is not uninstalled.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads"
+      },
+      {
+        id: 2019,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You deploy a setting using a built-in Intune Administrative Template. Later, you deploy a Custom OMA-URI profile that points to the exact same Windows CSP node but with a different value. Both apply to the same device. What happens?",
+        options: [
+          "The Custom OMA-URI always wins because custom profiles override GUI templates.",
+          "The Administrative Template always wins because built-in templates are prioritized.",
+          "A conflict is reported in Intune and the setting fails to apply.",
+          "Intune merges the two values."
+        ],
+        answer: "A conflict is reported in Intune and the setting fails to apply.",
+        explanation: "Under the hood, both Administrative Templates and Custom OMA-URI profiles write to the exact same Windows Configuration Service Providers (CSPs).",
+        moreDetails: "Intune does not rank profile <i>types</i>. It detects that two different profiles are sending conflicting instructions to the same URI node on the device and flags a standard 'Conflict' state, refusing to apply either.",
+        otherOptions: "Custom profiles do not inherently override GUI templates.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profile-troubleshoot#conflicts-and-resolutions"
+      },
+      {
+        id: 2020,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A Device Configuration profile assigning a lock screen background is targeted to a 'Device Group' (the laptop). Another profile assigning a different lock screen background is targeted to a 'User Group' (the user logging into that laptop). What is the expected behavior when the user logs in?",
+        options: [
+          "The user-targeted profile takes precedence when the user is logged in.",
+          "The device-targeted profile takes precedence because it applies at the hardware level.",
+          "Intune reports a conflict because they configure the same setting.",
+          "The settings are merged."
+        ],
+        answer: "Intune reports a conflict because they configure the same setting.",
+        explanation: "Intune does not natively prioritize User targeting over Device targeting (or vice versa) when it comes to resolving identical settings.",
+        moreDetails: "Even though one profile is targeted at the device and the other at the user, they ultimately configure the same CSP setting on the same machine during the user's session. Intune cannot determine which should win, resulting in a conflict.",
+        otherOptions: "Neither targeting method automatically overrides the other.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profile-troubleshoot"
+      },
+      {
+        id: 2021,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A user belongs to two different groups. Group A is assigned an Intune Device Enrollment Restriction policy that blocks Android devices. Group B is assigned an Enrollment Restriction policy that allows Android devices. How does Intune determine which policy to apply when the user attempts to enroll an Android phone?",
+        options: [
+          "The policy with the highest assigned Priority number (e.g., Priority 1) takes precedence.",
+          "Intune applies the most restrictive setting (blocks Android).",
+          "A conflict occurs and enrollment is halted.",
+          "The default restriction policy always overrides custom policies."
+        ],
+        answer: "The policy with the highest assigned Priority number (e.g., Priority 1) takes precedence.",
+        explanation: "Unlike Configuration profiles which simply generate a conflict error, <b>Enrollment Restrictions</b> use a dedicated priority-based system.",
+        moreDetails: "The administrator assigns a specific priority number to each restriction policy. When a user belongs to multiple targeted groups, Intune evaluates the policies in order of priority (Priority 1 being the highest/first) and applies the first one it hits, ignoring the rest.",
+        otherOptions: "It is not based on the 'most restrictive' logic; it is strictly based on the admin-defined priority list.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/enrollment-restrictions-set#priorities"
+      },
+      {
+        id: 2022,
+        type: "hard",
+        format: "multi-select",
+        question: "Which TWO of the following scenarios will cause a conflict or severe overlapping behavior when managing Windows Updates via Intune? (Select TWO)",
+        options: [
+          "Assigning two different 'Update rings for Windows 10 and later' with different deferral settings to the same device.",
+          "Assigning a 'Feature updates' profile and a 'Quality updates (Expedited)' profile to the same device.",
+          "Assigning an 'Update ring' and a 'Feature updates' profile to the same device.",
+          "Assigning an Intune Update Ring to a device that is actively receiving Software Updates from an on-premises WSUS server via legacy Group Policy."
+        ],
+        multiAnswers: [
+          "Assigning two different 'Update rings for Windows 10 and later' with different deferral settings to the same device.",
+          "Assigning an Intune Update Ring to a device that is actively receiving Software Updates from an on-premises WSUS server via legacy Group Policy."
+        ],
+        explanation: "Update management conflicts can severely disrupt the patching cycle.",
+        moreDetails: "Assigning two different Update Rings to the same device natively causes a 'Conflict' in Intune because the device doesn't know which deferral schedule to follow. Additionally, having legacy WSUS GPOs active while trying to use Intune WUfB creates severe management conflicts (often referred to as 'Dual Scan' issues), where the device is confused about its update source.",
+        otherOptions: "Mixing Feature Update profiles, Expedited Quality Update profiles, and Update Rings is the supported, intended architecture; they complement each other, rather than conflict.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/wufb-wsus"
       }
     ]
   }

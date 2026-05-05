@@ -25,38 +25,7 @@ export const domain1Dataset: TermData[] = [
     term: "Windows Autopilot Provisioning",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 101,
-        type: "easy",
-        question: "What is the primary benefit of using <b>Windows Autopilot</b> for deploying new Windows clients in an organization?",
-        options: [
-          "It captures custom OS images to deploy via USB drives.",
-          "It allows organizations to deploy pre-configured devices directly to end-users without IT needing to physically image them.",
-          "It acts as a local proxy server for downloading Windows Updates.",
-          "It replaces the need for an MDM provider like Intune."
-        ],
-        answer: "It allows organizations to deploy pre-configured devices directly to end-users without IT needing to physically image them.",
-        explanation: "<b>Windows Autopilot</b> is a collection of technologies used to set up and pre-configure new devices, getting them ready for productive use. Its primary benefit is zero-touch IT provisioning.",
-        moreDetails: "With Autopilot, devices can be shipped straight from the OEM to the end-user. Upon first boot and network connection, the device automatically joins Entra ID and enrolls in Intune to receive policies and apps.",
-        otherOptions: "Autopilot does not capture custom OS images (MDT/Configuration Manager do this). It requires an MDM like Intune and doesn't replace it. It's not an update proxy (that's Delivery Optimization).",
-        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot"
-      },
-      {
-        id: 102,
-        type: "medium",
-        question: "Which of the following is required to register a device for <b>Windows Autopilot</b>?",
-        options: [
-          "The device's MAC address and IP address.",
-          "The device's hardware hash, product key ID, or serial number.",
-          "A local administrator account created manually on the device.",
-          "An Active Directory Domain Controller on the same local network."
-        ],
-        answer: "The device's hardware hash, product key ID, or serial number.",
-        explanation: "To register a device in the Windows Autopilot deployment service, you must upload the device's hardware identity, which can be the <b>hardware hash</b>, product key ID, or serial number.",
-        moreDetails: "OEMs, distributors, or resellers can automatically register devices on your behalf. If done manually, IT administrators can extract the hardware hash using the `Get-WindowsAutopilotInfo` PowerShell script.",
-        otherOptions: "MAC/IP addresses are not used for Autopilot registration. A local admin account is what Autopilot helps avoid creating manually. A local DC is only needed for Hybrid Entra join, not standard Autopilot registration.",
-        link: "https://learn.microsoft.com/en-us/autopilot/add-devices"
-      },
+
       {
         id: 103,
         type: "medium",
@@ -73,22 +42,7 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "User account type determines Standard vs Admin. Language/Region skips the locale selection. Skipping Microsoft account sign-in is not a profile setting for privacy.",
         link: "https://learn.microsoft.com/en-us/autopilot/profiles"
       },
-      {
-        id: 104,
-        type: "hard",
-        question: "You want to deploy Windows clients using <b>Windows Autopilot self-deploying mode</b>. Which of the following is a strict hardware requirement for this mode?",
-        options: [
-          "A discrete GPU",
-          "A TPM 2.0 chip that supports device attestation",
-          "At least 16GB of RAM",
-          "A wired Ethernet connection"
-        ],
-        answer: "A TPM 2.0 chip that supports device attestation",
-        explanation: "<b>Windows Autopilot self-deploying mode</b> requires a physical <b>TPM 2.0</b> chip that supports device attestation to authenticate the device with Entra ID automatically.",
-        moreDetails: "Self-deploying mode joins the device into Entra ID, enrolls it into Intune, and provisions all policies and apps without requiring user credentials. This is heavily reliant on the hardware security provided by the TPM 2.0 attestation.",
-        otherOptions: "GPUs, RAM limits, and wired connections are not strict hardware requirements for self-deploying mode (though wired networks can help avoid Wi-Fi credential prompts).",
-        link: "https://learn.microsoft.com/en-us/autopilot/self-deploying"
-      },
+
       {
         id: 105,
         type: "easy",
@@ -128,70 +82,7 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "ESP does not allow OS selection, hash capture, or prompt for BitLocker keys (though it might wait for BitLocker to encrypt).",
         link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
       },
-      {
-        id: 107,
-        type: "medium",
-        question: "In the <b>Enrollment Status Page (ESP)</b> configuration, what happens if the 'Block device use until all apps and profiles are installed' setting is set to 'No'?",
-        options: [
-          "The deployment will fail immediately.",
-          "Users can access the desktop while apps and policies continue to install in the background.",
-          "The device will skip Intune enrollment entirely.",
-          "Only local administrators can log in."
-        ],
-        answer: "Users can access the desktop while apps and policies continue to install in the background.",
-        explanation: "If blocking is disabled, the user is allowed to reach the Windows desktop as soon as the initial account setup is done, while apps and policies finish applying asynchronously in the background.",
-        moreDetails: "While this gets the user to the desktop faster, it risks exposing the device before security agents or VPN profiles are fully installed.",
-        otherOptions: "The deployment does not fail. Intune enrollment still happens. It does not restrict login to local admins only.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      },
-      {
-        id: 108,
-        type: "hard",
-        question: "You need to ensure that a specific security application always installs during the Autopilot ESP phase. How can you achieve this?",
-        options: [
-          "Package the app as an MSI and place it on a network share.",
-          "Select the app under 'Block device use until these required apps are installed if they are assigned to the user/device' in the ESP profile.",
-          "Assign the app as 'Available' to the All Users group.",
-          "Use a Provisioning Package to bypass the ESP."
-        ],
-        answer: "Select the app under 'Block device use until these required apps are installed if they are assigned to the user/device' in the ESP profile.",
-        explanation: "To guarantee a specific app installs before the user can access the desktop, you must explicitly list it in the 'Block device use until these required apps are installed' section of the ESP profile.",
-        moreDetails: "You can select multiple critical applications. If any of these selected apps fail to install, the ESP will show an error and block access, ensuring the device does not become active without critical software.",
-        otherOptions: "Network shares are irrelevant to Intune ESP. 'Available' apps do not install automatically. Provisioning packages don't enforce Intune app installations.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      },
-      {
-        id: 109,
-        type: "medium",
-        question: "A user is experiencing an error on the ESP during Autopilot. Which setting in the ESP profile allows the user to gather logs for troubleshooting?",
-        options: [
-          "Allow users to reset device if installation error occurs",
-          "Turn on log collection and diagnostics page for end users",
-          "Show app and profile configuration progress",
-          "Disable Windows Error Reporting"
-        ],
-        answer: "Turn on log collection and diagnostics page for end users",
-        explanation: "By enabling the <b>Turn on log collection and diagnostics page for end users</b> setting in the ESP profile, a button becomes available on the error screen that allows users to export diagnostic logs to a USB drive.",
-        moreDetails: "These logs (including MDMDiagReport.cab) contain vital events from Intune Management Extension and Autopilot event logs, which administrators need for troubleshooting deployment failures.",
-        otherOptions: "Resetting the device wipes it. Showing progress just displays the UI. Disabling error reporting would hinder troubleshooting.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      },
-      {
-        id: 110,
-        type: "easy",
-        question: "Can you target different <b>Enrollment Status Page (ESP)</b> profiles to different groups of users?",
-        options: [
-          "No, there can only be one global ESP profile for the entire tenant.",
-          "Yes, ESP profiles can be assigned to specific Entra ID device or user groups, with priorities handling conflicts.",
-          "Yes, but only based on the geographic location of the device.",
-          "No, ESP profiles are hardcoded by Microsoft."
-        ],
-        answer: "Yes, ESP profiles can be assigned to specific Entra ID device or user groups, with priorities handling conflicts.",
-        explanation: "Intune allows you to create multiple <b>ESP profiles</b> and assign them to different groups. You use priorities to determine which profile applies if a user/device is in multiple targeted groups.",
-        moreDetails: "For example, you could have a strict ESP profile for the Finance department that blocks access until 10 apps install, and a more relaxed default profile for general users.",
-        otherOptions: "There is a default global profile, but you can create custom ones. They are not limited by geography or hardcoded.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      }
+
     ]
   },
   {
@@ -286,22 +177,7 @@ export const domain1Dataset: TermData[] = [
     term: "Windows Client Upgrades",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 116,
-        type: "easy",
-        question: "What is an 'in-place upgrade' in the context of Windows client deployment?",
-        options: [
-          "Wiping the hard drive and installing a fresh copy of the OS.",
-          "Upgrading the operating system to a newer version while preserving existing applications, user data, and settings.",
-          "Moving a virtual machine from one Hyper-V host to another.",
-          "Physically swapping the hard drive of a laptop."
-        ],
-        answer: "Upgrading the operating system to a newer version while preserving existing applications, user data, and settings.",
-        explanation: "An <b>in-place upgrade</b> updates the Windows OS directly (e.g., from Windows 10 to Windows 11) using the Windows setup engine, keeping all user files, installed applications, and configurations intact.",
-        moreDetails: "This is the Microsoft-recommended approach for upgrading existing devices, as it avoids the complexity of backing up user data (USMT) and reinstalling applications required by a wipe-and-load scenario.",
-        otherOptions: "Wiping is a wipe-and-load/clean install. Moving VMs is Live Migration. Swapping drives is hardware maintenance.",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-10-with-mdt"
-      },
+
       {
         id: 117,
         type: "medium",
@@ -318,22 +194,7 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "Performance Monitor measures real-time stats. ADUC manages directory objects. Firewall manages network rules.",
         link: "https://learn.microsoft.com/en-us/mem/analytics/work-from-anywhere"
       },
-      {
-        id: 118,
-        type: "medium",
-        question: "You want to perform a Windows edition upgrade from Windows 10 Pro to Windows 10 Enterprise without requiring a reboot. How can this be natively accomplished in a managed environment?",
-        options: [
-          "By deploying a Windows 10 Enterprise ISO file and running setup.exe.",
-          "By using a Windows 10/11 Edition Upgrade policy in Intune supplying the KMS or MAK product key.",
-          "By formatting the drive and reinstalling from a USB.",
-          "It is impossible to upgrade the edition without a full reboot."
-        ],
-        answer: "By using a Windows 10/11 Edition Upgrade policy in Intune supplying the KMS or MAK product key.",
-        explanation: "Intune allows you to create an <b>Edition Upgrade policy</b>. For upgrading from Pro to Enterprise, the process is instant and unlock-based (does not require a reboot) when using a valid product key or subscription activation.",
-        moreDetails: "Windows 10/11 Pro already contains all the binaries for Enterprise. The edition upgrade simply unlocks the Enterprise features immediately without modifying the underlying OS installation.",
-        otherOptions: "Running setup.exe requires a reboot. Formatting is a clean install. It IS possible without a reboot.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/edition-upgrade-configure-windows-10"
-      },
+
       {
         id: 119,
         type: "hard",
@@ -350,22 +211,6 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "DISM does not perform full OS upgrades. SFC is for system file checking. Bootrec is for fixing boot loaders.",
         link: "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-setup-command-line-options"
       },
-      {
-        id: 120,
-        type: "easy",
-        question: "What is Subscription Activation in the context of Windows clients?",
-        options: [
-          "A monthly fee to unlock Solitaire.",
-          "A feature that steps up a device from Windows Pro to Windows Enterprise automatically when a licensed user signs in with Entra ID.",
-          "A method to activate Microsoft Office 365.",
-          "A tool that requires a KMS server on-premises."
-        ],
-        answer: "A feature that steps up a device from Windows Pro to Windows Enterprise automatically when a licensed user signs in with Entra ID.",
-        explanation: "<b>Subscription Activation</b> allows organizations with Windows 10/11 Enterprise E3 or E5 licenses (assigned via Entra ID) to automatically step-up their devices from Pro to Enterprise seamlessly upon user login.",
-        moreDetails: "If the user's license is revoked or expires, the device simply steps back down to Windows Pro within a grace period. No KMS or MAK keys are required.",
-        otherOptions: "It is for the OS, not Office or Solitaire. It explicitly replaces the need for traditional KMS servers.",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-10-subscription-activation"
-      }
     ]
   },
   {
@@ -373,38 +218,7 @@ export const domain1Dataset: TermData[] = [
     term: "User State Migration Tool (USMT)",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 121,
-        type: "easy",
-        question: "What is the primary purpose of the <b>User State Migration Tool (USMT)</b>?",
-        options: [
-          "To migrate Active Directory users to Entra ID.",
-          "To capture and restore user accounts, files, and OS settings during a wipe-and-load Windows deployment.",
-          "To clone a hard drive sector-by-sector.",
-          "To migrate Exchange mailboxes."
-        ],
-        answer: "To capture and restore user accounts, files, and OS settings during a wipe-and-load Windows deployment.",
-        explanation: "<b>USMT</b> is a command-line utility used by IT professionals to migrate user files and settings from an old Windows installation to a new one, particularly useful in PC replacement or wipe-and-load scenarios.",
-        moreDetails: "USMT captures the state (ScanState) from the old PC and restores it (LoadState) to the new PC, significantly reducing end-user downtime.",
-        otherOptions: "USMT handles local files and settings, not AD identities, drive cloning, or mailbox migration.",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-overview"
-      },
-      {
-        id: 122,
-        type: "medium",
-        question: "Which USMT command-line tool is used to gather the user files and settings from the source computer?",
-        options: [
-          "LoadState.exe",
-          "MigApp.xml",
-          "ScanState.exe",
-          "UsmtUtils.exe"
-        ],
-        answer: "ScanState.exe",
-        explanation: "<b>ScanState.exe</b> is executed on the source computer to scan for and collect files, settings, and user profiles based on the configuration XML rules, saving them to a secure migration store.",
-        moreDetails: "After the OS is deployed, `LoadState.exe` is run on the destination computer to apply the stored data.",
-        otherOptions: "LoadState restores data. MigApp.xml is a configuration file, not an executable. UsmtUtils provides supplemental utilities like deleting stores.",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-scanstate-syntax"
-      },
+
       {
         id: 123,
         type: "hard",
@@ -455,114 +269,13 @@ export const domain1Dataset: TermData[] = [
       }
     ]
   },
-  {
-    id: 6,
-    term: "Provisioning Packages (PPKG)",
-    category: "Deploy Windows client",
-    questions: [
-      {
-        id: 126,
-        type: "easy",
-        question: "What is a <b>Provisioning Package</b> (.ppkg) in Windows?",
-        options: [
-          "A compressed ZIP file containing user profile backups.",
-          "A container that holds configuration settings, apps, and certificates which can be rapidly applied to a Windows device without reimaging.",
-          "An update package downloaded from WSUS.",
-          "A script used exclusively for formatting hard drives."
-        ],
-        answer: "A container that holds configuration settings, apps, and certificates which can be rapidly applied to a Windows device without reimaging.",
-        explanation: "<b>Provisioning packages</b> (.ppkg) let IT administrators quickly configure a device (joining it to a domain, installing apps, applying policies) simply by executing the file, usually via USB, without needing to reinstall the OS.",
-        moreDetails: "This is heavily used in 'Bring Your Own Device' (BYOD) or small business scenarios, or by OEMs to apply bulk settings on the factory floor.",
-        otherOptions: "It is not for backups, updates, or formatting drives.",
-        link: "https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-packages"
-      },
-      {
-        id: 127,
-        type: "medium",
-        question: "Which tool must an administrator use to create a custom Provisioning Package?",
-        options: [
-          "Windows Configuration Designer (WCD)",
-          "Active Directory Administrative Center",
-          "Registry Editor",
-          "Disk Management"
-        ],
-        answer: "Windows Configuration Designer (WCD)",
-        explanation: "<b>Windows Configuration Designer (WCD)</b> is the official tool provided by Microsoft (available in the Microsoft Store or ADK) used to author and build .ppkg files.",
-        moreDetails: "WCD provides a GUI with 'simple' wizards for common tasks (like provisioning kiosk devices or bulk enrollment) and an 'advanced' mode to tweak hundreds of specific OMA-URI settings.",
-        otherOptions: "ADAC manages AD objects. Registry Editor edits local registries. Disk Management partitions drives.",
-        link: "https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-create-package"
-      },
-      {
-        id: 128,
-        type: "hard",
-        question: "When applying a Provisioning Package during the Out-of-Box Experience (OOBE), what action triggers the device to search for a .ppkg file on an inserted USB drive?",
-        options: [
-          "Pressing F12 during boot.",
-          "Pressing the Windows Key five times on the first OOBE screen.",
-          "Holding down Shift + F10.",
-          "Selecting 'Advanced' from the Wi-Fi setup screen."
-        ],
-        answer: "Pressing the Windows Key five times on the first OOBE screen.",
-        explanation: "If you insert a USB drive containing a valid .ppkg file during OOBE, pressing the <b>Windows Key five times</b> triggers the Provisioning process. The OS will automatically discover the package and prompt to install it.",
-        moreDetails: "This hidden shortcut is a massive time-saver for IT technicians deploying devices in bulk off-network.",
-        otherOptions: "F12 is network boot. Shift + F10 opens the command prompt in WinPE/OOBE. The Wi-Fi screen does not have this option.",
-        link: "https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-apply-package"
-      },
-      {
-        id: 129,
-        type: "medium",
-        question: "Can a Provisioning Package be deployed through Microsoft Intune?",
-        options: [
-          "Yes, Intune can deploy .ppkg files via an Endpoint protection profile.",
-          "No, .ppkg files must only be applied manually via USB.",
-          "Yes, they can be uploaded as a Line-of-Business (LOB) app or custom configuration profile in Intune.",
-          "No, Intune only supports MSI files."
-        ],
-        answer: "No, .ppkg files must only be applied manually via USB.",
-        explanation: "Wait, actually, you CAN deploy a provisioning package through Intune by uploading it. Let me correct the answer. Wait, no. Actually, Intune does not natively deploy .ppkg files. The modern approach is to configure Intune natively. However, you can use powershell. Let's provide a better question.",
-        moreDetails: "The standard use case for Provisioning Packages is for off-network or pre-enrollment configuration (like Bulk Enrollment). Once a device is in Intune, you use Intune Configuration Profiles instead of PPKGs.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-packages"
-      },
-      {
-        id: 130,
-        type: "easy",
-        question: "What happens if a setting in a Provisioning Package conflicts with a policy deployed via Intune (MDM)?",
-        options: [
-          "The device blue screens.",
-          "The Provisioning Package setting always wins permanently.",
-          "The MDM policy from Intune generally takes precedence and overrides the package setting.",
-          "The user is prompted to choose."
-        ],
-        answer: "The MDM policy from Intune generally takes precedence and overrides the package setting.",
-        explanation: "In the Windows client configuration hierarchy, Mobile Device Management (MDM) policies (like those from Intune) take precedence over settings applied via Provisioning Packages.",
-        moreDetails: "This ensures that a centrally managed cloud policy is always the absolute source of truth, preventing rogue USB provisioning from overriding organizational security postures.",
-        otherOptions: "The device doesn't crash, packages don't win, and users are never prompted to resolve policy conflicts.",
-        link: "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-configuration-service-provider"
-      }
-    ]
-  },
+
   {
     id: 7,
     term: "Windows 365 Cloud PCs",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 131,
-        type: "easy",
-        question: "What is <b>Windows 365</b>?",
-        options: [
-          "A suite of local desktop applications like Word and Excel.",
-          "A Software-as-a-Service (SaaS) solution that streams a personalized, persistent Windows desktop from the Microsoft Cloud to any device.",
-          "A new version of the Windows Server operating system.",
-          "A hardware lease program for laptops."
-        ],
-        answer: "A Software-as-a-Service (SaaS) solution that streams a personalized, persistent Windows desktop from the Microsoft Cloud to any device.",
-        explanation: "<b>Windows 365</b> is a Cloud PC service that provides a dedicated, persistent virtual machine hosted by Microsoft. Users can stream their Windows experience (apps, data, settings) to any endpoint (Mac, iPad, thin client).",
-        moreDetails: "Unlike Azure Virtual Desktop (which is PaaS), Windows 365 is a fully managed SaaS offering. IT admins manage it exactly like a physical PC through Intune.",
-        otherOptions: "Word/Excel is Microsoft 365 Apps. It is not an OS version or hardware lease.",
-        link: "https://learn.microsoft.com/en-us/windows-365/overview"
-      },
+
       {
         id: 132,
         type: "medium",
@@ -596,22 +309,6 @@ export const domain1Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/windows-365/enterprise/azure-network-connections"
       },
       {
-        id: 134,
-        type: "medium",
-        question: "How does a user securely access their Windows 365 Cloud PC?",
-        options: [
-          "By plugging a USB drive into a server.",
-          "By navigating to windows365.microsoft.com or using the Remote Desktop/Windows App clients.",
-          "By using a standard FTP client.",
-          "By physically connecting to a port on the Azure datacenter."
-        ],
-        answer: "By navigating to windows365.microsoft.com or using the Remote Desktop/Windows App clients.",
-        explanation: "Users can access their persistent Cloud PC via any HTML5-compatible web browser at <b>windows365.microsoft.com</b> or by utilizing the rich <b>Windows App</b> (formerly Remote Desktop client) available for Windows, macOS, iOS, and Android.",
-        moreDetails: "This flexibility is a core selling point of Windows 365, enabling secure BYOD and remote work scenarios without requiring local data storage on the endpoint.",
-        otherOptions: "USB drives, FTP, and physical DC connections are entirely incorrect methods for accessing a Cloud PC.",
-        link: "https://learn.microsoft.com/en-us/windows-365/enterprise/end-user-access"
-      },
-      {
         id: 135,
         type: "easy",
         question: "What is a key administrative difference between Windows 365 Business and Windows 365 Enterprise?",
@@ -634,22 +331,7 @@ export const domain1Dataset: TermData[] = [
     term: "Azure Virtual Desktop (AVD)",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 136,
-        type: "easy",
-        question: "What is <b>Azure Virtual Desktop (AVD)</b>?",
-        options: [
-          "A tool for creating local Hyper-V virtual machines.",
-          "A desktop and app virtualization service that runs on the cloud (PaaS), allowing multi-session Windows environments.",
-          "A backup solution for on-premises servers.",
-          "A feature that renders 3D graphics inside Microsoft Edge."
-        ],
-        answer: "A desktop and app virtualization service that runs on the cloud (PaaS), allowing multi-session Windows environments.",
-        explanation: "<b>Azure Virtual Desktop (AVD)</b> is a highly scalable desktop and app virtualization PaaS offering in Azure. Notably, it uniquely provides Windows 10/11 Enterprise multi-session, allowing multiple users to share a single VM concurrently.",
-        moreDetails: "AVD provides administrators complete control over the underlying Azure infrastructure (VMs, storage, networking), differentiating it from the SaaS approach of Windows 365.",
-        otherOptions: "It is a cloud VDI service, not local Hyper-V, a backup tool, or a browser renderer.",
-        link: "https://learn.microsoft.com/en-us/azure/virtual-desktop/overview"
-      },
+
       {
         id: 137,
         type: "medium",
@@ -722,38 +404,6 @@ export const domain1Dataset: TermData[] = [
     category: "Deploy Windows client",
     questions: [
       {
-        id: 141,
-        type: "easy",
-        question: "What is <b>Remote Help</b> in the context of Microsoft Intune?",
-        options: [
-          "A community forum for IT administrators.",
-          "A premium Intune add-on that enables secure, cloud-based remote assistance for Windows and Android devices.",
-          "A physical hardware diagnostic tool.",
-          "A command-line interface for restarting routers."
-        ],
-        answer: "A premium Intune add-on that enables secure, cloud-based remote assistance for Windows and Android devices.",
-        explanation: "<b>Remote Help</b> is a secure, cloud-hosted remote assistance tool deeply integrated with Intune and Entra ID. It allows IT helpdesk staff to view or control a user's screen to troubleshoot issues.",
-        moreDetails: "Because it integrates with Entra ID, it provides strong identity verification, showing the helper and the user trust indicators (like profile pictures and organizational roles) before the session begins.",
-        otherOptions: "It is an interactive remote support software, not a forum, hardware tool, or CLI.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help"
-      },
-      {
-        id: 142,
-        type: "medium",
-        question: "Before a helpdesk administrator can initiate a Remote Help session via Intune, what permissions must they be granted via Role-Based Access Control (RBAC)?",
-        options: [
-          "Global Administrator only.",
-          "Remote tasks: Offer Remote Assistance (View screen or Take full control).",
-          "Billing Administrator.",
-          "Intune Read-Only Operator."
-        ],
-        answer: "Remote tasks: Offer Remote Assistance (View screen or Take full control).",
-        explanation: "To use Remote Help, the administrator's Intune RBAC role must have specific permissions granted under Remote tasks, specifically the ability to <b>Offer Remote Assistance</b>.",
-        moreDetails: "Administrators can be granted 'View screen' permissions (for compliance/privacy reasons) or 'Take full control' permissions, ensuring the principle of least privilege is maintained.",
-        otherOptions: "Global Admin has it by default, but it's not strictly required. Billing and Read-Only roles cannot initiate remote control.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#role-based-access-control"
-      },
-      {
         id: 143,
         type: "hard",
         question: "How does Remote Help handle a scenario where a standard user device receives a User Account Control (UAC) prompt requiring administrative credentials?",
@@ -769,38 +419,6 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "The session does not disconnect. UAC is a critical security boundary and cannot be automatically accepted. The screen doesn't go permanently black.",
         link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#elevation"
       },
-      {
-        id: 144,
-        type: "medium",
-        question: "Which built-in Windows tool can be configured via Group Policy to allow remote assistance without requiring the premium Intune add-on?",
-        options: [
-          "Quick Assist",
-          "Windows Terminal",
-          "Event Viewer",
-          "Task Manager"
-        ],
-        answer: "Quick Assist",
-        explanation: "<b>Quick Assist</b> is a free, built-in Windows application that allows two people to share a screen over an internet connection. It can be managed somewhat via Group Policy or Intune.",
-        moreDetails: "While Quick Assist is free, it lacks the deep RBAC integration, conditional access compliance checks, and secure UAC elevation capabilities of the premium Remote Help add-on.",
-        otherOptions: "Terminal, Event Viewer, and Task Manager are local diagnostic/CLI tools, not screen-sharing applications.",
-        link: "https://learn.microsoft.com/en-us/windows/client-management/quick-assist"
-      },
-      {
-        id: 145,
-        type: "easy",
-        question: "When configuring Remote Desktop Protocol (RDP) for remote management, which port must typically be allowed through the firewall?",
-        options: [
-          "Port 80",
-          "Port 443",
-          "Port 3389",
-          "Port 22"
-        ],
-        answer: "Port 3389",
-        explanation: "The default listening port for <b>Remote Desktop Protocol (RDP)</b> is TCP (and UDP) <b>3389</b>.",
-        moreDetails: "To manage clients locally over RDP, this port must be opened in the Windows Defender Firewall. However, exposing port 3389 directly to the public internet is a massive security risk and should never be done without a VPN or Gateway.",
-        otherOptions: "Port 80 is HTTP. Port 443 is HTTPS. Port 22 is SSH.",
-        link: "https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/change-listening-port"
-      }
     ]
   },
   {
@@ -855,22 +473,6 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "Because the private key never leaves the TPM, WHfB is highly resistant to phishing and credential theft, fulfilling strict passwordless and MFA requirements.",
         otherOptions: "Credential Guard protects NTLM/Kerberos hashes. Authenticator is a mobile app. BitLocker encrypts hard drives.",
         link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/hello-overview"
-      },
-      {
-        id: 149,
-        type: "medium",
-        question: "How does <b>Windows LAPS</b> (Local Administrator Password Solution) improve client security?",
-        options: [
-          "It forces all users to change their Entra ID passwords every 30 days.",
-          "It automatically rotates the password of the built-in local administrator account and stores it securely in Entra ID or Active Directory.",
-          "It logs out users who are inactive for 15 minutes.",
-          "It blocks the use of standard user accounts."
-        ],
-        answer: "It automatically rotates the password of the built-in local administrator account and stores it securely in Entra ID or Active Directory.",
-        explanation: "<b>Windows LAPS</b> automatically manages and randomizes the password of the local administrator account on Windows clients, backing the password up to the directory (Entra ID or AD).",
-        moreDetails: "This completely mitigates 'Pass-the-Hash' attacks that rely on identical local admin passwords shared across thousands of corporate workstations.",
-        otherOptions: "It manages the local admin, not normal user passwords, inactivity timeouts, or standard accounts.",
-        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview"
       },
       {
         id: 150,
@@ -1558,6 +1160,1813 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "The massive 15GB CAD application will continue to download and install silently in the background while the user is already productive on the desktop, preventing the ESP timeout failure.",
         otherOptions: "Making it 'Available' requires manual user intervention to install. Increasing timeout to 24h is a terrible user experience. MSIX doesn't solve the file size/download time bottleneck.",
         link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
+      }
+    ]
+  },
+  {
+    id: 994,
+    term: "Intune/Entra RBAC Roles (Advanced)",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1016,
+        type: "hard",
+        format: "multiple-choice",
+        question: "An IT admin needs to view all device configurations, compliance policies, and app assignments in the Intune admin center to perform an audit. They must not be able to modify any settings or run remote actions. Which of the following Entra ID roles provides the LEAST privileged access to accomplish this?",
+        options: [
+          "Global Reader",
+          "Security Reader",
+          "Intune Administrator",
+          "Read Only Operator"
+        ],
+        answer: "Global Reader",
+        explanation: "The <b>Global Reader</b> role in Entra ID provides read-only access to almost all administrative features in Microsoft 365, including Intune.",
+        moreDetails: "The Intune 'Read Only Operator' is an Intune-specific built-in role, not an Entra ID role. The question explicitly asks for an Entra ID role, making Global Reader the correct answer.",
+        otherOptions: "Security Reader focuses on security alerts and Defender. Intune Admin has write access. Read Only Operator is an Intune role, not an Entra ID role.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#global-reader"
+      },
+      {
+        id: 1017,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have created a custom Intune role named 'Regional IT' and assigned it to a group of administrators. You want to ensure these administrators can only manage devices located in the 'Europe' office. Which combination of Intune RBAC features is required to achieve this?",
+        options: [
+          "A custom role assignment applied to an 'All Devices' scope, using a Device Category of 'Europe'.",
+          "A custom role assignment targeting an Entra ID group containing the administrators, with a Scope Tag of 'Europe' applied to both the assignment and the target devices.",
+          "An Administrative Unit in Entra ID containing the administrators, mapped to the Intune role.",
+          "A Conditional Access policy restricting access based on the administrator's IP address."
+        ],
+        answer: "A custom role assignment targeting an Entra ID group containing the administrators, with a Scope Tag of 'Europe' applied to both the assignment and the target devices.",
+        explanation: "<b>Scope Tags</b> are the primary mechanism in Intune RBAC to restrict the visibility and management scope of objects (like policies, apps, and devices) to specific administrators.",
+        moreDetails: "By applying the 'Europe' scope tag to both the role assignment and the devices, the administrators can only see and manage those specific devices.",
+        otherOptions: "Administrative Units in Entra ID are primarily for managing Entra ID objects (users/groups), not Intune devices directly. Device Categories do not enforce RBAC boundaries natively without scope tags.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/scope-tags"
+      },
+      {
+        id: 1018,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A junior administrator is assigned the 'Intune Administrator' role in Entra ID. They are trying to reset the password for a user who is a 'Global Administrator', but the action fails. Why does this occur?",
+        options: [
+          "The Intune Administrator role does not grant user password reset permissions; only the Helpdesk Administrator can reset passwords.",
+          "Intune Administrators can reset passwords for standard users, but they are blocked from resetting passwords for highly privileged roles like Global Administrator.",
+          "The Intune Administrator role is strictly for device management and has absolutely no user management capabilities.",
+          "Password resets for Global Administrators require a PIM elevation approval from two other Global Admins."
+        ],
+        answer: "Intune Administrators can reset passwords for standard users, but they are blocked from resetting passwords for highly privileged roles like Global Administrator.",
+        explanation: "The <b>Intune Administrator</b> role in Entra ID possesses some basic user management rights, including the ability to reset passwords for standard users to facilitate device enrollment.",
+        moreDetails: "However, Entra ID RBAC strictly prevents lower-tier administrators from resetting passwords of highly privileged roles (like Global Admin) to prevent privilege escalation.",
+        otherOptions: "Intune Admin CAN reset passwords for non-privileged users. Passwords for Global Admins must be reset by Privileged Role Administrators or other Global Admins, not necessarily through PIM dual-approval.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#intune-administrator"
+      },
+      {
+        id: 1019,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Which built-in Intune role should you assign to an administrator who needs to deploy Antivirus, Disk Encryption, and Firewall policies, but should NOT be able to wipe devices or deploy Win32 applications?",
+        options: [
+          "Security Administrator (Entra ID)",
+          "Endpoint Security Manager (Intune Built-in Role)",
+          "Helpdesk Operator (Intune Built-in Role)",
+          "Application Manager (Intune Built-in Role)"
+        ],
+        answer: "Endpoint Security Manager (Intune Built-in Role)",
+        explanation: "The Intune built-in <b>Endpoint Security Manager</b> role is explicitly designed for managing security baselines and endpoint security policies (AV, Firewall, BitLocker) without granting broader device management rights like wiping devices or deploying general applications.",
+        moreDetails: "The Entra ID 'Security Administrator' role grants broad security permissions across the entire Microsoft 365 tenant (including Defender and Purview), which violates the principle of least privilege if they only need to manage Intune endpoint security policies.",
+        otherOptions: "Security Administrator is too broad. Helpdesk Operator focuses on remote actions, not creating security policies. Application Manager focuses on apps.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control#built-in-roles"
+      },
+      {
+        id: 1020,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization is deploying 5,000 kiosk devices. A service account is used to enroll these devices via an automated provisioning package. You notice the enrollment starts failing after the 15th device. You add the service account to the 'Device Enrollment Manager' (DEM) list. How many devices can this account now enroll, and does it grant the account Intune administrative privileges?",
+        options: [
+          "1,000 devices; Yes, it grants full read/write access to device configurations.",
+          "1,000 devices; No, DEM is not an RBAC role and grants no administrative portal access.",
+          "Unlimited devices; Yes, DEM acts as a Read-Only Operator.",
+          "Unlimited devices; No, DEM only overrides the device limit."
+        ],
+        answer: "1,000 devices; No, DEM is not an RBAC role and grants no administrative portal access.",
+        explanation: "A <b>Device Enrollment Manager (DEM)</b> account can enroll up to 1,000 devices, bypassing the standard Entra ID per-user device limit.",
+        moreDetails: "Crucially, DEM is merely an enrollment mechanism, NOT an RBAC role. It grants absolutely zero administrative permissions within the Intune or Entra ID portals.",
+        otherOptions: "DEM does not grant unlimited enrollments (it's hardcoded to 1,000). It does not grant any read or write access to the Intune portal.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-manager-enroll"
+      },
+      {
+        id: 1021,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your environment is co-managed between Configuration Manager and Intune. A user has the 'Full Administrator' security role in Configuration Manager. How do these permissions translate to the Intune admin center?",
+        options: [
+          "They are automatically granted the Intune Administrator role in Entra ID.",
+          "They are granted the Read Only Operator role in Intune.",
+          "Configuration Manager RBAC roles do not natively map or sync to Intune; they must be granted separate Intune/Entra ID roles to manage cloud workloads.",
+          "The permissions map dynamically based on which workloads have been shifted to Intune."
+        ],
+        answer: "Configuration Manager RBAC roles do not natively map or sync to Intune; they must be granted separate Intune/Entra ID roles to manage cloud workloads.",
+        explanation: "Configuration Manager uses its own local SQL-based RBAC model, while Intune relies on Entra ID and cloud-native Intune RBAC.",
+        moreDetails: "There is no automated sync or mapping between the two. An admin must be explicitly granted roles in both environments to fully manage a co-managed state, even if workloads are shifted.",
+        otherOptions: "Intune and ConfigMgr RBAC are distinct. Workloads don't automatically grant portal permissions.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/overview"
+      },
+      {
+        id: 1022,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have assigned the 'Germany' scope tag to a specific Windows Autopilot Deployment Profile. An administrator with only the 'France' scope tag assigned to their role attempts to view the list of Autopilot profiles. What will they see?",
+        options: [
+          "They will see the 'Germany' profile but it will be greyed out and read-only.",
+          "They will not see the 'Germany' profile at all.",
+          "They will see the profile and can edit it, because Autopilot profiles are global objects that ignore scope tags.",
+          "They will see the profile, but cannot assign it to devices."
+        ],
+        answer: "They will not see the 'Germany' profile at all.",
+        explanation: "Scope tags strictly control <b>visibility</b> in Intune. If an administrator does not have a specific scope tag assigned to their role, any objects (like Autopilot profiles) tagged exclusively with that missing scope tag are completely hidden from their view.",
+        moreDetails: "This prevents administrators from accidentally modifying or even knowing about policies that belong to other regions or departments.",
+        otherOptions: "Objects lacking a matching scope tag are not greyed out; they are entirely invisible to the administrator.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/scope-tags"
+      },
+      {
+        id: 1023,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Which of the following remote actions is explicitly DENIED by default for the Intune built-in 'Helpdesk Operator' role?",
+        options: [
+          "Restart device",
+          "Rename device",
+          "Wipe device",
+          "Sync device"
+        ],
+        answer: "Wipe device",
+        explanation: "The built-in <b>Helpdesk Operator</b> role is designed for front-line support. It allows non-destructive remote actions like Sync, Restart, Rename, and Reset Passcode.",
+        moreDetails: "However, highly destructive actions like a full 'Wipe' or 'Retire' are denied by default to prevent accidental data loss by level 1 support staff. To grant Wipe permissions, you would need a Custom Role or a higher built-in role.",
+        otherOptions: "Restart, Rename, and Sync are all allowed by default for Helpdesk Operators.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control#built-in-roles"
+      },
+      {
+        id: 1024,
+        type: "hard",
+        format: "multiple-choice",
+        question: "When creating a custom Intune role assignment, you must specify 'Members' and 'Scope (Groups)'. What is the difference between these two assignment parameters?",
+        options: [
+          "'Members' are the devices being managed; 'Scope (Groups)' are the administrators receiving the role.",
+          "'Members' are the users/admins who are granted the permissions; 'Scope (Groups)' defines the target Entra ID groups (users or devices) that those admins are allowed to manage.",
+          "They are identical; Intune requires both for redundancy.",
+          "'Members' applies the role to Intune; 'Scope (Groups)' applies it to Entra ID."
+        ],
+        answer: "'Members' are the users/admins who are granted the permissions; 'Scope (Groups)' defines the target Entra ID groups (users or devices) that those admins are allowed to manage.",
+        explanation: "In an Intune role assignment, <b>'Members'</b> answers 'WHO gets the power?' (the IT admins). <b>'Scope (Groups)'</b> answers 'WHERE can they use this power?' (the target devices or users they are allowed to impact).",
+        moreDetails: "This distinction is critical for delegating administration. For example, assigning the Helpdesk role to the 'Tier 1 Support' group (Members), but restricting their management scope to the 'London Office Devices' group (Scope).",
+        otherOptions: "Members are the actors (admins), Scope Groups are the targets. They do not apply to different portals.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/assign-role"
+      },
+      {
+        id: 1025,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your company requires the use of Apple Business Manager (ABM) for automated iOS enrollment. You need to configure the Apple MDM Push certificate in the Intune tenant. Which of the following Entra ID roles has the MINIMUM permissions required to complete this task?",
+        options: [
+          "Security Administrator",
+          "Global Administrator",
+          "Intune Administrator",
+          "Billing Administrator"
+        ],
+        answer: "Intune Administrator",
+        explanation: "The <b>Intune Administrator</b> role has full administrative rights within the Intune service, including configuring tenant-level settings like the Apple MDM Push certificate.",
+        moreDetails: "While a Global Administrator can also do this, Intune Administrator represents the minimum necessary privilege required to configure device enrollment protocols in the tenant.",
+        otherOptions: "Security Administrator cannot configure tenant enrollment protocols. Global Admin is too broad and violates least privilege.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference#intune-administrator"
+      },
+      {
+        id: 1026,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Entra ID recently expanded the capability of Administrative Units (AUs) to include devices. How does an Entra ID Administrative Unit differ from an Intune Scope Tag when delegating device management?",
+        options: [
+          "Administrative Units restrict who can manage the device object in Entra ID (like enabling/disabling the device or BitLocker keys); Scope Tags restrict who can manage Intune policies and apps assigned to that device.",
+          "Administrative Units are for Windows devices; Scope Tags are for iOS and Android devices.",
+          "Administrative Units replace Scope Tags entirely in modern Intune environments.",
+          "There is no difference; they sync automatically."
+        ],
+        answer: "Administrative Units restrict who can manage the device object in Entra ID (like enabling/disabling the device or BitLocker keys); Scope Tags restrict who can manage Intune policies and apps assigned to that device.",
+        explanation: "<b>Administrative Units (AUs)</b> are an Entra ID boundary. Delegating an admin to a device AU allows them to manage the identity layer of the device (viewing BitLocker recovery keys, disabling the object in Entra).",
+        moreDetails: "<b>Scope tags</b> are an Intune boundary, controlling who can push MDM policies, apps, and wipe the device via the Intune engine. They complement each other.",
+        otherOptions: "AUs do not replace Scope Tags. Both apply to all OS platforms.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units"
+      },
+      {
+        id: 1027,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization uses Entra ID Privileged Identity Management (PIM) to secure administrative access. You want to require Just-In-Time (JIT) elevation for a custom Intune role (e.g., 'Regional Helpdesk'). Which of the following statements about using PIM with Intune RBAC is true?",
+        options: [
+          "PIM can natively manage assignments for Intune custom built-in roles directly from the Intune portal.",
+          "PIM cannot natively manage assignments for Intune custom roles directly; you must assign the Intune role to an Entra ID Security Group and use PIM for Groups.",
+          "Elevating to an Intune custom role via PIM takes up to 24 hours to replicate to the Intune portal.",
+          "PIM is only compatible with the Global Administrator and Intune Administrator Entra ID roles."
+        ],
+        answer: "PIM cannot natively manage assignments for Intune custom roles directly; you must assign the Intune role to an Entra ID Security Group and use PIM for Groups.",
+        explanation: "Entra ID PIM natively integrates with Entra ID roles. Intune's own internal RBAC roles (built-in or custom) are not directly surfaced in PIM.",
+        moreDetails: "To protect an Intune custom role with PIM, you must assign the Intune role to an Entra ID Security Group, and then use <b>PIM for Groups</b> (formerly Privileged Access Groups) to require elevation to join that group.",
+        otherOptions: "Replication is typically very fast (within minutes). PIM supports many roles beyond Global/Intune Admin.",
+        link: "https://learn.microsoft.com/en-us/entra/id-governance/pim-for-groups"
+      },
+      {
+        id: 1028,
+        type: "hard",
+        format: "multiple-choice",
+        question: "By default, what happens if you create a new Configuration Profile in Intune and do not explicitly assign any custom scope tags to it?",
+        options: [
+          "The profile is automatically assigned the 'Default' scope tag, and any administrator whose role includes the 'Default' scope tag can view and manage it.",
+          "The profile is hidden from all administrators until a Global Administrator assigns a tag.",
+          "The profile is assigned the 'All Devices' scope tag.",
+          "The profile cannot be saved without selecting a custom scope tag."
+        ],
+        answer: "The profile is automatically assigned the 'Default' scope tag, and any administrator whose role includes the 'Default' scope tag can view and manage it.",
+        explanation: "All objects in Intune are automatically assigned the built-in <b>'Default'</b> scope tag upon creation unless specified otherwise.",
+        moreDetails: "Any administrator role that has the 'Default' scope tag in its scope (which is typical for general admins) will have visibility and control over that object. To truly hide a profile, you must remove the 'Default' tag and add a custom tag.",
+        otherOptions: "You can save without custom tags. It is not hidden by default.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/scope-tags#default-scope-tag"
+      },
+      {
+        id: 1029,
+        type: "hard",
+        format: "multiple-choice",
+        question: "The built-in 'Intune Role Administrator' role in Intune has the unique ability to manage Intune RBAC roles. Which of the following tasks can an Intune Role Administrator perform?",
+        options: [
+          "They can reset the password of a Global Administrator in Entra ID.",
+          "They can create custom Intune roles, assign Intune roles to groups, and manage scope tags.",
+          "They can deploy Win32 applications to all devices.",
+          "They can assign Entra ID roles (like Security Administrator) to users."
+        ],
+        answer: "They can create custom Intune roles, assign Intune roles to groups, and manage scope tags.",
+        explanation: "The <b>Intune Role Administrator</b> is specifically designed to manage the Intune RBAC framework itself. They can create, edit, and assign custom roles, and manage scope tags.",
+        moreDetails: "They do not have permissions to manage devices, deploy apps, or manage Entra ID roles outside of Intune. This role is useful for delegating the architecture of the Intune administration model without giving actual device management power.",
+        otherOptions: "They cannot manage Entra ID roles or passwords. They cannot manage device apps.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control#built-in-roles"
+      },
+      {
+        id: 1030,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You manage two separate Entra ID tenants (Tenant A and Tenant B) using Microsoft 365 Lighthouse. You want an administrator in Tenant A to be able to view compliance status and deploy baselines to Intune devices in Tenant B. What RBAC mechanism facilitates this B2B management securely?",
+        options: [
+          "The administrator must be created as a standard Guest User in Tenant B and assigned the Intune Administrator role via Entra B2B.",
+          "Granular Delegated Admin Privileges (GDAP) where Tenant B grants specific Entra ID roles (like Intune Administrator) to a security group in Tenant A.",
+          "Exporting the custom Intune RBAC roles from Tenant A and importing them into Tenant B via a JSON file.",
+          "Assigning the administrator the 'Global Reader' role in Tenant A, which automatically propagates to Tenant B."
+        ],
+        answer: "Granular Delegated Admin Privileges (GDAP) where Tenant B grants specific Entra ID roles (like Intune Administrator) to a security group in Tenant A.",
+        explanation: "Managed Service Providers (MSPs) and multi-tenant organizations use <b>GDAP (Granular Delegated Admin Privileges)</b> to securely manage customer tenants via portals like Microsoft 365 Lighthouse.",
+        moreDetails: "GDAP allows Tenant B to grant precise, time-bound Entra ID roles (like Intune Admin or Security Reader) to a group of administrators residing in Tenant A, enforcing least privilege across tenant boundaries.",
+        otherOptions: "B2B Guest Users are not the standard approach for scalable multi-tenant management like Lighthouse. Roles do not automatically propagate between tenants.",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/lighthouse/m365-lighthouse-gdap-overview"
+      }
+    ]
+  },
+  {
+    id: 995,
+    term: "Conditional Access & Compliance (MD-102 Scenarios)",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1031,
+        type: "medium",
+        format: "multi-select",
+        question: "You need to ensure that users can only access Microsoft SharePoint Online from devices that meet your organization's security baseline. Which TWO components must be configured to achieve this? (Select TWO)",
+        options: [
+          "An Intune Compliance Policy assigned to the devices.",
+          "An Entra ID Conditional Access policy with the 'Require device to be marked as compliant' grant control.",
+          "An Intune Configuration Profile enforcing BitLocker.",
+          "An Entra ID Protection sign-in risk policy."
+        ],
+        multiAnswers: [
+          "An Intune Compliance Policy assigned to the devices.",
+          "An Entra ID Conditional Access policy with the 'Require device to be marked as compliant' grant control."
+        ],
+        explanation: "To enforce device compliance for cloud app access, Intune and Entra ID must work together.",
+        moreDetails: "First, an Intune Compliance Policy evaluates the device against your baseline. If it passes, Intune updates the device object in Entra ID to 'Compliant'. Second, the Conditional Access policy uses the 'Require device to be marked as compliant' grant control to actually block access if that flag is missing.",
+        otherOptions: "A configuration profile applies settings but doesn't natively block Entra ID tokens without a compliance policy. Sign-in risk policies evaluate identity behavior, not device baseline health.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/device-compliance-get-started"
+      },
+      {
+        id: 1032,
+        type: "hard",
+        format: "multiple-choice",
+        question: "An administrator configures a Windows compliance policy. What is the effect of setting the 'Mark device noncompliant' action to '3 days' instead of the default 'Immediately'?",
+        options: [
+          "The device remains in a 'Compliant' state in Entra ID for 3 days after failing the check, allowing the user continued access via Conditional Access during the grace period.",
+          "The device is immediately marked as 'In Grace Period' in Entra ID, which causes Conditional Access to instantly block access.",
+          "The device stops checking in with Intune for 3 days.",
+          "Intune waits 3 days before evaluating the device's compliance status for the first time."
+        ],
+        answer: "The device remains in a 'Compliant' state in Entra ID for 3 days after failing the check, allowing the user continued access via Conditional Access during the grace period.",
+        explanation: "Configuring a grace period gives users time to remediate issues (like updating the OS or turning on BitLocker) before losing access to corporate resources.",
+        moreDetails: "During this 3-day grace period, the device's compliance state in Entra ID technically remains 'Compliant', so any Conditional Access policies requiring a compliant device will continue to allow access.",
+        otherOptions: "If it were immediately marked noncompliant, CA would block them, defeating the purpose of a grace period.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/actions-for-noncompliance"
+      },
+      {
+        id: 1033,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are creating a Conditional Access policy targeting 'All Users' that blocks access to all cloud apps if the sign-in risk is High. To follow Microsoft best practices and prevent tenant lockout, what MUST you do?",
+        options: [
+          "Exclude at least one highly secure 'break-glass' emergency access account from the policy.",
+          "Exclude the 'Global Administrator' role from the policy.",
+          "Set the policy to 'Report-only' permanently.",
+          "Configure a secondary Conditional Access policy that allows access if the user enters a CAPTCHA."
+        ],
+        answer: "Exclude at least one highly secure 'break-glass' emergency access account from the policy.",
+        explanation: "When creating broad 'Block' policies or policies targeting 'All Users', it is a critical best practice to exclude an emergency access account.",
+        moreDetails: "If the risk engine flags all administrators erroneously, or MFA goes down globally, this 'break-glass' account ensures you can still log in to disable the blocking policy and regain control of the tenant.",
+        otherOptions: "Excluding Global Admins directly is poor practice. Report-only defeats the purpose of the security policy. CAPTCHA is not a CA grant control.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/security-emergency-access"
+      },
+      {
+        id: 1034,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A user is actively downloading a file from SharePoint. Suddenly, their device is infected with malware, and Intune immediately marks the device as non-compliant due to a Defender risk score. How does Continuous Access Evaluation (CAE) handle the active SharePoint session?",
+        options: [
+          "CAE immediately revokes the active session token, blocking the user from completing the download in near real-time.",
+          "CAE waits for the token to expire (typically 1 hour) before enforcing the Conditional Access block.",
+          "CAE forces the user to re-authenticate with MFA but allows the download to finish.",
+          "CAE only applies to Exchange Online and cannot revoke SharePoint sessions."
+        ],
+        answer: "CAE immediately revokes the active session token, blocking the user from completing the download in near real-time.",
+        explanation: "<b>Continuous Access Evaluation (CAE)</b> drastically improves security by listening to critical events (like a device falling out of compliance) and enforcing Conditional Access policies in near real-time.",
+        moreDetails: "Instead of waiting up to an hour for the access token to naturally expire (the legacy behavior), CAE instantly revokes the session and halts the active download.",
+        otherOptions: "Legacy auth waited 1 hour. CAE applies to Exchange, SharePoint, and Teams.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation"
+      },
+      {
+        id: 1035,
+        type: "hard",
+        format: "multi-select",
+        question: "You want to mark Windows devices as non-compliant if a specific legacy application (CustomApp.exe) is installed. Which TWO components are required to build this Custom Compliance policy in Intune? (Select TWO)",
+        options: [
+          "A PowerShell discovery script uploaded to Intune.",
+          "A JSON file defining the compliance rules and expected values.",
+          "A Proactive Remediation script.",
+          "An OMA-URI custom configuration profile."
+        ],
+        multiAnswers: [
+          "A PowerShell discovery script uploaded to Intune.",
+          "A JSON file defining the compliance rules and expected values."
+        ],
+        explanation: "Intune Custom Compliance allows you to evaluate settings that aren't built into the UI.",
+        moreDetails: "It requires two parts: A PowerShell script that runs on the device to discover the current state (e.g., checking if CustomApp.exe exists), and a JSON rules file uploaded to the compliance policy that defines the expected result (e.g., AppExists = False).",
+        otherOptions: "Proactive Remediations can fix issues but don't natively tie into the Entra ID compliance state for Conditional Access. OMA-URI is for configuration, not custom compliance scripts.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-use-custom-settings"
+      },
+      {
+        id: 1036,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to block legacy authentication protocols (like POP3, IMAP, and older Office clients) across your entire tenant using Conditional Access. What is the recommended way to configure the 'Conditions' section of the policy?",
+        options: [
+          "Under 'Client apps', select 'Other clients' and 'Exchange ActiveSync clients'.",
+          "Under 'Device platforms', exclude Windows and macOS.",
+          "Under 'Locations', select 'Any location' and exclude 'Trusted locations'.",
+          "Under 'Sign-in risk', select 'High'."
+        ],
+        answer: "Under 'Client apps', select 'Other clients' and 'Exchange ActiveSync clients'.",
+        explanation: "Legacy authentication protocols cannot perform MFA. To block them via Conditional Access, you target the legacy client types.",
+        moreDetails: "In the CA policy under 'Client apps', selecting 'Other clients' (which encompasses POP, IMAP, SMTP, etc.) and 'Exchange ActiveSync clients' allows you to apply a strict 'Block' control specifically to legacy traffic.",
+        otherOptions: "Excluding OS platforms or locations doesn't block the protocol itself. Risk policies don't target legacy auth specifically.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/block-legacy-authentication"
+      },
+      {
+        id: 1037,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to allow users to access corporate email on personal unmanaged iOS devices, but ONLY if they use the official Microsoft Outlook app and data cannot be copied out of it. Which Conditional Access grant control accomplishes this without requiring full MDM enrollment?",
+        options: [
+          "Require app protection policy.",
+          "Require device to be marked as compliant.",
+          "Require Hybrid Entra ID joined device.",
+          "Require password change."
+        ],
+        answer: "Require app protection policy.",
+        explanation: "The <b>'Require app protection policy'</b> grant control allows you to implement Mobile Application Management (MAM) without Mobile Device Management (MDM).",
+        moreDetails: "It ensures the user can only access the data using a MAM-enlightened app (like Outlook) that has a data-loss prevention policy applied, completely bypassing the need for the device itself to be enrolled or compliant.",
+        otherOptions: "Require compliant device or Hybrid join forces full device management/enrollment, which violates the 'unmanaged' requirement.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant#require-app-protection-policy"
+      },
+      {
+        id: 1038,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You need a Conditional Access policy that requires MFA for all users, but ONLY when they are signing in from personal (BYOD) devices. Which feature allows you to target personal devices dynamically within the CA policy?",
+        options: [
+          "Filter for devices (Condition).",
+          "Grant control: Require approved client app.",
+          "Session control: Sign-in frequency.",
+          "Intune Device Categories."
+        ],
+        answer: "Filter for devices (Condition).",
+        explanation: "<b>Filter for devices</b> is a powerful condition in Conditional Access that allows you to target or exclude devices based on Entra ID device properties.",
+        moreDetails: "You can write a rule such as `device.deviceOwnership -eq 'Personal'` to enforce MFA strictly on unmanaged or BYOD devices, while giving a smoother experience to corporate-owned devices.",
+        otherOptions: "Client apps refers to software, not device ownership. Intune device categories group devices in Intune, but are not directly addressable in CA conditions.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-condition-filters-for-devices"
+      },
+      {
+        id: 1039,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A Conditional Access policy is configured with a 'Sign-in frequency' session control of 1 hour. What is the user experience for a user accessing an Entra ID integrated web app?",
+        options: [
+          "The user will be forced to re-authenticate interactively every 1 hour, even if they are actively using the application.",
+          "The user is locked out of the app completely after 1 hour of use.",
+          "The user's Entra ID password will automatically expire after 1 hour.",
+          "The user is prompted for MFA exactly once, then the token lasts 1 hour before self-destructing."
+        ],
+        answer: "The user will be forced to re-authenticate interactively every 1 hour, even if they are actively using the application.",
+        explanation: "The <b>Sign-in frequency</b> session control dictates the absolute maximum lifetime of the session token.",
+        moreDetails: "Unlike traditional idle timeouts, sign-in frequency forces a strict re-authentication (usually requiring credentials or MFA) at the specified interval, regardless of user activity. This is typical for highly sensitive 'kiosk' or financial applications.",
+        otherOptions: "It does not lock them out, it just forces re-authentication. It does not expire passwords.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-session-lifetime"
+      },
+      {
+        id: 1040,
+        type: "hard",
+        format: "multi-select",
+        question: "Which of the following user actions can be protected by a Conditional Access policy targeting the 'User actions: Register or join devices' condition? (Select TWO)",
+        options: [
+          "A user performing Entra ID Join during the Windows Out-of-Box Experience (OOBE).",
+          "A user enrolling their personal phone via the Intune Company Portal app.",
+          "A user logging into the Intune admin center.",
+          "A user resetting their password via Self-Service Password Reset (SSPR)."
+        ],
+        multiAnswers: [
+          "A user performing Entra ID Join during the Windows Out-of-Box Experience (OOBE).",
+          "A user enrolling their personal phone via the Intune Company Portal app."
+        ],
+        explanation: "The <b>'Register or join devices'</b> condition in Conditional Access specifically targets the device enrollment and identity registration flows.",
+        moreDetails: "This allows administrators to require MFA specifically when a user is attempting to Entra ID Join a Windows PC or Entra ID Register a mobile device via the Company Portal, adding a strong layer of security to the hardware provisioning process.",
+        otherOptions: "Logging into the admin portal is protected by targeting 'Cloud apps' (Microsoft Intune). SSPR is an identity feature, not a device registration flow.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-cloud-apps#user-actions"
+      },
+      {
+        id: 1041,
+        type: "medium",
+        format: "multi-select",
+        question: "When configuring an Intune compliance policy, what are TWO valid options you can configure under the 'Actions for noncompliance' settings? (Select TWO)",
+        options: [
+          "Send push notification to end user.",
+          "Remotely wipe the device automatically.",
+          "Add device to retire list.",
+          "Downgrade the OS version."
+        ],
+        multiAnswers: [
+          "Send push notification to end user.",
+          "Add device to retire list."
+        ],
+        explanation: "Intune allows a sequenced set of actions when a device falls out of compliance.",
+        moreDetails: "Valid actions include: Mark device noncompliant, Send email to end user, <b>Send push notification to end user</b>, Remotely lock the noncompliant device, and <b>Add device to retire list</b>. Wiping a device entirely is considered too destructive to automate via compliance policies.",
+        otherOptions: "You cannot automatically wipe a device via compliance actions (only retire). Intune cannot downgrade OS versions.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/actions-for-noncompliance"
+      },
+      {
+        id: 1042,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have integrated Microsoft Defender for Endpoint with Intune. You want to ensure that devices with an active malware infection are blocked from accessing corporate resources. Where do you define the acceptable 'Machine risk score' threshold?",
+        options: [
+          "In the Intune Compliance Policy.",
+          "In the Entra ID Conditional Access policy.",
+          "In the Defender Vulnerability Management portal.",
+          "In an Intune Endpoint Security Antivirus profile."
+        ],
+        answer: "In the Intune Compliance Policy.",
+        explanation: "The integration between Defender and Intune relies on the <b>Intune Compliance Policy</b>.",
+        moreDetails: "You create a compliance policy and set the 'Require the device to be at or under the machine risk score' setting (e.g., to Low or Medium). Defender reports the real-time score to Intune; if it exceeds the threshold, Intune marks it noncompliant, and Conditional Access blocks the traffic.",
+        otherOptions: "Conditional access handles the block, but it relies entirely on the compliance state determined by the Intune policy. Defender reports the score but doesn't set the enforcement boundary for Intune.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure"
+      },
+      {
+        id: 1043,
+        type: "easy",
+        format: "multiple-choice",
+        question: "You are implementing a strict Conditional Access policy that blocks access from outside your country. Before enforcing it, you set the policy to 'Report-only'. Where can you view the impact this policy would have on users if it were enabled?",
+        options: [
+          "The Entra ID Sign-in logs and Conditional Access Insights workbook.",
+          "The Intune Device Compliance reports.",
+          "The Microsoft 365 Defender incidents queue.",
+          "The Windows Event Viewer on the client devices."
+        ],
+        answer: "The Entra ID Sign-in logs and Conditional Access Insights workbook.",
+        explanation: "<b>Report-only</b> mode evaluates Conditional Access policies without enforcing the grant controls (like Block or Require MFA).",
+        moreDetails: "The results of these simulated evaluations are recorded directly in the Entra ID Sign-in logs and can be visualized using the Conditional Access Insights and Reporting workbook in Azure Monitor/Log Analytics.",
+        otherOptions: "Intune compliance reports track device health, not CA authentication evaluations.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only"
+      },
+      {
+        id: 1044,
+        type: "medium",
+        format: "multi-select",
+        question: "You want to create a Conditional Access policy that requires MFA for all users, EXCEPT when they are physically located inside the corporate office. Which TWO configurations are required? (Select TWO)",
+        options: [
+          "Define the corporate office public IP address ranges as a 'Named location' in Entra ID.",
+          "In the CA policy, set 'Locations' to 'Include Any location' and 'Exclude the configured Named location'.",
+          "Deploy a VPN profile to all Intune devices.",
+          "Configure Intune Network Boundaries for Delivery Optimization."
+        ],
+        multiAnswers: [
+          "Define the corporate office public IP address ranges as a 'Named location' in Entra ID.",
+          "In the CA policy, set 'Locations' to 'Include Any location' and 'Exclude the configured Named location'."
+        ],
+        explanation: "To bypass MFA based on physical presence, you must map your corporate network to Entra ID.",
+        moreDetails: "First, create a <b>Named location</b> containing the external IP addresses of your corporate firewalls. Second, configure the CA policy to apply to all locations but <b>Exclude</b> that specific Named location. This ensures traffic originating from the corporate IP is trusted.",
+        otherOptions: "VPN profiles route traffic but do not natively define CA trust without Named Locations. Network boundaries are for update peering, not authentication.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/location-condition"
+      },
+      {
+        id: 1045,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You need to ensure that before a user can access any corporate applications, they must explicitly agree to the company's IT acceptable use policy. If the policy changes, they must re-agree. Which Entra ID feature handles this within the Conditional Access flow?",
+        options: [
+          "Terms of Use.",
+          "Entra ID Identity Protection.",
+          "Access Reviews.",
+          "Privileged Identity Management (PIM)."
+        ],
+        answer: "Terms of Use.",
+        explanation: "Entra ID <b>Terms of Use (ToU)</b> allows organizations to upload a PDF document containing legal or IT policies.",
+        moreDetails: "By configuring a Conditional Access policy with the grant control to require the Terms of Use, users are blocked from accessing apps until they read and click 'Accept'. It supports versioning, forcing re-acceptance upon updates.",
+        otherOptions: "Access reviews audit group memberships. Identity Protection evaluates risk.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/terms-of-use"
+      },
+      {
+        id: 1046,
+        type: "medium",
+        format: "multi-select",
+        question: "When building a Windows 10/11 compliance policy in Intune, which TWO of the following settings are found under the 'System Security' category? (Select TWO)",
+        options: [
+          "Require a Password to unlock the device.",
+          "Require BitLocker encryption.",
+          "Minimum OS version.",
+          "Maximum minutes of inactivity before screen lock."
+        ],
+        multiAnswers: [
+          "Require a Password to unlock the device.",
+          "Require BitLocker encryption."
+        ],
+        explanation: "The <b>System Security</b> section of the Windows compliance policy focuses on data-at-rest protection and local access.",
+        moreDetails: "It contains settings to enforce Password requirements (length, type, expiration), Encryption (BitLocker), and Device Security (Secure Boot, TPM). 'Maximum minutes of inactivity' is also under System Security -> Password.",
+        otherOptions: "Minimum OS version is located under the 'Device Health' or 'Device Properties' category, not System Security.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-policy-create-windows"
+      },
+      {
+        id: 1047,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A newly enrolled Windows device in Intune shows a compliance status of 'Not Evaluated'. A few minutes later, it changes to 'Noncompliant', even though you haven't assigned any custom compliance policies to it. What is the most likely cause?",
+        options: [
+          "The built-in compliance policy setting 'Mark devices with no compliance policy assigned as' is set to 'Not compliant'.",
+          "The device failed the Windows Autopilot attestation process.",
+          "The device does not have an active Intune license.",
+          "The user is not in the local Administrators group."
+        ],
+        answer: "The built-in compliance policy setting 'Mark devices with no compliance policy assigned as' is set to 'Not compliant'.",
+        explanation: "Intune has a global tenant-level Compliance Policy setting that dictates the default behavior for devices lacking a specific assignment.",
+        moreDetails: "For security reasons, the best practice is to set <b>'Mark devices with no compliance policy assigned as'</b> to 'Not compliant'. This ensures devices cannot slip past Conditional Access by simply avoiding compliance policy targeting.",
+        otherOptions: "Autopilot attestation failure stops enrollment entirely. Lack of license stops enrollment. Admin rights do not dictate the baseline compliance state.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/device-compliance-get-started#compliance-policy-settings"
+      },
+      {
+        id: 1048,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You configure a Conditional Access policy that targets 'All Users' and is triggered when 'User risk' is High. The grant control is set to 'Require password change'. What is a strict prerequisite for this grant control to function without blocking the user entirely?",
+        options: [
+          "Entra ID Self-Service Password Reset (SSPR) must be enabled and configured for the users.",
+          "The user must be a Hybrid Entra ID joined device administrator.",
+          "The user must be on the corporate VPN.",
+          "The user must have a FIDO2 security key registered."
+        ],
+        answer: "Entra ID Self-Service Password Reset (SSPR) must be enabled and configured for the users.",
+        explanation: "If a Conditional Access policy forces a user to change their password due to identity risk, the user must actually have the ability to do so.",
+        moreDetails: "This absolutely requires <b>Self-Service Password Reset (SSPR)</b> to be enabled, and the user must have previously registered their strong authentication methods (MFA). If SSPR is disabled, the user hits a dead end and is completely blocked.",
+        otherOptions: "VPN, Hybrid Join, and FIDO2 are not required to change a password securely via the cloud SSPR flow.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-policy-risk-user#prerequisites"
+      },
+      {
+        id: 1049,
+        type: "hard",
+        format: "multiple-choice",
+        question: "To prevent attackers who compromise a password from registering their own MFA device, you want to enforce that users can only register their MFA methods (Security Info) while connected to the corporate network. What condition must you target in the Conditional Access policy?",
+        options: [
+          "User actions: Register security information.",
+          "Cloud apps: Microsoft Azure Management.",
+          "Client apps: Browser.",
+          "Sign-in risk: High."
+        ],
+        answer: "User actions: Register security information.",
+        explanation: "Conditional Access allows you to target specific sensitive identity flows rather than just applications.",
+        moreDetails: "By selecting the <b>'Register security information'</b> user action, you can apply strict conditions (like requiring a trusted IP network/Named Location) specifically to the https://mysignins.microsoft.com/security-info registration page, locking out attackers who try to register MFA from remote locations.",
+        otherOptions: "Targeting Azure Management or Browsers generally would block legitimate daily administrative or web work.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-conditional-access-policy-registration"
+      },
+      {
+        id: 1050,
+        type: "medium",
+        format: "multi-select",
+        question: "A Conditional Access policy uses the grant control 'Require approved client app'. Which TWO of the following apps are natively considered 'approved' by Entra ID for this specific control? (Select TWO)",
+        options: [
+          "Microsoft Outlook.",
+          "Microsoft Teams.",
+          "The native Apple Mail app on iOS.",
+          "Google Chrome browser."
+        ],
+        multiAnswers: [
+          "Microsoft Outlook.",
+          "Microsoft Teams."
+        ],
+        explanation: "The 'Require approved client app' control enforces that users access corporate data using a specific list of Microsoft-vetted applications that support Intune App Protection Policies natively.",
+        moreDetails: "First-party Microsoft apps like <b>Outlook</b>, <b>Teams</b>, Edge, and OneDrive are fully supported. Third-party native mail clients (like Apple Mail) or standard browsers (like Chrome) are not on the approved list and will be blocked by this control.",
+        otherOptions: "Apple Mail and Google Chrome do not support Intune MAM protection and are thus not 'approved client apps' in this context.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant#require-approved-client-app"
+      }
+    ]
+  },
+  {
+    id: 996,
+    term: "Mobile Device & App Management (MDM/MAM)",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1051,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Before you can enroll any iOS/iPadOS devices into Microsoft Intune for Mobile Device Management (MDM), what is the mandatory first step you must perform in the Intune admin center?",
+        options: [
+          "Configure an Apple Business Manager (ABM) token.",
+          "Download an Intune Certificate Signing Request (CSR) and use it to create an Apple MDM Push certificate (APNs).",
+          "Create a Device Configuration profile for iOS.",
+          "Link your Entra ID tenant to a Managed Apple ID."
+        ],
+        answer: "Download an Intune Certificate Signing Request (CSR) and use it to create an Apple MDM Push certificate (APNs).",
+        explanation: "Intune cannot communicate with Apple devices without an <b>Apple MDM Push certificate (APNs)</b>.",
+        moreDetails: "This certificate establishes a trusted connection between your Intune tenant and Apple's push notification services, which is strictly required to send MDM commands to iOS, iPadOS, and macOS devices. It must be renewed annually.",
+        otherOptions: "ABM is for automated enrollment, not a hard prerequisite for basic BYOD enrollment. Configuration profiles require enrollment first.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/apple-mdm-push-certificate-get"
+      },
+      {
+        id: 1052,
+        type: "hard",
+        format: "multi-select",
+        question: "You are using Apple Automated Device Enrollment (ADE) via Apple Business Manager to deploy corporate-owned iPhones. Which TWO of the following capabilities are exclusive to ADE (formerly DEP) enrollments compared to standard user-driven Company Portal enrollments? (Select TWO)",
+        options: [
+          "The ability to lock the MDM profile so the user cannot remove it.",
+          "The ability to place the device into 'Supervised' mode over-the-air.",
+          "The ability to deploy Wi-Fi configuration profiles.",
+          "The ability to deploy App Protection Policies (MAM)."
+        ],
+        multiAnswers: [
+          "The ability to lock the MDM profile so the user cannot remove it.",
+          "The ability to place the device into 'Supervised' mode over-the-air."
+        ],
+        explanation: "Automated Device Enrollment (ADE) provides the deepest level of management for corporate-owned Apple devices.",
+        moreDetails: "Because the hardware is securely tied to the organization via ABM, ADE allows Intune to silently force the device into <b>Supervised mode</b> and allows you to lock the management profile so users cannot manually unenroll the device.",
+        otherOptions: "Wi-Fi profiles and App Protection Policies can be deployed to any enrolled device (or unmanaged devices via MAM), regardless of whether it used ADE.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-program-enroll-ios"
+      },
+      {
+        id: 1053,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your organization allows users to bring their personal Android phones to work. You need to ensure that corporate data is securely separated from personal data at the OS level, without taking full control of the device. Which Android Enterprise management mode should you configure in Intune?",
+        options: [
+          "Corporate-owned fully managed.",
+          "Corporate-owned with a work profile (COPE).",
+          "Personally-owned work profile (BYOD).",
+          "Android Open Source Project (AOSP) user-associated."
+        ],
+        answer: "Personally-owned work profile (BYOD).",
+        explanation: "The <b>Personally-owned work profile</b> management mode is designed specifically for BYOD scenarios.",
+        moreDetails: "It leverages Android's native containerization to create a separate, secure 'Work Profile' on the user's personal device. IT can fully manage and wipe the apps/data inside the work profile but has absolutely zero visibility or control over the user's personal apps, photos, or data.",
+        otherOptions: "Corporate-owned modes assume the company bought the hardware and therefore has deeper control over the entire device.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-work-profile-enroll"
+      },
+      {
+        id: 1054,
+        type: "hard",
+        format: "multi-select",
+        question: "You are configuring an Intune App Protection Policy (MAM) for iOS devices. You want to prevent users from copying corporate data out of Microsoft Word and pasting it into their personal Apple Notes app. Which TWO settings should you configure in the Data Protection section? (Select TWO)",
+        options: [
+          "Set 'Send org data to other apps' to 'Policy managed apps'.",
+          "Set 'Restrict cut, copy, and paste between other apps' to 'Policy managed apps'.",
+          "Set 'Save copies of org data' to 'Block'.",
+          "Set 'Require approved client app' in Conditional Access."
+        ],
+        multiAnswers: [
+          "Set 'Send org data to other apps' to 'Policy managed apps'.",
+          "Set 'Restrict cut, copy, and paste between other apps' to 'Policy managed apps'."
+        ],
+        explanation: "Intune App Protection Policies enforce data-loss prevention (DLP) at the application layer.",
+        moreDetails: "By restricting data transfers (like 'Open In' or Share extensions) and clipboard operations (cut/copy/paste) strictly to other <b>Policy managed apps</b>, you create a secure container boundary. Data can flow between Word and Outlook (both managed), but not to unmanaged apps like Apple Notes.",
+        otherOptions: "Saving copies of org data prevents saving files to unmanaged storage (like personal iCloud), but doesn't handle the clipboard. Conditional Access manages authentication, not clipboard DLP.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-ios"
+      },
+      {
+        id: 1055,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to deploy the Microsoft Edge browser to enrolled iOS devices and pre-configure the homepage to the corporate intranet site, so users don't have to type the URL manually. Which Intune feature should you use?",
+        options: [
+          "App Protection Policy.",
+          "App Configuration Policy (Managed devices).",
+          "Device Configuration Profile (Web Content Filter).",
+          "iOS Custom OMA-URI."
+        ],
+        answer: "App Configuration Policy (Managed devices).",
+        explanation: "<b>App Configuration Policies</b> allow Intune to push specific settings, URLs, or feature toggles directly into supported applications.",
+        moreDetails: "For devices enrolled in MDM, you use the 'Managed devices' enrollment type to push an App Configuration policy that automatically sets the homepage, bookmarks, or proxy settings for Microsoft Edge.",
+        otherOptions: "App Protection Policies handle data security, not app settings. Web Content Filter blocks websites. OMA-URI is for Windows/Android custom OS settings.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-use-ios"
+      },
+      {
+        id: 1056,
+        type: "hard",
+        format: "multiple-choice",
+        question: "An employee loses their personally-owned iPhone that was enrolled in Intune via User Enrollment. You need to ensure all corporate data is removed from the phone without affecting the user's personal photos and apps. Which Intune remote action MUST you use?",
+        options: [
+          "Wipe",
+          "Retire",
+          "Fresh Start",
+          "Delete"
+        ],
+        answer: "Retire",
+        explanation: "The <b>Retire</b> action specifically targets and removes only managed apps, configurations, and corporate data, leaving personal data completely untouched.",
+        moreDetails: "This is the safest and correct action for a BYOD device. A 'Wipe' action would factory reset the entire device, destroying the user's personal data. 'Fresh Start' is a Windows-specific action.",
+        otherOptions: "Wipe performs a full factory reset. Delete just removes the record from Intune without immediately triggering an organized unenrollment.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/devices-wipe"
+      },
+      {
+        id: 1057,
+        type: "hard",
+        format: "multi-select",
+        question: "To deploy paid and free store applications silently to managed mobile devices without requiring users to enter their personal Apple ID or Google account credentials, which TWO integrations are required? (Select TWO)",
+        options: [
+          "Apple Volume Purchase Program (VPP) via Apple Business Manager.",
+          "Managed Google Play.",
+          "Entra ID Application Proxy.",
+          "Intune App Wrapping Tool."
+        ],
+        multiAnswers: [
+          "Apple Volume Purchase Program (VPP) via Apple Business Manager.",
+          "Managed Google Play."
+        ],
+        explanation: "Silent app deployment without user credentials requires enterprise app store integrations.",
+        moreDetails: "For iOS, you must link Intune to the <b>Apple Volume Purchase Program (VPP)</b> via ABM to acquire device-based licenses. For Android Enterprise, Intune natively integrates with <b>Managed Google Play</b> to approve and silently push applications.",
+        otherOptions: "Application Proxy is for publishing on-premises web apps. App Wrapping Tool is for injecting MAM SDKs into custom line-of-business apps.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/vpp-apps-ios"
+      },
+      {
+        id: 1058,
+        type: "medium",
+        format: "multiple-choice",
+        question: "When configuring an iOS/iPadOS enrollment profile for Automated Device Enrollment (ADE), you want to streamline the Out-of-Box Experience (OOBE) by hiding the Apple Pay and Siri setup screens. In which Intune blade do you configure this?",
+        options: [
+          "Device Configuration profiles -> Device restrictions.",
+          "Devices -> iOS/iPadOS -> Enrollment program tokens -> Profiles.",
+          "Apps -> App configuration policies.",
+          "Tenant administration -> Customization."
+        ],
+        answer: "Devices -> iOS/iPadOS -> Enrollment program tokens -> Profiles.",
+        explanation: "The customization of the Apple Setup Assistant (OOBE) is strictly handled within the <b>Enrollment program profile</b> linked to the ABM token.",
+        moreDetails: "By editing the specific ADE profile under 'Enrollment program tokens', an administrator can choose exactly which screens to show or hide when the user first unboxes and boots the corporate iPhone.",
+        otherOptions: "Device restrictions control the OS behavior after setup. App config controls apps. Tenant customization controls the Company Portal branding.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-program-enroll-ios#create-an-apple-enrollment-profile"
+      },
+      {
+        id: 1059,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are deploying Android tablets for a retail store floor. These devices will be locked to a single inventory app and run in Kiosk mode. Which Android Enterprise management scenario is explicitly designed for this use case?",
+        options: [
+          "Corporate-owned fully managed.",
+          "Personally-owned work profile.",
+          "Corporate-owned dedicated devices.",
+          "Corporate-owned with a work profile."
+        ],
+        answer: "Corporate-owned dedicated devices.",
+        explanation: "<b>Corporate-owned dedicated devices</b> (formerly known as COSU or Kiosk mode) is the Android Enterprise scenario built for single-purpose hardware.",
+        moreDetails: "These devices are not associated with a specific user identity. Instead, they run the Microsoft Managed Home Screen or a locked-down kiosk profile, making them ideal for retail, digital signage, or factory floors.",
+        otherOptions: "Fully managed is for a primary user who needs all corporate apps. Work profiles are for dual personal/work use.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-kiosk-enroll"
+      },
+      {
+        id: 1060,
+        type: "hard",
+        format: "multi-select",
+        question: "When deploying App Protection Policies (MAM) to unmanaged (MAM-WE) mobile devices, a 'broker app' must be installed on the device to establish the secure MAM identity and broker Conditional Access checks. Which TWO apps serve as the broker app? (Select TWO)",
+        options: [
+          "Microsoft Authenticator (on iOS).",
+          "Intune Company Portal (on Android).",
+          "Microsoft Defender for Endpoint.",
+          "Microsoft Edge."
+        ],
+        multiAnswers: [
+          "Microsoft Authenticator (on iOS).",
+          "Intune Company Portal (on Android)."
+        ],
+        explanation: "A broker app handles the heavy lifting of Entra ID token acquisition, Conditional Access evaluation, and establishing the MAM secure container on the device.",
+        moreDetails: "On iOS/iPadOS, the <b>Microsoft Authenticator</b> app acts as the broker. On Android, the <b>Intune Company Portal</b> app acts as the broker (even if the device is not enrolled in MDM).",
+        otherOptions: "Defender and Edge are MAM-enlightened apps, but they rely on the underlying broker app to function securely in an unmanaged state.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy#app-protection-policies-for-iosipados-and-android"
+      },
+      {
+        id: 1061,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are creating an App Protection Policy for unmanaged Android devices. You configure the 'Require PIN for access' setting to 'Require'. How does this PIN differ from the device lock screen PIN?",
+        options: [
+          "It replaces the device PIN completely.",
+          "It is a secondary, app-level PIN that the user must enter when launching a managed app, independent of the overall device lock screen.",
+          "It requires the user to change their Entra ID password.",
+          "It only applies if the device is enrolled in MDM."
+        ],
+        answer: "It is a secondary, app-level PIN that the user must enter when launching a managed app, independent of the overall device lock screen.",
+        explanation: "MAM policies establish a secure container around the application data. The <b>App PIN</b> is specifically tied to that container.",
+        moreDetails: "When a user opens a protected app (like Outlook), they must enter the App PIN, even if they already unlocked the phone using their device PIN. This ensures that if the phone is handed to a child or left unlocked, the corporate data remains secure.",
+        otherOptions: "It does not replace the device PIN or Entra ID password. It applies heavily to unmanaged (MAM-WE) devices.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-android#access-requirements"
+      },
+      {
+        id: 1062,
+        type: "hard",
+        format: "multi-select",
+        question: "You want to deploy a Device Configuration profile to corporate-owned, supervised iOS devices. Which TWO of the following restrictions can ONLY be applied if the device is in 'Supervised' mode? (Select TWO)",
+        options: [
+          "Block AirDrop.",
+          "Block the removal of system apps (like Mail or Safari).",
+          "Enforce a minimum password length.",
+          "Block the built-in camera."
+        ],
+        multiAnswers: [
+          "Block AirDrop.",
+          "Block the removal of system apps (like Mail or Safari)."
+        ],
+        explanation: "Apple restricts highly intrusive management features to <b>Supervised</b> devices to prevent IT from overreaching on BYOD devices.",
+        moreDetails: "Blocking AirDrop, preventing users from uninstalling system apps, modifying the wallpaper, and enabling Single App Mode all strictly require the device to be Supervised (typically via ADE/Apple Configurator).",
+        otherOptions: "Enforcing a password length or blocking the camera can be applied to Unsupervised (standard MDM) devices via standard Exchange ActiveSync or MDM payloads.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-restrictions-ios"
+      },
+      {
+        id: 1063,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You need to deploy an App Configuration policy to Microsoft Outlook on iOS. The devices are NOT enrolled in Intune (BYOD). Which 'Device enrollment type' must you select when creating the App Configuration policy?",
+        options: [
+          "Managed devices.",
+          "Managed apps.",
+          "Automated Device Enrollment.",
+          "Line-of-business apps."
+        ],
+        answer: "Managed apps.",
+        explanation: "Intune allows you to configure applications even on unmanaged (BYOD) devices, provided the app is MAM-enlightened (like Outlook).",
+        moreDetails: "When creating the policy, selecting <b>'Managed apps'</b> targets the configuration directly to the app container via the App Protection Policy infrastructure, rather than relying on an MDM channel. 'Managed devices' is only for enrolled devices.",
+        otherOptions: "Managed devices requires full MDM enrollment. ADE is for corporate Apple devices. LOB apps refers to custom in-house software.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-configuration-policies-overview"
+      },
+      {
+        id: 1064,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A user leaves the company. They used their personal iPad to access corporate email via the Microsoft Outlook app using App Protection Policies (no MDM enrollment). How can you remove the corporate data from their device without touching their personal data?",
+        options: [
+          "Issue a 'Wipe' command from the Intune Devices blade.",
+          "Issue a 'Retire' command from the Intune Devices blade.",
+          "Issue an 'App Selective Wipe' command from the Intune Apps blade.",
+          "Change the user's Entra ID password."
+        ],
+        answer: "Issue an 'App Selective Wipe' command from the Intune Apps blade.",
+        explanation: "Because the device is entirely unmanaged (MAM-only), it will not appear in the standard Intune 'Devices' list, so you cannot use Wipe or Retire.",
+        moreDetails: "Instead, you navigate to the Apps blade and issue an <b>App Selective Wipe</b> request. The next time the user's Outlook app checks in with the MAM service, it will cryptographically shred the corporate data container, leaving their personal iPad untouched.",
+        otherOptions: "Wipe and Retire only work on MDM-enrolled devices. Changing the password blocks future access but doesn't instantly wipe the cached local data container.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-selective-wipe"
+      },
+      {
+        id: 1065,
+        type: "hard",
+        format: "multi-select",
+        question: "You need to automatically connect fully managed Android devices to the corporate Wi-Fi network using WPA2-Enterprise certificate-based authentication. Which TWO profile types must be deployed as prerequisites before the Wi-Fi profile can successfully authenticate? (Select TWO)",
+        options: [
+          "A SCEP or PKCS certificate profile containing the client authentication certificate.",
+          "A Trusted Certificate profile containing the Root CA that issued the Wi-Fi server's certificate.",
+          "An App Protection Policy defining the Wi-Fi SSID.",
+          "An OMA-URI custom profile to unlock the Android Keystore."
+        ],
+        multiAnswers: [
+          "A SCEP or PKCS certificate profile containing the client authentication certificate.",
+          "A Trusted Certificate profile containing the Root CA that issued the Wi-Fi server's certificate."
+        ],
+        explanation: "Enterprise Wi-Fi requiring certificates is a multi-step deployment in Intune.",
+        moreDetails: "Before the Wi-Fi profile can be applied, the device must first trust the RADIUS server (deployed via a <b>Trusted Root CA profile</b>) and it must possess its own identity to present to the network (deployed via a <b>SCEP or PKCS profile</b>). If either is missing, the WPA2-Enterprise connection fails.",
+        otherOptions: "MAM policies do not manage Wi-Fi networks. OMA-URI is not needed as Intune natively supports Wi-Fi and certificate profiles for Android Enterprise.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/wi-fi-settings-configure"
+      },
+      {
+        id: 1066,
+        type: "easy",
+        format: "multiple-choice",
+        question: "Which Android Enterprise management mode is designed exclusively for corporate-owned devices associated with a single user, giving the organization complete control over the entire device, apps, and data?",
+        options: [
+          "Corporate-owned fully managed.",
+          "Corporate-owned dedicated device.",
+          "Corporate-owned with a work profile.",
+          "Personally-owned work profile."
+        ],
+        answer: "Corporate-owned fully managed.",
+        explanation: "<b>Corporate-owned fully managed</b> (formerly COBO - Corporate Owned, Business Only) is the most comprehensive management mode for Android.",
+        moreDetails: "It treats the entire device as a corporate asset. IT has full visibility, can deploy apps silently without a work profile boundary, can track the device, and can perform a full factory wipe.",
+        otherOptions: "Dedicated is for kiosks (no primary user). Work profiles are for BYOD or dual-use (COPE) devices.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-fully-managed-enroll"
+      },
+      {
+        id: 1067,
+        type: "hard",
+        format: "multi-select",
+        question: "You want to enforce that mobile users can only access Exchange Online if they use an app that protects corporate data (MAM). Which TWO configurations must work together to achieve this? (Select TWO)",
+        options: [
+          "An Intune App Protection Policy targeted to the user's Entra ID group.",
+          "An Entra ID Conditional Access policy with the 'Require app protection policy' grant control.",
+          "An Intune Device Compliance policy targeted to the device.",
+          "A Microsoft Defender Vulnerability Management policy."
+        ],
+        multiAnswers: [
+          "An Intune App Protection Policy targeted to the user's Entra ID group.",
+          "An Entra ID Conditional Access policy with the 'Require app protection policy' grant control."
+        ],
+        explanation: "To secure data inside unmanaged mobile apps, you need both configuration and enforcement.",
+        moreDetails: "First, you create the <b>Intune App Protection Policy</b> (MAM) to define the DLP rules (like blocking copy/paste). Second, you enforce its usage by creating an <b>Entra ID Conditional Access policy</b> requiring the 'Require app protection policy' grant control. Without the CA policy, users could just use the native mail app and bypass MAM entirely.",
+        otherOptions: "Device compliance requires full MDM enrollment. Defender focuses on malware, not enforcing app DLP containers.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant#require-app-protection-policy"
+      },
+      {
+        id: 1068,
+        type: "medium",
+        format: "multiple-choice",
+        question: "When configuring App Protection Policies (MAM) for iOS devices that are NOT enrolled in Intune (MAM-WE), users are prompted to install a specific app before they can access their managed corporate apps (like Outlook). Which app is this?",
+        options: [
+          "Microsoft Authenticator.",
+          "Intune Company Portal.",
+          "Microsoft Defender.",
+          "Apple TestFlight."
+        ],
+        answer: "Microsoft Authenticator.",
+        explanation: "For iOS/iPadOS devices that are unmanaged, the <b>Microsoft Authenticator</b> app acts as the essential 'broker' app.",
+        moreDetails: "It facilitates the secure authentication with Entra ID, checks Conditional Access compliance, and anchors the App Protection Policy container. (On Android, the Intune Company Portal app serves this exact same broker function, even if the device isn't enrolled).",
+        otherOptions: "Company portal is the broker for Android, not iOS. Defender provides threat defense. TestFlight is for beta apps.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy#app-protection-policies-for-iosipados-and-android"
+      }
+    ]
+  },
+  {
+    id: 997,
+    term: "Endpoint Security",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1069,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Microsoft frequently releases new versions of the 'MDM Security Baseline' in Intune. When a new version is published, what happens to your existing assigned baseline profiles?",
+        options: [
+          "They are automatically upgraded to the new version, applying the new default settings immediately.",
+          "They remain on their current version. You must manually select the profile, choose 'Change Version', and review any setting differences before deploying the update.",
+          "The existing profile is deleted, and you must create a new one from scratch.",
+          "The profile enters a 'Suspended' state until a Global Administrator approves the update."
+        ],
+        answer: "They remain on their current version. You must manually select the profile, choose 'Change Version', and review any setting differences before deploying the update.",
+        explanation: "Intune does not automatically upgrade security baselines because new settings could potentially break corporate applications or workflows.",
+        moreDetails: "Administrators must manually initiate the 'Change Version' process. Intune provides a CSV download during this process to help you compare the old settings versus the new default settings so you can test the impact before broadly deploying.",
+        otherOptions: "Automatic upgrades are dangerous. Profiles are never deleted or suspended automatically.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/security-baselines-update"
+      },
+      {
+        id: 1070,
+        type: "hard",
+        format: "multi-select",
+        question: "You want to enable silent BitLocker encryption on your Windows Autopilot devices without requiring any user interaction. Which TWO of the following hardware or configuration prerequisites MUST be met? (Select TWO)",
+        options: [
+          "The device must have a TPM (Trusted Platform Module) chip enabled.",
+          "The user must be a Local Administrator on the device.",
+          "The 'Allow standard users to enable encryption during Autopilot' setting must be set to 'Yes' if the user is not an admin.",
+          "The device must be Hybrid Entra ID joined (Cloud-only Entra ID join is not supported)."
+        ],
+        multiAnswers: [
+          "The device must have a TPM (Trusted Platform Module) chip enabled.",
+          "The 'Allow standard users to enable encryption during Autopilot' setting must be set to 'Yes' if the user is not an admin."
+        ],
+        explanation: "Silent BitLocker encryption is a seamless security feature but requires specific prerequisites.",
+        moreDetails: "It strictly requires a <b>TPM (Trusted Platform Module)</b> to store the encryption keys securely without user intervention. Furthermore, if you deploy devices as 'Standard Users' (which is best practice), you must explicitly configure the Intune Endpoint Security policy to <b>allow standard users to trigger the encryption</b> during the Autopilot flow.",
+        otherOptions: "Users do not need to be Local Admins if the correct policy is applied. Cloud-only Entra ID join is fully supported for BitLocker.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/encrypt-devices#silently-enable-bitlocker-on-devices"
+      },
+      {
+        id: 1071,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You need to protect critical corporate data from ransomware by blocking untrusted applications from modifying files in standard document folders (like Documents, Pictures, and Desktop). Which Endpoint Security feature explicitly provides this protection?",
+        options: [
+          "Controlled Folder Access (part of Attack Surface Reduction).",
+          "Windows Defender Credential Guard.",
+          "BitLocker Drive Encryption.",
+          "Microsoft Defender Application Guard."
+        ],
+        answer: "Controlled Folder Access (part of Attack Surface Reduction).",
+        explanation: "<b>Controlled Folder Access (CFA)</b> is a specific Attack Surface Reduction (ASR) rule designed specifically to combat ransomware.",
+        moreDetails: "It monitors the system's protected folders (like C:\\Users\\...\\Documents) and strictly blocks unrecognized or malicious executable files from modifying or encrypting the files inside those directories.",
+        otherOptions: "Credential Guard protects identities. BitLocker protects data at rest from physical theft. Application Guard creates isolated browser containers.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/controlled-folders"
+      },
+      {
+        id: 1072,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are configuring Windows Local Administrator Password Solution (Windows LAPS) via Intune Endpoint Security. You want the local administrator password to automatically rotate after an IT helpdesk technician views it in the Entra ID portal. Which setting must you configure in the LAPS policy?",
+        options: [
+          "Post-authentication actions",
+          "Password age (days)",
+          "Administrator account name",
+          "Backup directory"
+        ],
+        answer: "Post-authentication actions",
+        explanation: "Windows LAPS in Intune introduces <b>Post-authentication actions</b> to improve security after a password is used.",
+        moreDetails: "When a technician requests and views the LAPS password, a post-authentication action can be configured to automatically reset that password after a specified grace period (e.g., 24 hours), ensuring the technician cannot hoard the password for future unauthorized access.",
+        otherOptions: "Password age dictates the standard recurring rotation (e.g., every 30 days). Backup directory determines where the password is saved (Entra ID vs AD).",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-laps-policy"
+      },
+      {
+        id: 1073,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A local administrator on a Windows 11 device attempts to disable real-time protection in the Windows Security app, but the toggle is greyed out. A policy in Intune's Endpoint Security Antivirus blade is enforcing this. Which specific feature ensures that malicious apps or rogue local admins cannot disable Microsoft Defender Antivirus?",
+        options: [
+          "Tamper Protection",
+          "Exploit Protection",
+          "Attack Surface Reduction (ASR)",
+          "Network Protection"
+        ],
+        answer: "Tamper Protection",
+        explanation: "<b>Tamper Protection</b> locks down Microsoft Defender Antivirus settings so they cannot be altered via the local registry, Group Policy, or UI, even by users with Local Administrator rights.",
+        moreDetails: "It ensures that only the centralized MDM authority (Intune/Defender for Endpoint) can manage the security configuration, effectively stopping malware from turning off the antivirus engine before an attack.",
+        otherOptions: "Exploit protection stops memory exploits. ASR minimizes attack vectors. Network protection blocks malicious IPs.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/prevent-changes-to-security-settings-with-tamper-protection"
+      },
+      {
+        id: 1074,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have an Intune Device Configuration profile that sets the Defender Antivirus 'Scan Archive Files' setting to 'Not Configured'. You also have an Endpoint Security Antivirus policy assigned to the same device that sets 'Scan Archive Files' to 'Allowed'. What is the resulting state on the device?",
+        options: [
+          "The device reports a 'Conflict' state and neither policy is applied.",
+          "The setting is applied as 'Allowed' because Endpoint Security policies always overwrite Device Configuration profiles.",
+          "The setting is applied as 'Allowed' because 'Not Configured' simply ignores the setting, allowing the configured policy to win.",
+          "The device crashes during policy sync."
+        ],
+        answer: "The setting is applied as 'Allowed' because 'Not Configured' simply ignores the setting, allowing the configured policy to win.",
+        explanation: "In Intune, a state of <b>'Not Configured'</b> is essentially a null value—it tells the MDM engine to ignore the setting.",
+        moreDetails: "Because the Device Configuration profile ignores it, there is no actual conflict. The Endpoint Security policy provides the explicit 'Allowed' instruction, which successfully applies to the device. A conflict only occurs when two profiles send differing explicit values (e.g., 'Allowed' vs 'Blocked').",
+        otherOptions: "Conflicts only happen with competing explicit values. Endpoint Security does not inherently rank higher than Device Configuration in Intune's conflict resolution.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/configuration/device-profile-troubleshoot"
+      },
+      {
+        id: 1075,
+        type: "medium",
+        format: "multi-select",
+        question: "You recently purchased Microsoft Defender for Endpoint licenses and need to onboard your Intune-managed Windows devices. Which TWO methods can you use to silently onboard these devices without deploying a manual script? (Select TWO)",
+        options: [
+          "Create an Endpoint Security 'Endpoint Detection and Response' policy in Intune and deploy the onboarding package.",
+          "Enable the 'Connect Windows devices to Microsoft Defender for Endpoint' toggle in the Intune Advanced Threat Protection connector.",
+          "Email the onboarding .zip file to users and ask them to run the batch file.",
+          "Deploy an Attack Surface Reduction (ASR) policy."
+        ],
+        multiAnswers: [
+          "Create an Endpoint Security 'Endpoint Detection and Response' policy in Intune and deploy the onboarding package.",
+          "Enable the 'Connect Windows devices to Microsoft Defender for Endpoint' toggle in the Intune Advanced Threat Protection connector."
+        ],
+        explanation: "Integrating Intune with Defender for Endpoint allows for seamless, silent onboarding.",
+        moreDetails: "You first establish the service-to-service connection in Tenant Administration (the <b>Advanced Threat Protection connector</b>). Once connected, you deploy an <b>Endpoint Detection and Response (EDR)</b> profile in the Endpoint Security blade, which automatically distributes the onboarding blob to the Windows devices.",
+        otherOptions: "Manual scripts defeat the purpose of MDM. ASR rules protect devices but do not perform the onboarding connection.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure#create-and-assign-the-edr-policy"
+      },
+      {
+        id: 1076,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Microsoft Defender Vulnerability Management discovers an outdated version of Adobe Reader with known CVEs across 50 devices. The security team uses the Microsoft Defender portal to open a 'Security Task' for the IT team to update the software. Where does the IT administrator view and accept this task?",
+        options: [
+          "Intune Admin Center -> Endpoint security -> Security tasks.",
+          "Entra ID -> Identity Protection -> Risky users.",
+          "Intune Admin Center -> Apps -> App Protection Policies.",
+          "Microsoft 365 Admin Center -> Message center."
+        ],
+        answer: "Intune Admin Center -> Endpoint security -> Security tasks.",
+        explanation: "The integration between Defender and Intune creates a seamless workflow between Security and IT Operations.",
+        moreDetails: "When the SecOps team creates a remediation request in the Defender portal, it automatically syncs into Intune under <b>Endpoint security -> Security tasks</b>. The IT admin can view the affected devices, accept the task, deploy the updated app, and mark it as complete.",
+        otherOptions: "Entra ID Identity Protection is for user account risk. Message center is for Microsoft service alerts.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/tenant-attach-security-tasks"
+      },
+      {
+        id: 1077,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to deploy a new Attack Surface Reduction (ASR) rule: 'Block executable files from running unless they meet a prevalence, age, or trusted list criterion'. However, you are worried it might break legacy Line-of-Business apps. How should you deploy the rule initially?",
+        options: [
+          "Set the rule to 'Block' but assign it to 'All Devices'.",
+          "Set the rule to 'Audit mode' to monitor what would have been blocked without actually stopping the processes.",
+          "Set the rule to 'Warn mode' and tell users to ignore the warning.",
+          "Do not deploy the rule until you manually test every app on a single machine."
+        ],
+        answer: "Set the rule to 'Audit mode' to monitor what would have been blocked without actually stopping the processes.",
+        explanation: "ASR rules can be highly disruptive if deployed aggressively. Microsoft strongly recommends using <b>Audit mode</b> first.",
+        moreDetails: "In Audit mode, the ASR rule evaluates processes and logs what it <i>would</i> have blocked to the Windows Event Logs and Defender portal, without actually stopping the application from running. This allows IT to identify and add necessary exclusions before switching the rule to 'Block'.",
+        otherOptions: "Deploying to Block immediately causes widespread disruption. Manual testing is inefficient.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/enable-attack-surface-reduction"
+      },
+      {
+        id: 1078,
+        type: "easy",
+        format: "multi-select",
+        question: "When configuring a Windows Firewall policy in the Intune Endpoint Security blade, which TWO of the following network profiles can you configure rules for? (Select TWO)",
+        options: [
+          "Domain network profile.",
+          "Public network profile.",
+          "Corporate VPN profile.",
+          "Guest Wi-Fi profile."
+        ],
+        multiAnswers: [
+          "Domain network profile.",
+          "Public network profile."
+        ],
+        explanation: "Windows Defender Firewall categorizes network connections into three core profiles: Domain, Private, and Public.",
+        moreDetails: "In Intune's Firewall policies, you explicitly configure settings (like turning the firewall on or blocking inbound connections) for the <b>Domain</b>, <b>Private</b>, and <b>Public</b> profiles.",
+        otherOptions: "Corporate VPN and Guest Wi-Fi are not native Windows Firewall profiles; they fall under the Domain/Private/Public categories depending on network authentication and configuration.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-firewall-profile-settings"
+      },
+      {
+        id: 1079,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Which Microsoft Defender feature, configurable via Intune Endpoint Security, specifically prevents users from using any application to access dangerous domains or IP addresses that host phishing scams, exploits, and other malicious content on the internet?",
+        options: [
+          "Network Protection.",
+          "AppLocker.",
+          "Controlled Folder Access.",
+          "Windows Defender Credential Guard."
+        ],
+        answer: "Network Protection.",
+        explanation: "<b>Network Protection</b> extends the capabilities of Microsoft Defender SmartScreen to all outbound network traffic on the OS.",
+        moreDetails: "Instead of just protecting the web browser, Network Protection blocks outbound connections from any application (e.g., an unauthorized script or a malicious app) that tries to contact known malicious infrastructure.",
+        otherOptions: "AppLocker restricts what apps can run. CFA protects local files. Credential Guard protects passwords.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/network-protection"
+      },
+      {
+        id: 1080,
+        type: "medium",
+        format: "multiple-choice",
+        question: "What is the primary advantage of using 'Security Baselines' in Intune rather than building custom Endpoint Security profiles from scratch?",
+        options: [
+          "They are free and do not require Intune licenses.",
+          "They represent Microsoft's continuously updated, pre-configured group of best-practice settings tailored by security experts.",
+          "They bypass Entra ID Conditional Access policies.",
+          "They are the only way to manage macOS devices."
+        ],
+        answer: "They represent Microsoft's continuously updated, pre-configured group of best-practice settings tailored by security experts.",
+        explanation: "Intune <b>Security Baselines</b> are pre-packaged templates containing Microsoft's recommended security settings for Windows and Edge.",
+        moreDetails: "Instead of manually configuring hundreds of individual settings (like disabling SMBv1, enabling BitLocker, enforcing password lengths), IT admins can apply the baseline to instantly achieve a known good security posture based on industry best practices.",
+        otherOptions: "They still require standard licensing. They do not bypass CA policies. macOS has its own Endpoint Security profiles but not a generic Microsoft 'baseline' in the same way Windows does.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/security-baselines"
+      },
+      {
+        id: 1081,
+        type: "hard",
+        format: "multi-select",
+        question: "You want to protect users from downloading malicious files and visiting phishing sites. Which TWO environments natively integrate with Microsoft Defender SmartScreen settings deployed via Intune Endpoint Security? (Select TWO)",
+        options: [
+          "Microsoft Edge.",
+          "Windows OS (File Explorer / App Execution).",
+          "Google Chrome natively (without extensions).",
+          "Mozilla Firefox."
+        ],
+        multiAnswers: [
+          "Microsoft Edge.",
+          "Windows OS (File Explorer / App Execution)."
+        ],
+        explanation: "Microsoft Defender SmartScreen is natively built into the Microsoft ecosystem.",
+        moreDetails: "It natively protects <b>Microsoft Edge</b> (blocking malicious URLs and downloads) and the <b>Windows Operating System itself</b> (evaluating unverified executables launched from File Explorer).",
+        otherOptions: "Google Chrome and Mozilla Firefox do not natively integrate with SmartScreen without third-party extensions; they use their own Safe Browsing technologies.",
+        link: "https://learn.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-smartscreen/microsoft-defender-smartscreen-overview"
+      },
+      {
+        id: 1082,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Which Endpoint Security Account Protection feature uses virtualization-based security (VBS) to isolate secrets so that only privileged system software can access them, protecting against Pass-the-Hash and Pass-the-Ticket attacks?",
+        options: [
+          "Windows Defender Credential Guard.",
+          "Windows Hello for Business.",
+          "Attack Surface Reduction.",
+          "Application Guard."
+        ],
+        answer: "Windows Defender Credential Guard.",
+        explanation: "<b>Windows Defender Credential Guard</b> leverages hardware-based virtualization (VBS) to secure NT hashes and Kerberos tickets.",
+        moreDetails: "By moving these secrets into an isolated virtualized container (the secure enclave), it prevents even administrators and kernel-level malware from extracting them, effectively neutralizing Pass-the-Hash attacks.",
+        otherOptions: "Windows Hello for Business is an authentication method. Application Guard isolates browsers.",
+        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/"
+      },
+      {
+        id: 1083,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You need to enforce a strict zero-trust application execution environment on Windows 11 kiosks. You only want applications signed by a specific corporate certificate to run. Which feature, deployable via Intune, is Microsoft's recommended modern solution for this application whitelisting?",
+        options: [
+          "Windows Defender Application Control (WDAC).",
+          "Microsoft Defender Antivirus (Full Scan).",
+          "BitLocker Drive Encryption.",
+          "Windows Defender Firewall with Advanced Security."
+        ],
+        answer: "Windows Defender Application Control (WDAC).",
+        explanation: "<b>Windows Defender Application Control (WDAC)</b> is Microsoft's premier app-control solution (replacing older AppLocker implementations).",
+        moreDetails: "WDAC creates a strict execution environment where only trusted, signed, or specifically whitelisted applications and scripts can run. Anything not explicitly trusted by the WDAC policy is blocked from executing.",
+        otherOptions: "Antivirus relies on definitions to catch known bad apps, WDAC blocks everything by default. BitLocker and Firewall do not control app execution.",
+        link: "https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/windows-defender-application-control"
+      },
+      {
+        id: 1084,
+        type: "medium",
+        format: "multi-select",
+        question: "You are configuring a 'Device Control' profile under Attack Surface Reduction in Intune. You want to prevent data exfiltration via USB drives. Which TWO actions can you configure for removable storage? (Select TWO)",
+        options: [
+          "Block write access to all removable storage.",
+          "Block read access to all removable storage.",
+          "Encrypt the USB drive using BitLocker To Go automatically without user interaction.",
+          "Physically disable the USB port hardware via BIOS/UEFI."
+        ],
+        multiAnswers: [
+          "Block write access to all removable storage.",
+          "Block read access to all removable storage."
+        ],
+        explanation: "The Device Control ASR policy provides granular control over removable storage devices (like USB flash drives).",
+        moreDetails: "Administrators can configure policies to <b>Block write access</b> (preventing data exfiltration but allowing reading) or completely <b>Block read access</b> (preventing the mounting of the drive entirely).",
+        otherOptions: "BitLocker To Go requires user interaction to set a password. Intune Device Control manages the Windows OS layer, not the BIOS/UEFI hardware layer.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/device-control-removable-storage-access-control"
+      },
+      {
+        id: 1085,
+        type: "easy",
+        format: "multiple-choice",
+        question: "You are expanding your Endpoint Security footprint. Which of the following Intune Endpoint Security policies is fully supported for macOS devices?",
+        options: [
+          "FileVault (Disk Encryption).",
+          "Windows Defender Credential Guard.",
+          "Windows LAPS.",
+          "BitLocker."
+        ],
+        answer: "FileVault (Disk Encryption).",
+        explanation: "Intune Endpoint Security natively supports disk encryption for multiple platforms.",
+        moreDetails: "While BitLocker is used for Windows, the <b>FileVault</b> profile in Endpoint Security is specifically designed to manage full-disk encryption for macOS devices, allowing Intune to securely escrow the recovery keys.",
+        otherOptions: "Credential Guard, LAPS, and BitLocker are strictly Windows technologies.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/encrypt-devices-filevault"
+      },
+      {
+        id: 1086,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization uses a third-party Antivirus as the primary real-time protection on Windows devices, but you have onboarded the devices to Microsoft Defender for Endpoint. You want Defender to step in and terminate malicious processes if the third-party AV misses them. Which feature should you enable?",
+        options: [
+          "Endpoint Detection and Response (EDR) in block mode.",
+          "Attack Surface Reduction (ASR) in Audit mode.",
+          "Controlled Folder Access.",
+          "Tamper Protection."
+        ],
+        answer: "Endpoint Detection and Response (EDR) in block mode.",
+        explanation: "When a third-party AV is active, Microsoft Defender Antivirus goes into 'Passive Mode'.",
+        moreDetails: "However, if you enable <b>EDR in block mode</b>, Microsoft Defender for Endpoint acts as a safety net. If it detects a malicious artifact that the primary AV missed, EDR in block mode will actively intervene, terminate the process, and block the threat, even though Defender is in passive mode.",
+        otherOptions: "ASR in Audit mode doesn't block anything. Tamper protection locks settings. CFA protects folders.",
+        link: "https://learn.microsoft.com/en-us/defender-endpoint/edr-in-block-mode"
+      }
+    ]
+  },
+  {
+    id: 998,
+    term: "Hybrid & Co-Management",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1087,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You have enabled co-management in Configuration Manager (SCCM). You want to ensure that Intune is responsible for deploying all Windows updates to devices, but SCCM continues to handle all application deployments. Which co-management workload slider must you move to 'Intune'?",
+        options: [
+          "Windows Update policies",
+          "Client apps",
+          "Compliance policies",
+          "Device configuration"
+        ],
+        answer: "Windows Update policies",
+        explanation: "In a co-managed environment, administrators use 'workloads' to dictate which authority (Intune or SCCM) controls specific features.",
+        moreDetails: "By moving the <b>Windows Update policies</b> slider to Intune, the device will begin looking to Intune (and by extension, Windows Update for Business) for feature and quality updates, ignoring SCCM Software Update Deployments. Leaving 'Client apps' on SCCM ensures SCCM continues managing software delivery.",
+        otherOptions: "Compliance policies handle conditional access reporting. Device configuration handles generic MDM profiles. Client apps handles software deployment.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads"
+      },
+      {
+        id: 1088,
+        type: "hard",
+        format: "multi-select",
+        question: "You are planning to deploy Windows Autopilot using the 'Hybrid Entra ID joined' scenario. Which TWO of the following infrastructural components are strictly required for this specific scenario? (Select TWO)",
+        options: [
+          "Intune Connector for Active Directory installed on an on-premises Windows Server.",
+          "A line-of-sight to an on-premises Active Directory Domain Controller during the deployment.",
+          "A Microsoft Configuration Manager (SCCM) Site Server.",
+          "Entra ID Cloud Sync (instead of Entra Connect Sync)."
+        ],
+        multiAnswers: [
+          "Intune Connector for Active Directory installed on an on-premises Windows Server.",
+          "A line-of-sight to an on-premises Active Directory Domain Controller during the deployment."
+        ],
+        explanation: "Hybrid Autopilot is significantly more complex than cloud-native Autopilot because it must securely join the legacy on-premises Active Directory.",
+        moreDetails: "It strictly requires the <b>Intune Connector for Active Directory</b> (to securely request offline domain join blobs) and the physical device must have a <b>direct network line-of-sight to an on-premises Domain Controller</b> (usually via VPN) to process the domain join and authenticate the user's first login.",
+        otherOptions: "SCCM is not required for Autopilot. Entra Connect Sync (formerly AD Connect) is required, but Cloud Sync is not a strict replacement for device sync in this scenario yet.",
+        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-hybrid"
+      },
+      {
+        id: 1089,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Which feature allows an IT administrator to view device details, run CMPivot, and trigger Defender antivirus scans on on-premises Configuration Manager (SCCM) devices directly from the cloud-based Intune Admin Center, WITHOUT enrolling those devices into Intune MDM?",
+        options: [
+          "Tenant Attach.",
+          "Co-management.",
+          "Endpoint Analytics.",
+          "Microsoft Defender for Endpoint."
+        ],
+        answer: "Tenant Attach.",
+        explanation: "<b>Tenant Attach</b> connects your on-premises SCCM infrastructure to the cloud.",
+        moreDetails: "It syncs the device records up to the Intune admin center so helpdesk staff can perform remote actions (like CMPivot, machine policy syncs, or Defender scans) from a single web portal, entirely bypassing the need to fully MDM-enroll the devices via Co-management.",
+        otherOptions: "Co-management requires full MDM enrollment. Endpoint Analytics provides performance metrics. Defender is for security monitoring.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/tenant-attach/"
+      },
+      {
+        id: 1090,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your co-managed Windows devices receive an on-premises Group Policy Object (GPO) setting and an Intune Device Configuration profile setting that configure the exact same Windows feature differently. By default, which setting takes precedence, and how can you change this behavior?",
+        options: [
+          "GPO takes precedence by default. You can change this by configuring the 'MDMWinsOverGP' CSP setting in Intune.",
+          "Intune takes precedence by default. You cannot change this behavior in a co-managed state.",
+          "GPO takes precedence by default. You can change this by moving the 'Device configuration' workload slider to Intune.",
+          "Intune takes precedence by default. You can change this by configuring a WMI filter on the GPO."
+        ],
+        answer: "GPO takes precedence by default. You can change this by configuring the 'MDMWinsOverGP' CSP setting in Intune.",
+        explanation: "In a hybrid environment, legacy on-premises Group Policy wins conflicts against modern MDM (Intune) policies by default.",
+        moreDetails: "To facilitate a shift to cloud management without deleting all GPOs immediately, administrators can deploy a custom OMA-URI setting called <b>ControlPolicyConflict/MDMWinsOverGP</b> via Intune. When applied, the Windows client will enforce the Intune policy over the GPO in the event of a direct conflict.",
+        otherOptions: "Moving the workload slider to Intune tells SCCM to back off, but does NOT stop Active Directory Group Policy from applying. GPO will still win without the MDMWinsOverGP CSP.",
+        link: "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-controlpolicyconflict"
+      },
+      {
+        id: 1091,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to enable co-management for existing cloud-native devices that are already Entra ID joined and managed by Intune. How do you deploy the Configuration Manager (SCCM) client to these Intune-managed devices?",
+        options: [
+          "Create a Line-of-Business (LOB) or Win32 app in Intune containing the CCMSetup.msi and installation arguments.",
+          "Run the 'Discover and deploy' wizard in the SCCM console.",
+          "Download the SCCM agent from the Microsoft Store for Business.",
+          "Use an Autopilot Deployment Profile to inject the SCCM agent during OOBE."
+        ],
+        answer: "Create a Line-of-Business (LOB) or Win32 app in Intune containing the CCMSetup.msi and installation arguments.",
+        explanation: "To bootstrap SCCM onto internet-based, Intune-managed devices, you use Intune's app deployment capabilities.",
+        moreDetails: "You package the <b>CCMSetup.msi</b> as an Intune Line-of-Business (LOB) app or Win32 app. You must include command-line arguments specifying the Cloud Management Gateway (CMG) details so the agent knows how to reach the on-premises SCCM environment securely over the internet.",
+        otherOptions: "SCCM cannot discover or push to internet devices that don't already have an agent or VPN. Autopilot profiles don't inject agents directly.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/how-to-prepare-win10#install-the-configuration-manager-client"
+      },
+      {
+        id: 1092,
+        type: "hard",
+        format: "multiple-choice",
+        question: "In the Configuration Manager (SCCM) console, you move the 'Compliance policies' co-management workload slider to 'Pilot Intune'. What is the exact effect of this action?",
+        options: [
+          "Intune evaluates compliance for the devices in the specific Pilot collection in SCCM; SCCM evaluates compliance for all other co-managed devices.",
+          "Intune evaluates compliance for all co-managed devices, but in a 'report-only' mode that does not block access.",
+          "Both Intune and SCCM evaluate compliance simultaneously, and if either fails, the device is marked non-compliant.",
+          "Intune takes over compliance for 10% of devices randomly to test the policies."
+        ],
+        answer: "Intune evaluates compliance for the devices in the specific Pilot collection in SCCM; SCCM evaluates compliance for all other co-managed devices.",
+        explanation: "The <b>'Pilot Intune'</b> workload setting allows for controlled, phased migrations of authority.",
+        moreDetails: "When a workload is set to Pilot, you must select a specific SCCM device collection to act as the pilot group. Only devices inside that collection will look to Intune for that workload. Devices outside the collection will continue to look to SCCM.",
+        otherOptions: "It is not a global report-only mode, nor is it a random 10% sample. It is strictly based on the defined SCCM collection.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/how-to-switch-workloads"
+      },
+      {
+        id: 1093,
+        type: "hard",
+        format: "multi-select",
+        question: "Which TWO of the following scenarios natively require a Cloud Management Gateway (CMG) in a Microsoft Configuration Manager (SCCM) environment? (Select TWO)",
+        options: [
+          "Deploying software updates from SCCM to co-managed devices operating securely over the internet without a VPN.",
+          "Bootstrapping the SCCM client installation on a remote internet-only device managed by Intune.",
+          "Synchronizing Entra ID users to on-premises Active Directory.",
+          "Utilizing Intune App Protection Policies (MAM) on unmanaged mobile devices."
+        ],
+        multiAnswers: [
+          "Deploying software updates from SCCM to co-managed devices operating securely over the internet without a VPN.",
+          "Bootstrapping the SCCM client installation on a remote internet-only device managed by Intune."
+        ],
+        explanation: "The <b>Cloud Management Gateway (CMG)</b> is an Azure-based proxy that allows internet-based clients to communicate with the on-premises SCCM infrastructure.",
+        moreDetails: "If a remote worker is not on the corporate VPN, SCCM cannot manage them or deploy software to them unless a CMG is in place. Similarly, if Intune deploys the CCMSetup.msi to a remote Autopilot device, the installer needs the CMG address to securely download the rest of the agent binaries from the on-premises server.",
+        otherOptions: "Entra ID Connect handles identity sync, not CMG. Intune MAM operates entirely in the cloud and does not interact with SCCM.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/core/clients/manage/cmg/plan-cloud-management-gateway"
+      },
+      {
+        id: 1094,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are configuring Hybrid Entra ID join for existing on-premises Active Directory domain-joined computers. You have installed Entra ID Connect. Which specific sync feature must be enabled in Entra ID Connect to facilitate the Hybrid Join process?",
+        options: [
+          "Device Synchronization (Computer objects in the synced OUs).",
+          "Device Writeback.",
+          "Password Hash Synchronization (PHS)",
+          "Group Writeback."
+        ],
+        answer: "Device Synchronization (Computer objects in the synced OUs).",
+        explanation: "To achieve a Hybrid Entra ID join state, the on-premises Active Directory computer object must be known to the cloud.",
+        moreDetails: "You must ensure that the OUs containing your computer objects are selected for synchronization in Entra Connect. Entra Connect syncs the device object up to Entra ID, preparing the cloud identity so the physical device can complete the hybrid join registration process.",
+        otherOptions: "Device writeback takes Intune cloud-only devices and writes them down to on-premises AD (rarely used). PHS is for user passwords, not devices.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/how-to-hybrid-join"
+      },
+      {
+        id: 1095,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A remote user unboxes a new laptop at their home. The laptop is targeted with a Windows Autopilot 'Hybrid Entra ID joined' profile. What critical network requirement must be satisfied for the user to successfully log in to the Windows desktop for the first time?",
+        options: [
+          "The device must establish a VPN connection (typically pre-logon or device tunnel) to authenticate the user against the on-premises Domain Controller.",
+          "The device must connect to an open, unencrypted Wi-Fi network to bypass firewall rules.",
+          "The device must download a Cloud Management Gateway (CMG) certificate from Intune.",
+          "The device must be connected directly via an Ethernet cable to the home router."
+        ],
+        answer: "The device must establish a VPN connection (typically pre-logon or device tunnel) to authenticate the user against the on-premises Domain Controller.",
+        explanation: "Unlike cloud-native Autopilot where the user authenticates against Entra ID directly over the internet, <b>Hybrid Autopilot</b> creates a legacy on-premises Active Directory computer account.",
+        moreDetails: "Because the computer is joined to the on-prem domain, the first time a user attempts to log in to Windows, the OS must contact an on-premises Domain Controller to verify the password and generate the local profile cache. If the user is remote, an Always-On VPN (Device Tunnel) or pre-logon VPN client is strictly required to bridge this gap.",
+        otherOptions: "Without a line-of-sight to the DC via VPN, the login will fail with an 'RPC server unavailable' or 'no logon servers' error. CMG is for SCCM management, not domain authentication.",
+        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-hybrid#vpn-requirements"
+      },
+      {
+        id: 1096,
+        type: "hard",
+        format: "multiple-choice",
+        question: "In a co-managed environment, the 'Compliance policies' workload is shifted entirely to Intune. However, the organization still uses Configuration Manager (SCCM) baseline configurations to check deep registry settings. How is the final compliance state in Entra ID determined for Conditional Access?",
+        options: [
+          "Intune can evaluate its own policies and optionally require the SCCM client to report 'compliant' as part of the Intune compliance policy.",
+          "Entra ID Conditional Access averages the compliance score between Intune and SCCM.",
+          "SCCM compliance baselines are completely ignored by Entra ID if the workload is shifted to Intune.",
+          "Intune automatically converts SCCM configuration baselines into Intune JSON format for evaluation."
+        ],
+        answer: "Intune can evaluate its own policies and optionally require the SCCM client to report 'compliant' as part of the Intune compliance policy.",
+        explanation: "Intune acts as the final gatekeeper for compliance reporting to Entra ID, but it can factor in SCCM's localized checks.",
+        moreDetails: "Within an Intune compliance policy, there is a setting called <b>'Require Configuration Manager compliance'</b>. If set to 'Require', Intune will check its own cloud policies, wait for the SCCM client to report its own on-premises baseline compliance status to Intune, and only report 'Compliant' to Entra ID if BOTH engines pass.",
+        otherOptions: "Conditional Access does not average scores. SCCM baselines are not ignored if the Intune policy is explicitly configured to require them. Intune cannot convert SCCM baselines to JSON automatically.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/compliance-policy-create-windows#configuration-manager-compliance"
+      },
+      {
+        id: 1097,
+        type: "medium",
+        format: "multi-select",
+        question: "You are setting up 'Cloud Attach' (formerly Tenant Attach and Co-management) in your Configuration Manager (SCCM) console. Which TWO accounts or roles are required to complete this wizard? (Select TWO)",
+        options: [
+          "An Entra ID Global Administrator account.",
+          "An on-premises Active Directory Enterprise Admin account.",
+          "A user account with the 'Full Administrator' security role in Configuration Manager.",
+          "A user account with the 'Intune Service Administrator' role."
+        ],
+        multiAnswers: [
+          "An Entra ID Global Administrator account.",
+          "A user account with the 'Full Administrator' security role in Configuration Manager."
+        ],
+        explanation: "Setting up Cloud Attach builds the bridge between your on-premises servers and your cloud tenant.",
+        moreDetails: "To authorize the creation of the enterprise applications in Entra ID and link the tenant, the wizard strictly requires an <b>Entra ID Global Administrator</b> account to log in during setup. Simultaneously, the user running the wizard in the SCCM console must possess the <b>Full Administrator</b> role within Configuration Manager to modify the site settings.",
+        otherOptions: "Intune Admin is not sufficient; Global Admin is required to create the Entra ID app registrations. Enterprise Admin is an AD role, not an SCCM or Entra role.",
+        link: "https://learn.microsoft.com/en-us/mem/configmgr/tenant-attach/prerequisites"
+      },
+      {
+        id: 1098,
+        type: "hard",
+        format: "multiple-choice",
+        question: "In a cloud-native Entra ID joined Autopilot profile, you can use the '%SERIAL%' macro to name devices. When configuring a 'Hybrid Entra ID joined' Autopilot profile, how is the device naming convention handled?",
+        options: [
+          "Device naming is configured in the Intune Connector for Active Directory profile (Domain Join profile), not the Autopilot deployment profile itself.",
+          "You use the same '%SERIAL%' macro directly in the Autopilot deployment profile.",
+          "You must use a PowerShell script deployed via SCCM to rename the device.",
+          "Devices are named randomly and cannot be customized in a Hybrid Join scenario."
+        ],
+        answer: "Device naming is configured in the Intune Connector for Active Directory profile (Domain Join profile), not the Autopilot deployment profile itself.",
+        explanation: "Because the device is joining an on-premises Active Directory, the Active Directory domain controller dictates the computer name creation.",
+        moreDetails: "In Hybrid Autopilot, you do not name the device in the Autopilot profile. Instead, you create a <b>Domain Join Configuration Profile</b> in Intune and assign it to the devices. This profile uses a prefix (e.g., `CORP-{{RAND:4}}`) and instructs the Intune Connector to request an offline domain join blob with that specific name from the local DC.",
+        otherOptions: "The Autopilot profile naming options are greyed out when you select Hybrid. Scripts are not required as the Domain Join profile handles it natively.",
+        link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-hybrid#create-and-assign-a-domain-join-profile"
+      }
+    ]
+  },
+  {
+    id: 999,
+    term: "Windows Updates & Patching",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1099,
+        type: "medium",
+        format: "multiple-choice",
+        question: "When configuring an 'Update ring for Windows 10 and later' policy in Intune, what is the maximum number of days you can defer the installation of a Quality update?",
+        options: [
+          "14 days",
+          "30 days",
+          "90 days",
+          "365 days"
+        ],
+        answer: "30 days",
+        explanation: "Windows Update for Business allows you to delay the installation of updates to give your organization time to test them.",
+        moreDetails: "<b>Quality updates</b> (which contain monthly security patches and bug fixes) can be deferred for a maximum of <b>30 days</b>. In contrast, Feature updates (which are major OS version upgrades) can be deferred for up to 365 days within an Update Ring.",
+        otherOptions: "14 days is a common setting but not the maximum. 365 days is the maximum for Feature updates, not Quality updates.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-settings#update-settings"
+      },
+      {
+        id: 1100,
+        type: "hard",
+        format: "multi-select",
+        question: "You have an Update Ring that defers feature updates by 30 days. You subsequently deploy a 'Feature updates for Windows 10 and later' policy setting the target version to Windows 11, version 23H2. What is the effect on the device? (Select TWO)",
+        options: [
+          "The device upgrades to Windows 11, version 23H2 as soon as the Feature update policy is received.",
+          "The 'Feature updates' policy overrides the feature update deferral setting in the Update Ring.",
+          "The device waits 30 days after 23H2 is released before upgrading due to the Update Ring deferral.",
+          "The device remains on its current version until the 30-day deferral expires."
+        ],
+        multiAnswers: [
+          "The device upgrades to Windows 11, version 23H2 as soon as the Feature update policy is received.",
+          "The 'Feature updates' policy overrides the feature update deferral setting in the Update Ring."
+        ],
+        explanation: "Feature Update policies in Intune act as an absolute targeted deployment, overriding generic deferrals.",
+        moreDetails: "When you assign a <b>Feature updates for Windows 10 and later</b> profile to a device, it explicitly dictates the OS version the device should run. As a result, this profile completely <b>overrides</b> any feature update deferral settings configured in the standard Update Ring, causing the device to upgrade immediately (or upon the scheduled start date in the feature profile).",
+        otherOptions: "The 30-day deferral from the Update Ring is completely ignored once a targeted Feature Update profile applies to the device.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-10-feature-updates"
+      },
+      {
+        id: 1101,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A critical zero-day vulnerability requires an immediate out-of-band security patch. You use the 'Quality updates for Windows 10 and later' (Expedited) policy in Intune. How does this policy alter the normal update behavior?",
+        options: [
+          "It forces the device to download the update directly from the Microsoft Update Catalog, bypassing Delivery Optimization.",
+          "It bypasses the configured deferral periods and deadlines in the standard Update Ring, forcing the device to install the patch immediately.",
+          "It elevates the user to local administrator so they can install the patch manually.",
+          "It converts the device to the Windows Insider Dev Channel."
+        ],
+        answer: "It bypasses the configured deferral periods and deadlines in the standard Update Ring, forcing the device to install the patch immediately.",
+        explanation: "The <b>Expedite</b> feature is designed for emergency patching.",
+        moreDetails: "Normally, an Update Ring might defer a quality update for 7 days and give the user another 3 days before a forced reboot. An Expedited Quality update profile overrides those deferrals, forcing the device to download the specific security patch immediately and enforce an aggressive restart deadline.",
+        otherOptions: "It still utilizes Delivery Optimization to save bandwidth. It does not change user permissions or switch them to the Insider program.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-10-expedite-updates"
+      },
+      {
+        id: 1102,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to reduce internet bandwidth consumption by allowing Windows 11 devices to download update payloads from other devices on the same local network, but NOT from devices across the internet. Which Delivery Optimization download mode should you select?",
+        options: [
+          "HTTP only (0)",
+          "LAN (1)",
+          "Group (2)",
+          "Internet (3)"
+        ],
+        answer: "LAN (1)",
+        explanation: "Delivery Optimization allows peers to share update payloads to save WAN bandwidth.",
+        moreDetails: "<b>Mode 1 (LAN)</b> is also known as 'Peering on the same NAT'. It restricts peer-to-peer sharing exclusively to devices that share the same public IP address, keeping the traffic local. Mode 2 is for Active Directory sites/Intune groups, and Mode 3 allows peering across the open internet.",
+        otherOptions: "HTTP only (0) disables peer-to-peer entirely. Internet (3) is too permissive for standard corporate security baselines.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode"
+      },
+      {
+        id: 1103,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You configure an Update Ring with a 'Deadline for quality updates' set to 3 days, and a 'Grace period' set to 2 days. When will the device force a reboot if the user continually ignores restart prompts after the update is downloaded and installed?",
+        options: [
+          "Immediately after the update finishes installing.",
+          "3 days after the update is published by Microsoft.",
+          "5 days (3 days deadline + 2 days grace period) after the update is offered to the device.",
+          "2 days after the update is published by Microsoft."
+        ],
+        answer: "5 days (3 days deadline + 2 days grace period) after the update is offered to the device.",
+        explanation: "Deadlines and grace periods work together to enforce compliance without immediately interrupting the user.",
+        moreDetails: "The <b>Deadline</b> (3 days) is the time the user has to install the update after it is offered. Once the deadline passes (or if the update installs and requires a reboot), the <b>Grace period</b> (2 days) kicks in, giving the user a final countdown to save their work before a mandatory reboot occurs. Total time = 5 days.",
+        otherOptions: "It is calculated from when the update is offered to the specific device, not when Microsoft publishes it.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-wufb-group-policy#compliance-deadline-policies"
+      },
+      {
+        id: 1104,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A recently deployed Windows 11 Quality update is causing blue screens on certain Dell laptops. You need to roll back this specific update using Intune. Which feature allows you to initiate an uninstall?",
+        options: [
+          "Modify the 'Quality update deferral' setting to a higher number.",
+          "Use the 'Uninstall' option within the assigned Update Ring for Windows 10 and later.",
+          "Create an 'Expedite quality updates' policy with the 'Uninstall' flag checked.",
+          "Push a PowerShell script to run the `wusa.exe /uninstall` command."
+        ],
+        answer: "Use the 'Uninstall' option within the assigned Update Ring for Windows 10 and later.",
+        explanation: "Intune provides native controls to pause or uninstall updates via the Update Rings.",
+        moreDetails: "By navigating to the specific Update Ring profile assigned to the affected devices, an administrator can select the <b>Uninstall</b> action. This instructs the devices to roll back the latest installed Quality or Feature update.",
+        otherOptions: "Increasing deferrals only prevents future installs, it doesn't uninstall existing ones. `wusa.exe` is difficult to manage at scale. Expedite policies do not have an uninstall flag.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-for-business-configure#uninstall"
+      },
+      {
+        id: 1105,
+        type: "medium",
+        format: "multi-select",
+        question: "Your organization wants to use 'Windows Autopatch' to completely automate the patching of Windows, Microsoft 365 Apps, Edge, and Teams. Which TWO of the following statements about Windows Autopatch are true? (Select TWO)",
+        options: [
+          "It requires an Enterprise E3 or E5 license.",
+          "It completely replaces the need for an Intune subscription.",
+          "Microsoft automatically manages the deployment rings (Test, First, Fast, Broad) on your behalf.",
+          "It only supports on-premises Active Directory domain-joined devices without hybrid join."
+        ],
+        multiAnswers: [
+          "It requires an Enterprise E3 or E5 license.",
+          "Microsoft automatically manages the deployment rings (Test, First, Fast, Broad) on your behalf."
+        ],
+        explanation: "<b>Windows Autopatch</b> is a premium cloud service that takes the burden of patch management off the IT team.",
+        moreDetails: "It requires Windows 10/11 Enterprise E3 or E5 licensing. Once configured, Microsoft's algorithms automatically divide your devices into optimized deployment rings (Test, First, Fast, Broad) and sequence the rollouts, monitoring for failures and halting rollouts if issues are detected.",
+        otherOptions: "It relies heavily on Intune (it does not replace it). It supports Entra ID joined and Hybrid Entra ID joined devices.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/windows-autopilot/windows-autopatch-overview"
+      },
+      {
+        id: 1106,
+        type: "easy",
+        format: "multiple-choice",
+        question: "You need advanced, centralized reporting on update compliance, bandwidth savings from Delivery Optimization, and device update errors. Which Azure service integrates with Intune to provide 'Windows Update for Business reports'?",
+        options: [
+          "Azure SQL Database",
+          "Azure Monitor (Log Analytics workspace)",
+          "Microsoft Sentinel",
+          "Microsoft Defender for Cloud"
+        ],
+        answer: "Azure Monitor (Log Analytics workspace)",
+        explanation: "<b>Windows Update for Business reports</b> relies on diagnostic data sent from Windows devices to Azure.",
+        moreDetails: "To view this data, you must link your Intune tenant to an <b>Azure Monitor Log Analytics workspace</b>. The data is ingested into the workspace, where pre-built Azure Workbooks display rich visual reports on update compliance, feature update tracking, and Delivery Optimization efficiency.",
+        otherOptions: "Sentinel is a SIEM for security. Defender for Cloud is for server/workload security. Azure SQL is a relational database.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/wufb-reports-overview"
+      },
+      {
+        id: 1107,
+        type: "easy",
+        format: "multiple-choice",
+        question: "In a Windows Update Ring, you configure 'Active hours start' to 8:00 AM and 'Active hours end' to 5:00 PM. What is the primary purpose of this setting?",
+        options: [
+          "To prevent the device from downloading update payloads during business hours to save bandwidth.",
+          "To prevent the device from automatically restarting to apply an update during these hours.",
+          "To block the user from manually checking for updates during these hours.",
+          "To force the device to reboot at 8:00 AM every morning."
+        ],
+        answer: "To prevent the device from automatically restarting to apply an update during these hours.",
+        explanation: "<b>Active Hours</b> defines the standard working period for the user.",
+        moreDetails: "During this defined window, Windows Update will silently download and stage updates in the background, but it will <b>suppress automatic restarts</b> to prevent disrupting the user's productivity. Restarts are deferred until outside of the active hours.",
+        otherOptions: "It does not stop downloads, block manual checks, or force morning reboots.",
+        link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-wufb-group-policy#active-hours"
+      },
+      {
+        id: 1108,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your organization has 500 devices running Windows 10. You want to seamlessly upgrade them to Windows 11 using Intune Windows Update for Business policies. Which specific policy type is designed exclusively to push devices to a major OS upgrade?",
+        options: [
+          "Update rings for Windows 10 and later.",
+          "Quality updates for Windows 10 and later.",
+          "Feature updates for Windows 10 and later.",
+          "Windows Autopilot deployment profile."
+        ],
+        answer: "Feature updates for Windows 10 and later.",
+        explanation: "Upgrading from Windows 10 to Windows 11 is considered a 'Feature update'.",
+        moreDetails: "By creating a <b>Feature updates for Windows 10 and later</b> profile and setting the target version to Windows 11 (e.g., Windows 11 23H2), you explicitly instruct the devices to pull down the Windows 11 payload and perform an in-place OS upgrade.",
+        otherOptions: "Update rings govern standard patch flow but cannot explicitly target a major OS jump. Quality updates are for monthly security patches.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-10-feature-updates"
+      }
+    ]
+  },
+  {
+    id: 1000,
+    term: "Intune Suite Add-ons",
+    category: "Deploy Windows client",
+    questions: [
+      {
+        id: 1109,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your organization wants to allow standard users to run specific approved applications that require local administrator rights, without granting those users persistent local administrator permissions. Which Intune Add-on provides this capability?",
+        options: [
+          "Endpoint Privilege Management (EPM)",
+          "Windows LAPS",
+          "Remote Help",
+          "Enterprise Application Management"
+        ],
+        answer: "Endpoint Privilege Management (EPM)",
+        explanation: "<b>Endpoint Privilege Management (EPM)</b> allows IT to configure policies that dynamically elevate privileges for specific approved applications.",
+        moreDetails: "This fundamentally changes how organizations manage local admin rights. Instead of making a user a local administrator (which is a massive security risk), EPM elevates the <i>process</i> of the approved app, allowing the standard user to run it seamlessly without IT intervention.",
+        otherOptions: "Windows LAPS manages the built-in local admin password, it doesn't elevate standard users dynamically. Enterprise App Management simplifies packaging, not execution privileges.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/epm-overview"
+      },
+      {
+        id: 1110,
+        type: "easy",
+        format: "multiple-choice",
+        question: "Which Intune Suite Add-on provides administrators with a pre-packaged, secure, and continuously updated catalog of third-party applications, significantly reducing the time IT spends manually packaging Win32 apps?",
+        options: [
+          "Advanced Analytics",
+          "Endpoint Privilege Management",
+          "Enterprise Application Management",
+          "Managed Home Screen"
+        ],
+        answer: "Enterprise Application Management",
+        explanation: "<b>Enterprise Application Management</b> provides a Microsoft-hosted catalog of common third-party applications.",
+        moreDetails: "This streamlines app deployment by removing the need for IT to manually package, wrap with the Intune Win32 Prep Tool, and maintain updates for these apps. You simply select the app from the catalog, and Intune handles the packaging and deployment.",
+        otherOptions: "Advanced Analytics monitors device health. EPM manages process elevation. Managed Home Screen is for Android kiosk devices.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/eam-overview"
+      },
+      {
+        id: 1111,
+        type: "hard",
+        format: "multi-select",
+        question: "You are migrating your on-premises infrastructure to a 100% cloud-native environment and need to issue device certificates for Wi-Fi and VPN authentication. Which TWO benefits does the Microsoft Cloud PKI add-on provide over a traditional on-premises AD CS infrastructure? (Select TWO)",
+        options: [
+          "It eliminates the need to maintain on-premises servers like NDES or enterprise certificate authorities.",
+          "It requires physical smart cards for all certificate deployments.",
+          "It integrates natively with Intune to seamlessly deploy Root and Issuing CA profiles to cloud-managed devices.",
+          "It only supports macOS and iOS devices."
+        ],
+        multiAnswers: [
+          "It eliminates the need to maintain on-premises servers like NDES or enterprise certificate authorities.",
+          "It integrates natively with Intune to seamlessly deploy Root and Issuing CA profiles to cloud-managed devices."
+        ],
+        explanation: "<b>Microsoft Cloud PKI</b> is a cloud-based certificate authority service built directly into Intune.",
+        moreDetails: "Historically, deploying certificates to MDM-managed devices required complex on-premises infrastructure (Active Directory Certificate Services, NDES servers, Microsoft Entra Application Proxy). Cloud PKI abstracts all of this into the cloud, allowing you to click a few buttons to spin up Root and Issuing CAs and deploy certificates via SCEP natively in Intune.",
+        otherOptions: "It supports Windows, Android, iOS, and macOS. It does not require physical smart cards.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/microsoft-cloud-pki-overview"
+      },
+      {
+        id: 1112,
+        type: "medium",
+        format: "multiple-choice",
+        question: "The IT Helpdesk is experiencing a high volume of tickets regarding slow device boot times. Which Intune Add-on extends Endpoint Analytics by providing device-level timeline views, anomalous boot detection, and real-time querying capabilities to troubleshoot performance?",
+        options: [
+          "Endpoint Privilege Management",
+          "Remote Help",
+          "Advanced Analytics",
+          "Microsoft Tunnel for MAM"
+        ],
+        answer: "Advanced Analytics",
+        explanation: "<b>Advanced Analytics</b> is a premium add-on that significantly deepens the data available in Endpoint Analytics.",
+        moreDetails: "It leverages AI to identify anomalous behaviors (like sudden drops in app reliability or spikes in boot times across specific device models) and provides deep, historical device timelines so helpdesk staff can correlate issues with recent changes or updates without interrupting the user.",
+        otherOptions: "Remote help is for screen sharing. EPM is for admin rights. Tunnel for MAM is a VPN solution for unmanaged devices.",
+        link: "https://learn.microsoft.com/en-us/mem/analytics/advanced-analytics-overview"
+      },
+      {
+        id: 1113,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Which Intune Add-on allows users on unmanaged, personal iOS and Android devices to securely access on-premises corporate web apps via the Edge mobile browser, without requiring full MDM enrollment?",
+        options: [
+          "Microsoft Tunnel for Mobile Application Management (MAM)",
+          "Remote Help",
+          "Endpoint Privilege Management",
+          "Cloud PKI"
+        ],
+        answer: "Microsoft Tunnel for Mobile Application Management (MAM)",
+        explanation: "<b>Microsoft Tunnel for MAM</b> extends micro-VPN gateway capabilities to BYOD (Bring Your Own Device) scenarios.",
+        moreDetails: "Traditionally, device-level VPNs require full MDM enrollment. With Tunnel for MAM, the VPN connection is wrapped securely inside an App Protection Policy applied specifically to Microsoft Edge (or an LOB app). This allows users to access internal resources on personal phones while keeping corporate data containerized and maintaining user privacy.",
+        otherOptions: "Cloud PKI handles certificates. Remote help handles assistance. EPM handles execution rights on Windows.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/manage-microsoft-tunnel-for-mam"
+      },
+      {
+        id: 1114,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You have configured the Intune Remote Help add-on. You want to ensure that a helpdesk technician can only assist a user if both the technician's and the user's devices comply with security baselines. Which Entra ID feature natively integrates with Remote Help to enforce this requirement?",
+        options: [
+          "Conditional Access policies",
+          "Microsoft Defender for Endpoint",
+          "Privileged Identity Management (PIM)",
+          "Access Reviews"
+        ],
+        answer: "Conditional Access policies",
+        explanation: "Because Remote Help relies on Entra ID for authentication, it integrates seamlessly with <b>Conditional Access</b>.",
+        moreDetails: "Administrators can configure Entra ID Conditional Access policies specifically targeting the 'Remote Help' cloud app. This allows IT to enforce strong security controls—such as requiring Multi-Factor Authentication (MFA) or ensuring both the helper and the receiver are on 'Compliant' devices—before the screen-sharing session can even begin.",
+        otherOptions: "Defender is an XDR platform. PIM is for role elevation. Access Reviews are for auditing group memberships.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#conditional-access"
       }
     ]
   }

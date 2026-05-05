@@ -7,22 +7,6 @@ export const domain4Dataset: TermData[] = [
     category: "Manage applications and updates",
     questions: [
       {
-        id: 401,
-        type: "easy",
-        question: "When deploying Microsoft 365 Apps via Intune, which built-in profile type eliminates the need to manually create an XML configuration file using the Office Deployment Tool?",
-        options: [
-          "Win32 App (.intunewin)",
-          "Microsoft 365 Apps for Windows 10 and later",
-          "Line-of-business (LOB) app",
-          "Web link"
-        ],
-        answer: "Microsoft 365 Apps for Windows 10 and later",
-        explanation: "Intune provides a native <b>Microsoft 365 Apps</b> deployment type. This provides a user-friendly GUI within the Intune portal to select which Office applications to install, the update channel, and architecture, automatically generating the underlying configuration without manually writing XML.",
-        moreDetails: "If highly complex configurations are required, you can still choose the 'Use XML data' option within this profile.",
-        otherOptions: "Win32 requires manual packaging. LOB is for simple MSIs. Web links are just browser shortcuts.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-office365"
-      },
-      {
         id: 402,
         type: "medium",
         question: "You want to deploy Microsoft 365 Apps to your users, but you want to ensure they only receive feature updates once a month on a predictable schedule to allow for internal testing. Which update channel should you select?",
@@ -70,22 +54,6 @@ export const domain4Dataset: TermData[] = [
         otherOptions: "EULA acceptance is a generic setting. Update channels don't affect licensing. Install context doesn't solve the user licensing limit.",
         link: "https://learn.microsoft.com/en-us/deployoffice/overview-shared-computer-activation"
       },
-      {
-        id: 405,
-        type: "easy",
-        question: "By default, which architecture of Microsoft 365 Apps does Intune recommend deploying to modern Windows 10 and Windows 11 devices?",
-        options: [
-          "32-bit",
-          "64-bit",
-          "ARM32",
-          "x86"
-        ],
-        answer: "64-bit",
-        explanation: "Microsoft strongly recommends the <b>64-bit</b> architecture for modern deployments. It provides better performance, can utilize more than 4GB of RAM (critical for large Excel spreadsheets), and aligns with modern OS architectures.",
-        moreDetails: "32-bit should only be used if the organization relies on legacy, hard-coded 32-bit COM add-ins or ActiveX controls that have not been updated.",
-        otherOptions: "32-bit and x86 are the same and represent legacy architecture. ARM32 is for legacy mobile/tablet processors.",
-        link: "https://learn.microsoft.com/en-us/deployoffice/choose-64-bit-or-32-bit-version"
-      }
     ]
   },
   {
@@ -157,22 +125,6 @@ export const domain4Dataset: TermData[] = [
         otherOptions: "MDM wipe requires enrollment. Deleting the user account is destructive and unnecessary. MAC addresses are irrelevant for cloud auth.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-selective-wipe"
       },
-      {
-        id: 410,
-        type: "easy",
-        question: "When configuring access requirements in an App Protection Policy, what is the purpose of requiring an 'App PIN'?",
-        options: [
-          "To unlock the physical device screen.",
-          "To provide a secondary layer of authentication required to open the specific managed application, independent of the device passcode.",
-          "To authenticate against the corporate VPN.",
-          "To connect to corporate Wi-Fi."
-        ],
-        answer: "To provide a secondary layer of authentication required to open the specific managed application, independent of the device passcode.",
-        explanation: "An <b>App PIN</b> is a MAM security control. Even if a user hands their unlocked phone to a child to play a game, the child cannot open the corporate Outlook app without knowing the specific App PIN.",
-        moreDetails: "It separates the security of the application from the security of the operating system.",
-        otherOptions: "The device passcode unlocks the screen. It has nothing to do with VPN or Wi-Fi auth.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy-settings-ios#access-requirements"
-      }
     ]
   },
   {
@@ -197,38 +149,6 @@ export const domain4Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft"
       },
       {
-        id: 412,
-        type: "medium",
-        question: "When deploying a 'Microsoft Store app (new)' via Intune, you must choose the 'Install behavior'. What is the difference between 'System' and 'User' context?",
-        options: [
-          "System installs it for all users on the device; User installs it only for the targeted user profile.",
-          "System installs it in the cloud; User installs it locally.",
-          "System requires internet access; User works offline.",
-          "System applies only to Windows Servers; User applies to Windows 11."
-        ],
-        answer: "System installs it for all users on the device; User installs it only for the targeted user profile.",
-        explanation: "<b>System context</b> installs the application into the core OS directories (like Program Files), making it available to anyone who logs into that physical machine. <b>User context</b> installs it into the specific user's AppData profile.",
-        moreDetails: "Certain Store apps only support User context, while others support both. Intune uses the Windows Package Manager to execute the installation according to this context.",
-        otherOptions: "Both install locally, require internet, and apply to Windows client OS.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft#install-behavior"
-      },
-      {
-        id: 413,
-        type: "hard",
-        question: "A required line-of-business application is listed in the Microsoft Store as a 'Paid' app. How do you deploy this paid app to 50 users using the new Intune Microsoft Store integration?",
-        options: [
-          "Purchase 50 licenses in the Intune portal using a credit card.",
-          "You cannot deploy paid apps natively through the new Microsoft Store integration in Intune; users must purchase them individually or the vendor must provide a volume-licensed Win32 package.",
-          "Intune automatically bills your Azure subscription.",
-          "Deploy it as 'Available' and it becomes free."
-        ],
-        answer: "You cannot deploy paid apps natively through the new Microsoft Store integration in Intune; users must purchase them individually or the vendor must provide a volume-licensed Win32 package.",
-        explanation: "The new Windows Package Manager/Store integration in Intune <b>only supports free applications</b>.",
-        moreDetails: "With the deprecation of the Microsoft Store for Business (which handled bulk purchasing), there is no native volume purchasing mechanism in Intune for paid Store apps. Organizations must work directly with ISVs to procure volume licenses and deploy the apps as Win32 (.intunewin) packages.",
-        otherOptions: "There is no credit card UI in Intune. It does not bill Azure. Deploying it as 'Available' doesn't bypass payment.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft#prerequisites"
-      },
-      {
         id: 414,
         type: "medium",
         question: "When adding a new Microsoft Store app in Intune, you notice an app is listed as a 'Win32' framework app rather than a UWP app. What happens on the client side when this app updates?",
@@ -244,22 +164,6 @@ export const domain4Dataset: TermData[] = [
         otherOptions: "The apps can update, reinstalling is not required, and it doesn't cause a blue screen.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/store-apps-microsoft#update-store-apps"
       },
-      {
-        id: 415,
-        type: "easy",
-        question: "What is an MSIX file?",
-        options: [
-          "A legacy script used in Windows 7.",
-          "A modern Windows app packaging format that provides reliable installs, clean uninstalls, and containerized execution.",
-          "A configuration file for Intune compliance.",
-          "A database format for Endpoint Analytics."
-        ],
-        answer: "A modern Windows app packaging format that provides reliable installs, clean uninstalls, and containerized execution.",
-        explanation: "<b>MSIX</b> is Microsoft's modern app packaging format. It combines the features of robust MSI deployments with the safety and containerization of UWP Appx packages.",
-        moreDetails: "MSIX apps never leave orphaned registry keys or files behind when uninstalled, which prevents 'Windows Rot' over time.",
-        otherOptions: "It is not a legacy script, compliance file, or database.",
-        link: "https://learn.microsoft.com/en-us/windows/msix/overview"
-      }
     ]
   },
   {
@@ -282,22 +186,6 @@ export const domain4Dataset: TermData[] = [
         moreDetails: "The <b>Microsoft Win32 Content Prep Tool</b> (IntuneWinAppUtil.exe) handles this compression and encryption locally before you upload it to the cloud.",
         otherOptions: "Standard zip files are not accepted. Renaming the extension breaks the file. Code signing is good practice but not the mechanical step required for Intune upload.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
-      },
-      {
-        id: 417,
-        type: "medium",
-        question: "When deploying a Win32 app, what is the purpose of a <b>Detection Rule</b>?",
-        options: [
-          "To detect if the user has a virus.",
-          "To check if the application is already installed on the device so Intune knows whether to run the installer or report a 'Success' status.",
-          "To find the device's IP address.",
-          "To determine if the app requires a license."
-        ],
-        answer: "To check if the application is already installed on the device so Intune knows whether to run the installer or report a 'Success' status.",
-        explanation: "Unlike simple MSI deployments, Intune needs explicit instructions on how to verify a Win32 app installed correctly. <b>Detection Rules</b> (which look for specific registry keys, file paths, or MSI product codes) provide this logic.",
-        moreDetails: "Before installing, Intune runs the detection rule. If found, it skips installation. After installing, it runs it again. If found, it reports success; if not, it reports failure.",
-        otherOptions: "Detection rules are strictly for state configuration management, not AV scanning, networking, or licensing.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add#step-4-detection-rules"
       },
       {
         id: 418,
@@ -354,22 +242,6 @@ export const domain4Dataset: TermData[] = [
     term: "Windows Update for Business (Update Rings)",
     category: "Manage applications and updates",
     questions: [
-      {
-        id: 421,
-        type: "easy",
-        question: "What is the purpose of an <b>Update Ring</b> in Microsoft Intune?",
-        options: [
-          "To physically network computers together.",
-          "To group devices and configure the policies that dictate *when* and *how* they receive Windows quality and feature updates.",
-          "To force users to reset their passwords.",
-          "To monitor CPU performance rings."
-        ],
-        answer: "To group devices and configure the policies that dictate *when* and *how* they receive Windows quality and feature updates.",
-        explanation: "An <b>Update Ring</b> is a collection of Windows Update for Business (WUfB) settings. By assigning different rings (e.g., 'Pilot', 'Fast', 'Broad') to different groups, you create a phased rollout of updates across the organization.",
-        moreDetails: "This ensures that if an update breaks a critical application, it only affects the 'Pilot' ring, giving IT time to pause the update before it hits the 'Broad' deployment ring.",
-        otherOptions: "It is a patching strategy, not networking, identity, or CPU monitoring.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-update-for-business-configure"
-      },
       {
         id: 422,
         type: "medium",
@@ -615,22 +487,7 @@ export const domain4Dataset: TermData[] = [
     term: "Endpoint Analytics",
     category: "Manage applications and updates",
     questions: [
-      {
-        id: 436,
-        type: "easy",
-        question: "What is the primary objective of <b>Endpoint Analytics</b> in the Microsoft Intune admin center?",
-        options: [
-          "To track which websites employees are browsing.",
-          "To provide metrics and insights into the user experience, helping IT identify slow boot times, application crashes, and proactive remediation opportunities.",
-          "To serve as the primary antivirus engine.",
-          "To track physical hardware inventory for accounting."
-        ],
-        answer: "To provide metrics and insights into the user experience, helping IT identify slow boot times, application crashes, and proactive remediation opportunities.",
-        explanation: "<b>Endpoint Analytics</b> shifts the IT focus from 'Is the device compliant?' to 'Is the user having a good experience?'. It highlights devices that take 5 minutes to boot or apps that crash daily.",
-        moreDetails: "This allows IT to proactively order a replacement SSD or patch a broken application before the user even calls the helpdesk.",
-        otherOptions: "It does not track web history, perform AV scans, or handle financial asset tracking.",
-        link: "https://learn.microsoft.com/en-us/mem/analytics/overview"
-      },
+
       {
         id: 437,
         type: "medium",
@@ -647,22 +504,7 @@ export const domain4Dataset: TermData[] = [
         otherOptions: "While network and AV affect these phases, the metrics are specifically 'boot' and 'sign-in'.",
         link: "https://learn.microsoft.com/en-us/mem/analytics/startup-performance"
       },
-      {
-        id: 438,
-        type: "hard",
-        question: "You want to use <b>Proactive Remediations</b> to automatically detect if the Print Spooler service has crashed and restart it without user intervention. What two components are required to create a Proactive Remediation package?",
-        options: [
-          "A batch file and a registry key.",
-          "A Detection script (PowerShell) and a Remediation script (PowerShell).",
-          "A Win32 app and a Detection rule.",
-          "An Event Viewer log and a Task Scheduler trigger."
-        ],
-        answer: "A Detection script (PowerShell) and a Remediation script (PowerShell).",
-        explanation: "A Proactive Remediation consists of two scripts. The <b>Detection script</b> runs on a schedule (e.g., every hour). If it returns 'Exit Code 1' (meaning an issue is found—e.g., the Spooler is stopped), Intune immediately executes the <b>Remediation script</b> (e.g., `Start-Service Spooler`).",
-        moreDetails: "If the Detection script returns 'Exit Code 0' (no issue), the Remediation script is skipped. This creates a powerful, self-healing automation loop on the endpoint.",
-        otherOptions: "Win32 apps install software. Event viewer/Task scheduler is the legacy local way, not the Intune cloud way.",
-        link: "https://learn.microsoft.com/en-us/mem/analytics/proactive-remediations"
-      },
+
       {
         id: 439,
         type: "medium",
@@ -679,22 +521,7 @@ export const domain4Dataset: TermData[] = [
         otherOptions: "It measures stability/crashes, not disk space, financial cost, or network bandwidth.",
         link: "https://learn.microsoft.com/en-us/mem/analytics/application-reliability"
       },
-      {
-        id: 440,
-        type: "easy",
-        question: "Which Endpoint Analytics report provides a clear visual summary of which Windows 10 devices meet the strict hardware requirements (TPM 2.0, Secure Boot, CPU generation) to be upgraded to Windows 11?",
-        options: [
-          "Work from anywhere",
-          "Battery health",
-          "Resource performance",
-          "Windows Autopilot deployment"
-        ],
-        answer: "Work from anywhere",
-        explanation: "The <b>Work from anywhere</b> report includes the 'Windows 11 readiness' metric.",
-        moreDetails: "It analyzes the hardware telemetry from enrolled devices and explicitly flags which devices are blocked from upgrading to Windows 11 due to incompatible CPUs, missing TPMs, or insufficient RAM.",
-        otherOptions: "Battery health measures battery degradation. Resource performance tracks CPU/RAM spikes. Autopilot tracks provisioning success.",
-        link: "https://learn.microsoft.com/en-us/mem/analytics/work-from-anywhere"
-      }
+
     ]
   },
   {
@@ -702,22 +529,7 @@ export const domain4Dataset: TermData[] = [
     term: "Remote Help & Troubleshooting",
     category: "Manage applications and updates",
     questions: [
-      {
-        id: 441,
-        type: "easy",
-        question: "What is a major enterprise advantage of the premium <b>Intune Remote Help</b> add-on compared to the built-in Windows Quick Assist tool?",
-        options: [
-          "Remote Help does not require an internet connection.",
-          "Remote Help provides strong identity trust, showing the helper and the user their Entra ID profile pictures and company details to prevent spoofing/scams.",
-          "Remote Help is completely free.",
-          "Remote Help can install physical hardware."
-        ],
-        answer: "Remote Help provides strong identity trust, showing the helper and the user their Entra ID profile pictures and company details to prevent spoofing/scams.",
-        explanation: "<b>Remote Help</b> is deeply integrated with Entra ID. When a helpdesk worker requests a session, the end-user sees the worker's official corporate name, title, and profile picture.",
-        moreDetails: "This mitigates social engineering attacks where malicious actors call users pretending to be 'IT support' and ask them to open Quick Assist or TeamViewer.",
-        otherOptions: "It requires internet. It is a premium paid add-on. Software cannot install physical hardware.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help"
-      },
+
       {
         id: 442,
         type: "medium",

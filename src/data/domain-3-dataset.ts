@@ -7,54 +7,6 @@ export const domain3Dataset: TermData[] = [
     category: "Protect devices and data",
     questions: [
       {
-        id: 301,
-        type: "easy",
-        question: "What is the primary function of <b>Microsoft Defender for Endpoint</b>?",
-        options: [
-          "To provide email filtering against phishing attacks.",
-          "To provide an enterprise endpoint detection and response (EDR) platform to prevent, detect, investigate, and respond to advanced threats.",
-          "To encrypt network traffic between clients and servers.",
-          "To deploy virtual machines in Azure."
-        ],
-        answer: "To provide an enterprise endpoint detection and response (EDR) platform to prevent, detect, investigate, and respond to advanced threats.",
-        explanation: "<b>Microsoft Defender for Endpoint</b> is a comprehensive endpoint security solution. It moves beyond traditional antivirus by using behavioral sensors, cloud security analytics, and threat intelligence to identify and mitigate complex cyberattacks post-breach.",
-        moreDetails: "It is deeply integrated into Windows 10/11 and operates seamlessly with Intune for configuration and policy deployment.",
-        otherOptions: "Email filtering is Defender for Office 365. Network encryption is IPsec/VPN. VM deployment is Azure Resource Manager.",
-        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/microsoft-defender-endpoint"
-      },
-      {
-        id: 302,
-        type: "medium",
-        question: "How do you establish the initial service-to-service connection between Microsoft Intune and Microsoft Defender for Endpoint?",
-        options: [
-          "By deploying a PowerShell script to all Windows devices.",
-          "By enabling the 'Microsoft Defender for Endpoint' toggle within the Intune Tenant Administration > Connectors and tokens menu.",
-          "By installing a physical firewall appliance.",
-          "By creating a Conditional Access policy."
-        ],
-        answer: "By enabling the 'Microsoft Defender for Endpoint' toggle within the Intune Tenant Administration > Connectors and tokens menu.",
-        explanation: "To allow Intune and Defender for Endpoint to share data (such as onboarding status and device risk scores), you must explicitly establish a service-to-service connection in the <b>Intune admin center</b> under Tenant Administration > Connectors and tokens.",
-        moreDetails: "Once connected, Intune can push the onboarding packages to devices natively, and Defender can report back the threat level of the devices.",
-        otherOptions: "Scripts are for onboarding clients, not connecting the cloud services. Firewalls are physical hardware. Conditional Access uses the integration but doesn't establish it.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure"
-      },
-      {
-        id: 303,
-        type: "hard",
-        question: "You want to block users from accessing Microsoft 365 services if Microsoft Defender for Endpoint detects active malware on their device. How do you implement this?",
-        options: [
-          "Configure a compliance policy to require the device to be at or under a specific 'Machine Risk Score', and then use a Conditional Access policy to block non-compliant devices.",
-          "Create a Windows Defender Firewall rule to block port 443.",
-          "Send a Remote Lock command from Intune.",
-          "Uninstall Microsoft 365 apps remotely."
-        ],
-        answer: "Configure a compliance policy to require the device to be at or under a specific 'Machine Risk Score', and then use a Conditional Access policy to block non-compliant devices.",
-        explanation: "This is a classic Zero Trust scenario. Defender for Endpoint calculates a <b>Machine Risk Score</b> (Clear, Low, Medium, High). You map this score into an Intune <b>Compliance Policy</b>. Finally, an Entra ID <b>Conditional Access</b> policy blocks access if the device is marked non-compliant by Intune.",
-        moreDetails: "This automated workflow ensures that a compromised device instantly loses access to corporate data without requiring manual IT intervention.",
-        otherOptions: "Blocking port 443 breaks all web traffic. Remote lock and uninstalling apps do not dynamically revoke cloud access based on real-time threat telemetry.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure#create-and-assign-compliance-policy-to-set-device-risk-level"
-      },
-      {
         id: 304,
         type: "medium",
         question: "Which feature within Microsoft Defender for Endpoint continuously discovers missing updates, zero-day vulnerabilities, and misconfigurations on your enrolled devices?",
@@ -1573,6 +1525,187 @@ export const domain3Dataset: TermData[] = [
         moreDetails: "Because Remote Help relies on identity verification to establish trust between the helper and the user, strict CA policies can inadvertently block the support session.",
         otherOptions: "Standard users can receive Remote Help (admin is only needed for elevation). The user does not need the premium license (only the helper/tenant needs it). IME is not required for the standalone Remote Help app execution.",
         link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#conditional-access"
+      }
+
+    ]
+  },
+  {
+    id: 26,
+    term: "Endpoint Security Settings & Setup",
+    category: "Protect devices and data",
+    questions: [
+      {
+        id: 3011,
+        type: "medium",
+        format: "multiple-choice",
+        question: "What is the primary administrative advantage of configuring security policies in the 'Endpoint security' node instead of using generic Device Configuration profiles?",
+        options: [
+          "Endpoint Security policies deploy significantly faster to devices than Configuration profiles.",
+          "Endpoint Security policies can be managed by Security Operations (SecOps) teams using dedicated Intune RBAC roles without giving them access to general OS settings.",
+          "Endpoint Security policies bypass Entra ID Conditional Access requirements.",
+          "Endpoint Security policies are the only way to manage third-party antivirus software."
+        ],
+        answer: "Endpoint Security policies can be managed by Security Operations (SecOps) teams using dedicated Intune RBAC roles without giving them access to general OS settings.",
+        explanation: "The <b>Endpoint security</b> node organizes security-specific settings (Defender, BitLocker, Firewall, ASR) into distinct profiles. This allows an organization to implement Role-Based Access Control (RBAC) specifically tailored for security teams.",
+        moreDetails: "By assigning the 'Endpoint Security Manager' role, SecOps can manage Antivirus and Firewall policies without accidentally altering general device settings like Wi-Fi or Start Menu layouts.",
+        otherOptions: "They do not deploy faster, bypass CA, or solely manage third-party AV.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security"
+      },
+      {
+        id: 3012,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Microsoft releases a new version of the 'MDM Security Baseline' in the Intune portal. What happens to the Windows devices currently assigned to the older version of the baseline?",
+        options: [
+          "Intune automatically forces the devices to upgrade to the new baseline on their next sync.",
+          "The devices are marked as Noncompliant until the administrator updates the profile.",
+          "The devices continue to use the older baseline settings until an administrator explicitly reviews the changes and updates the assigned profile to the new version.",
+          "The older baseline is immediately deleted, and devices lose their security settings."
+        ],
+        answer: "The devices continue to use the older baseline settings until an administrator explicitly reviews the changes and updates the assigned profile to the new version.",
+        explanation: "Intune <b>does not automatically force</b> active devices to adopt new Security Baselines when Microsoft publishes a version update.",
+        moreDetails: "Because new baselines often introduce stricter settings that could break production workloads, administrators must manually review the version differences in the portal and explicitly migrate the existing profile to the new version when they are ready.",
+        otherOptions: "They are not forced, not marked noncompliant, and the old baseline isn't deleted.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/security-baselines-update"
+      },
+      {
+        id: 3013,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to deploy an Attack Surface Reduction (ASR) rule to block Office applications from creating child processes. However, you are concerned this might break a legacy macro used by the Finance department. What is the recommended deployment strategy?",
+        options: [
+          "Deploy the ASR rule in 'Audit mode' first to collect telemetry in the Defender portal without actually blocking the behavior.",
+          "Deploy the ASR rule in 'Block mode' to the entire company and wait for helpdesk tickets.",
+          "Exclude the entire Finance department from all Endpoint Security policies.",
+          "Disable Microsoft Defender Antivirus on the Finance department's computers."
+        ],
+        answer: "Deploy the ASR rule in 'Audit mode' first to collect telemetry in the Defender portal without actually blocking the behavior.",
+        explanation: "Deploying ASR rules can significantly impact business productivity if legitimate applications exhibit behaviors that mimic malware.",
+        moreDetails: "By setting the rule to <b>Audit mode</b>, the rule will not block any processes. Instead, it will silently log an event every time the behavior occurs, allowing administrators to review the Microsoft Defender portal and create targeted exclusions before shifting the rule to Block mode.",
+        otherOptions: "Blocking blindly is disruptive. Excluding departments entirely reduces security. Disabling AV is a massive security risk.",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack-surface-reduction-rules-deployment-test"
+      },
+      {
+        id: 3014,
+        type: "medium",
+        format: "multi-select",
+        question: "You are configuring an Endpoint Security Disk Encryption policy to silently enable BitLocker on all corporate Windows 11 laptops without any user interaction. Which TWO prerequisites are generally required for silent encryption to succeed? (Select TWO)",
+        options: [
+          "The device must have a compatible Trusted Platform Module (TPM) chip.",
+          "The user must be a Local Administrator on the device.",
+          "The device must be joined to Entra ID (Hybrid or Cloud-only).",
+          "The device must have at least three hard drives."
+        ],
+        multiAnswers: [
+          "The device must have a compatible Trusted Platform Module (TPM) chip.",
+          "The device must be joined to Entra ID (Hybrid or Cloud-only)."
+        ],
+        explanation: "For BitLocker to encrypt silently (without prompting the user to accept or manually save a recovery key), specific prerequisites must be met.",
+        moreDetails: "A <b>TPM</b> (version 1.2 or 2.0) is required to securely store the encryption keys without user input. Furthermore, the device must be <b>Entra ID joined</b> (or Hybrid) so that the recovery key can be automatically escrowed to the cloud before encryption begins.",
+        otherOptions: "The user does NOT need to be a local admin (this is a primary benefit of silent encryption). The number of hard drives is irrelevant.",
+        link: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bitlocker-basic-deployment#silent-encryption"
+      },
+      {
+        id: 3015,
+        type: "easy",
+        format: "multiple-choice",
+        question: "Your organization wants to prevent users from copying corporate data to removable USB flash drives, but still allow the use of standard USB mice and keyboards. Which Endpoint Security policy type should you configure?",
+        options: [
+          "Antivirus policy",
+          "Firewall policy",
+          "Attack Surface Reduction (ASR) > Device Control policy",
+          "Account protection policy"
+        ],
+        answer: "Attack Surface Reduction (ASR) > Device Control policy",
+        explanation: "<b>Device Control</b> is a specific subset of Attack Surface Reduction (ASR) designed to manage removable storage.",
+        moreDetails: "Administrators can use Device Control profiles to block write access to USB mass storage devices, CD/DVD drives, or even block specific hardware IDs, while ensuring human interface devices (mice/keyboards) continue to function normally.",
+        otherOptions: "Antivirus handles malware. Firewall handles network ports. Account protection handles Windows Hello/Identity.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-asr#device-control"
+      },
+      {
+        id: 3016,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You notice that advanced malware (or malicious users with local admin rights) are modifying registry keys to manually disable Microsoft Defender Antivirus. Which Endpoint Security feature should you enable to lock down Defender's core settings?",
+        options: [
+          "Controlled Folder Access",
+          "Tamper Protection",
+          "SmartScreen for Microsoft Edge",
+          "BitLocker Drive Encryption"
+        ],
+        answer: "Tamper Protection",
+        explanation: "<b>Tamper Protection</b> essentially locks Microsoft Defender Antivirus and prevents its security settings from being changed by unauthorized apps or users.",
+        moreDetails: "Once enabled (typically configured globally in the Defender portal or via Intune Antivirus policies), even a user with full Local Administrator rights cannot disable real-time protection or modify Defender registry keys.",
+        otherOptions: "Controlled Folder Access protects files against ransomware. SmartScreen protects web browsing. BitLocker encrypts the drive.",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/prevent-changes-to-security-settings-with-tamper-protection"
+      },
+      {
+        id: 3017,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization currently uses a third-party antivirus solution as the primary AV, but you want to utilize Microsoft Defender for Endpoint's post-breach detection capabilities. To ensure Defender can intervene and stop malicious artifacts that the third-party AV misses, what feature should you enable?",
+        options: [
+          "EDR in block mode",
+          "Windows LAPS",
+          "Always On VPN",
+          "Windows Hello for Business"
+        ],
+        answer: "EDR in block mode",
+        explanation: "When a non-Microsoft antivirus is active, Microsoft Defender Antivirus enters 'Passive mode'. However, by enabling <b>EDR in block mode</b>, the Defender Endpoint Detection and Response sensor continues to monitor the device.",
+        moreDetails: "If the primary third-party AV misses a threat, EDR in block mode allows Defender to step in post-breach, flag the malicious artifact, and remediate (block/quarantine) the threat.",
+        otherOptions: "LAPS manages admin passwords. Always On VPN is networking. Windows Hello is identity.",
+        link: "https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/edr-in-block-mode"
+      },
+      {
+        id: 3018,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are configuring an 'Account protection' policy in the Endpoint security node to deploy Windows Local Administrator Password Solution (LAPS). What is the primary purpose of this policy?",
+        options: [
+          "To synchronize the user's Entra ID password with their local account.",
+          "To randomize the password of the built-in local administrator account, automatically rotate it, and securely back it up to Entra ID.",
+          "To enforce Multi-Factor Authentication (MFA) on the Windows lock screen.",
+          "To prevent standard users from locking their screens."
+        ],
+        answer: "To randomize the password of the built-in local administrator account, automatically rotate it, and securely back it up to Entra ID.",
+        explanation: "<b>Windows LAPS</b> automatically manages and randomizes the password of the local administrator account on Windows clients.",
+        moreDetails: "This completely mitigates 'Pass-the-Hash' attacks that rely on identical local admin passwords shared across corporate workstations. The Account Protection policy allows you to configure rotation schedules and specify the backup location (Entra ID).",
+        otherOptions: "It specifically targets the local admin, not standard user passwords, MFA requirements, or lock screen behaviors.",
+        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview"
+      },
+      {
+        id: 3019,
+        type: "easy",
+        format: "multiple-choice",
+        question: "When configuring a Microsoft Defender Firewall policy in Endpoint Security, you can specify different rules for different network locations. Which of the following is NOT a standard Windows Firewall profile?",
+        options: [
+          "Domain Profile",
+          "Private Profile",
+          "Public Profile",
+          "Enterprise Profile"
+        ],
+        answer: "Enterprise Profile",
+        explanation: "The Windows Defender Firewall operates using three distinct network location profiles: <b>Domain</b> (connected to an Active Directory network), <b>Private</b> (connected to a trusted home/work network), and <b>Public</b> (connected to an untrusted public Wi-Fi).",
+        moreDetails: "There is no 'Enterprise Profile'. Intune allows administrators to configure distinct firewall rules (like blocking inbound RDP) specifically tailored to which of the three valid profiles is currently active.",
+        otherOptions: "Domain, Private, and Public are all valid Windows Firewall profiles.",
+        link: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/best-practices-configuring"
+      },
+      {
+        id: 3020,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You need to onboard 500 newly enrolled Windows 11 devices into Microsoft Defender for Endpoint. You have already established the service-to-service connector in the Intune portal. What is the most efficient way to onboard these Intune-managed devices?",
+        options: [
+          "Download the local onboarding script from the Defender portal and email it to all users to run manually.",
+          "Deploy an Endpoint Detection and Response (EDR) policy from the Intune Endpoint Security node.",
+          "Use a Group Policy Object (GPO) pointing to a network share.",
+          "Purchase a third-party deployment tool."
+        ],
+        answer: "Deploy an Endpoint Detection and Response (EDR) policy from the Intune Endpoint Security node.",
+        explanation: "To onboard devices into Defender for Endpoint via Intune, administrators create an <b>Endpoint detection and response (EDR) policy</b> within the Endpoint Security node.",
+        moreDetails: "Because the tenant-to-tenant connection is already established, Intune automatically handles the distribution of the onboarding blob to the targeted Windows devices natively, requiring zero user interaction or manual script execution.",
+        otherOptions: "Emailing scripts is inefficient and insecure. GPOs do not apply to modern Intune-only managed devices. Third-party tools are unnecessary.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/endpoint-security-edr-profile"
       }
     ]
   }
