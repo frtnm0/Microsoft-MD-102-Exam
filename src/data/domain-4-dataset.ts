@@ -62,22 +62,6 @@ export const domain4Dataset: TermData[] = [
     category: "Manage applications and updates",
     questions: [
       {
-        id: 406,
-        type: "easy",
-        question: "What does the term <b>MAM-WE</b> refer to in the context of Microsoft Intune?",
-        options: [
-          "Mobile Application Management for Windows Editions.",
-          "Mobile Application Management Without Enrollment.",
-          "Microsoft App Management Web Environment.",
-          "Malware And Malware-Web Engine."
-        ],
-        answer: "Mobile Application Management Without Enrollment.",
-        explanation: "<b>MAM-WE (Mobile Application Management Without Enrollment)</b> allows organizations to protect corporate data inside specific applications (like Outlook or Teams) without requiring the user to enroll their personal device into full MDM control.",
-        moreDetails: "This is the cornerstone of BYOD (Bring Your Own Device) strategies, respecting user privacy while securing company data.",
-        otherOptions: "The acronym strictly stands for 'Without Enrollment' in Microsoft nomenclature.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
-      },
-      {
         id: 407,
         type: "medium",
         question: "In an App Protection Policy, what does the 'Offline grace period' setting under 'Conditional Launch' control?",
@@ -171,22 +155,6 @@ export const domain4Dataset: TermData[] = [
     term: "Win32 App Deployment",
     category: "Manage applications and updates",
     questions: [
-      {
-        id: 416,
-        type: "easy",
-        question: "Before you can upload a traditional .exe or .msi installer into Intune as a Win32 app, what must you do to the file?",
-        options: [
-          "Zip it using 7-Zip.",
-          "Run it through the Microsoft Win32 Content Prep Tool to convert it into an .intunewin file.",
-          "Rename the extension to .appx.",
-          "Sign it with a public SSL certificate."
-        ],
-        answer: "Run it through the Microsoft Win32 Content Prep Tool to convert it into an .intunewin file.",
-        explanation: "Intune requires Win32 installers (along with any dependencies or scripts in the same folder) to be packaged into a single, encrypted container file with the <b>.intunewin</b> extension.",
-        moreDetails: "The <b>Microsoft Win32 Content Prep Tool</b> (IntuneWinAppUtil.exe) handles this compression and encryption locally before you upload it to the cloud.",
-        otherOptions: "Standard zip files are not accepted. Renaming the extension breaks the file. Code signing is good practice but not the mechanical step required for Intune upload.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
-      },
       {
         id: 418,
         type: "hard",
@@ -634,22 +602,6 @@ export const domain4Dataset: TermData[] = [
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-troubleshoot"
       },
       {
-        id: 448,
-        type: "hard",
-        question: "During Windows Autopilot, a device sits on the Enrollment Status Page (ESP) for exactly 60 minutes and then fails with a timeout error. How can you prevent a single large application from causing the entire Autopilot provisioning process to fail via timeout?",
-        options: [
-          "Configure the ESP profile setting: 'Show error when installation takes longer than specified number of minutes' to a higher value, or reduce the number of blocking apps.",
-          "Connect the device to a 5G hotspot.",
-          "Disable BitLocker.",
-          "Assign the user a Global Administrator role."
-        ],
-        answer: "Configure the ESP profile setting: 'Show error when installation takes longer than specified number of minutes' to a higher value, or reduce the number of blocking apps.",
-        explanation: "The Enrollment Status Page (ESP) tracks the installation of required apps before letting the user reach the desktop. It has a default <b>timeout</b> (usually 60 minutes).",
-        moreDetails: "If deploying massive apps (like AutoCAD), you must either increase the ESP timeout to 120+ minutes, or remove that specific app from the 'Block device use until these required apps are installed' list so it installs silently in the background later.",
-        otherOptions: "Network speed helps, but doesn't change the hardcoded timeout policy limit. BitLocker and RBAC roles do not affect ESP timeouts.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      },
-      {
         id: 449,
         type: "medium",
         question: "A user is assigned to two different Entra ID groups. Group A has a Win32 app assigned as 'Required'. Group B has the exact same app assigned as 'Uninstall'. What happens on the user's device?",
@@ -689,42 +641,6 @@ export const domain4Dataset: TermData[] = [
     category: "Manage applications and updates",
     questions: [
       {
-        id: 452,
-        type: "medium",
-        format: "order-steps",
-        question: "Arrange the phases of deploying an out-of-band Expedited Quality Update via Intune to fix a zero-day vulnerability:",
-        options: [
-          "Navigate to Devices > Windows > Quality updates for Windows 10 and later.",
-          "Create a new Expedited update profile.",
-          "Select the specific target release (e.g., '04/11/2026 - 2026.04 B Security Updates').",
-          "Configure the number of days until a forced restart occurs (e.g., 1 day).",
-          "Assign the profile to all vulnerable devices."
-        ],
-        answer: "Navigate to Quality Updates -> Create Expedited Profile -> Select Target Release -> Configure Restart Days -> Assign",
-        explanation: "Expediting an update requires creating a specific profile that overrides existing deferrals. You must pick the exact KB/Release you want to enforce and set an aggressive forced-restart deadline.",
-        moreDetails: "This process relies heavily on the Windows Update for Business deployment service.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-10-expedite-updates"
-      },
-      {
-        id: 453,
-        type: "hard",
-        format: "order-steps",
-        question: "Arrange the steps to configure Delivery Optimization (DO) using Intune to optimize bandwidth across a campus with a shared high-speed backbone but multiple public IPs:",
-        options: [
-          "Create a new Device Configuration profile > Templates > Delivery Optimization.",
-          "Set the 'Download mode' to 'Group (2)'.",
-          "Configure the 'Group ID' setting using a specific GUID.",
-          "Set the 'Minimum RAM (inclusive)' and 'Minimum disk size' requirements for peer caching.",
-          "Assign the profile to all PCs on the campus."
-        ],
-        answer: "Create Profile -> Set Mode to Group (2) -> Configure Group ID GUID -> Set Hardware Minimums -> Assign",
-        explanation: "Because multiple public IPs are in use, standard LAN mode will fail. You must use 'Group (2)' mode and explicitly bind all campus devices together using a shared Group ID GUID. You also define which hardware is capable of acting as a cache.",
-        moreDetails: "PCs with very low disk space or RAM will automatically opt out of hosting content to prevent performance degradation.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization-reference#group-id"
-      },
-      {
         id: 456,
         type: "medium",
         format: "order-steps",
@@ -753,20 +669,20 @@ export const domain4Dataset: TermData[] = [
         id: 458,
         type: "hard",
         format: "multi-select",
-        question: "You are packaging a complex desktop application into a `.intunewin` file using the Microsoft Win32 Content Prep Tool. Which of the following requirements MUST be met for the deployment to succeed via Intune? (Select THREE)",
+        question: "You are packaging a complex desktop application into a `.intunewin` file using the Microsoft Win32 Content Prep Tool. Which of the following requirements MUST be met for the deployment to succeed via Intune? (select <b>THREE</b>)",
         options: [
-          "The uncompressed application folder size must not exceed 8 GB (without requesting a support quota increase).",
+          "The uncompressed application folder size must not exceed 30 GB (without requesting a support quota increase).",
           "You must specify an exact silent install command (e.g., msiexec /i setup.msi /qn).",
           "You must specify an uninstallation command.",
           "The application installer must be an .msi file.",
           "You must include a custom PowerShell script for installation."
         ],
         multiAnswers: [
-          "The uncompressed application folder size must not exceed 8 GB (without requesting a support quota increase).",
+          "The uncompressed application folder size must not exceed 30 GB (without requesting a support quota increase).",
           "You must specify an exact silent install command (e.g., msiexec /i setup.msi /qn).",
           "You must specify an uninstallation command."
         ],
-        explanation: "Win32 app deployments require strict metadata. The file size is hard-capped at <b>8 GB</b> by default. Because Intune executes the payload headlessly in the background (SYSTEM context), you MUST provide a <b>silent install command</b> and a valid <b>uninstall command</b>.",
+        explanation: "Win32 app deployments require strict metadata. The file size is hard-capped at <b>30 GB</b> (previously 8GB) by default. Because Intune executes the payload headlessly in the background (SYSTEM context), you MUST provide a <b>silent install command</b> and a valid <b>uninstall command</b>.",
         moreDetails: "Win32 apps can wrap any file type (.exe, .bat, .ps1, .msi); they are not restricted to just .msi. A custom PowerShell script is optional, not mandatory.",
         otherOptions: ".exe installers and batch scripts are completely supported, so it doesn't have to be an .msi or PS1.",
         link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
@@ -775,7 +691,7 @@ export const domain4Dataset: TermData[] = [
         id: 459,
         type: "medium",
         format: "multi-select",
-        question: "When creating an App Protection Policy (MAM) for iOS/iPadOS, which of the following 'Data Transfer' restrictions can be enforced? (Select THREE)",
+        question: "When creating an App Protection Policy (MAM) for iOS/iPadOS, which of the following 'Data Transfer' restrictions can be enforced? (select <b>THREE</b>)",
         options: [
           "Prevent users from taking screenshots of the managed app.",
           "Block users from saving corporate files to their personal iCloud Drive.",
@@ -797,7 +713,7 @@ export const domain4Dataset: TermData[] = [
         id: 460,
         type: "hard",
         format: "multi-select",
-        question: "You are defining 'Detection rules' for a newly packaged Win32 application in Intune. Which of the following methods are natively supported for detecting if the application successfully installed? (Select THREE)",
+        question: "You are defining 'Detection rules' for a newly packaged Win32 application in Intune. Which of the following methods are natively supported for detecting if the application successfully installed? (select <b>THREE</b>)",
         options: [
           "MSI product code presence.",
           "File or folder presence (with optional version/date checking).",
@@ -819,7 +735,7 @@ export const domain4Dataset: TermData[] = [
         id: 461,
         type: "medium",
         format: "multi-select",
-        question: "Which of the following scenarios are valid use cases for deploying an 'App Configuration Policy' in Intune? (Select TWO)",
+        question: "Which of the following scenarios are valid use cases for deploying an 'App Configuration Policy' in Intune? (select <b>TWO</b>)",
         options: [
           "Pre-populating a server URL for a line-of-business iOS app so the user doesn't have to type it.",
           "Silently disabling the 'Save Password' feature inside the managed Microsoft Edge browser.",
@@ -839,14 +755,14 @@ export const domain4Dataset: TermData[] = [
   },
   {
     id: 1000,
-    term: "Multi-Select (Select Two) App Management",
+    term: "Multi-Select (select <b>TWO</b>) App Management",
     category: "Manage applications",
     questions: [
       {
         id: 462,
         type: "medium",
         format: "multi-select",
-        question: "You are configuring a Microsoft Edge policy in Intune. Which of the following features can be controlled using Edge Administrative Templates? (Select TWO)",
+        question: "You are configuring a Microsoft Edge policy in Intune. Which of the following features can be controlled using Edge Administrative Templates? (select <b>TWO</b>)",
         options: [
           "Forcing the installation of a specific browser extension.",
           "Configuring the Edge startup page to a corporate intranet site.",
@@ -866,7 +782,7 @@ export const domain4Dataset: TermData[] = [
         id: 463,
         type: "hard",
         format: "multi-select",
-        question: "When deploying an iOS store app via Intune, which of the following requirements must be met to silently install the app without prompting the user for an Apple ID? (Select TWO)",
+        question: "When deploying an iOS store app via Intune, which of the following requirements must be met to silently install the app without prompting the user for an Apple ID? (select <b>TWO</b>)",
         options: [
           "The app must be purchased/acquired through Apple Volume Purchase Program (VPP) / Apple Business Manager.",
           "The VPP token must be synchronized with Intune and the app assigned as 'Required'.",
@@ -886,7 +802,7 @@ export const domain4Dataset: TermData[] = [
         id: 464,
         type: "medium",
         format: "multi-select",
-        question: "Which of the following application types can be natively added and deployed to Android Enterprise fully managed devices via Intune? (Select TWO)",
+        question: "Which of the following application types can be natively added and deployed to Android Enterprise fully managed devices via Intune? (select <b>TWO</b>)",
         options: [
           "Managed Google Play store apps.",
           "Web links (Web apps) published through Managed Google Play.",

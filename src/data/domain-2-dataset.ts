@@ -294,38 +294,6 @@ export const domain2Dataset: TermData[] = [
     category: "Manage devices and tenant applications",
     questions: [
       {
-        id: 221,
-        type: "easy",
-        question: "What is the recommended method for deploying Microsoft Word, Excel, and PowerPoint to Windows 10/11 devices using Intune?",
-        options: [
-          "Upload individual MSIs for each application.",
-          "Use the built-in 'Microsoft 365 Apps for Windows 10 and later' app type.",
-          "Require users to download them from the Microsoft Store.",
-          "Deploy them via a PowerShell script that downloads from a web server."
-        ],
-        answer: "Use the built-in 'Microsoft 365 Apps for Windows 10 and later' app type.",
-        explanation: "Intune has a native, optimized app type specifically for <b>Microsoft 365 Apps</b>. It allows administrators to easily select which Office apps to install, choose the update channel, and configure XML settings via a simple GUI.",
-        moreDetails: "This avoids the complexity of manually packaging the large Office deployment toolkit installers.",
-        otherOptions: "Uploading MSIs or using scripts is overly complex and unnecessary given the native integration.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-office365"
-      },
-      {
-        id: 222,
-        type: "medium",
-        question: "Before you can upload a complex legacy Windows application (like an .exe installer) into Intune as a Win32 app, what must you do first?",
-        options: [
-          "Convert the .exe to an .msi using a third-party tool.",
-          "Package the installation files using the Microsoft Win32 Content Prep Tool to create an .intunewin file.",
-          "Upload the .exe directly into the Line-of-Business (LOB) app section.",
-          "Zip the folder and upload it directly."
-        ],
-        answer: "Package the installation files using the Microsoft Win32 Content Prep Tool to create an .intunewin file.",
-        explanation: "Intune requires Win32 apps to be packaged into a proprietary <b>.intunewin</b> format using the <b>Microsoft Win32 Content Prep Tool</b> before they can be uploaded to the portal.",
-        moreDetails: "This tool encrypts and compresses the installation files. Once uploaded, administrators must manually define the install/uninstall command lines, detection rules, and requirements.",
-        otherOptions: "LOB apps only accept native .msi, .appx, or .msix files, not .exe files. Zipping the folder natively does not work.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-prepare"
-      },
-      {
         id: 224,
         type: "medium",
         question: "Microsoft strongly recommends NOT mixing Win32 apps and Line-of-Business (LOB) apps during which critical Windows deployment phase?",
@@ -535,51 +503,6 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "Until that slider is moved, Configuration Manager retains authority, and any Endpoint Security policies pushed from Intune will be ignored to prevent conflicts.",
         otherOptions: "Uninstalling ConfigMgr breaks co-management. Windows 10 is fully supported. Wiping is unnecessary.",
         link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads#endpoint-protection"
-      }
-    ]
-  },
-  {
-    id: 992,
-    term: "Identity and Compliance Scenario Steps",
-    category: "Manage devices and tenant applications",
-    questions: [
-      {
-        id: 253,
-        type: "hard",
-        format: "order-steps",
-        question: "Arrange the steps to configure and enforce Windows LAPS (Local Administrator Password Solution) using Intune:",
-        options: [
-          "Enable Windows LAPS in the Microsoft Entra ID tenant settings (Device settings).",
-          "Create an Endpoint Security > Account protection policy in Intune.",
-          "Select the 'Local admin password solution (Windows LAPS)' profile type.",
-          "Configure the backup directory to 'Microsoft Entra ID' and set password complexity rules.",
-          "Assign the policy to the targeted Windows devices.",
-          "Monitor the device status and view passwords in the Entra ID device properties."
-        ],
-        answer: "Enable in Entra -> Create Account Protection Policy -> Select LAPS Profile -> Configure Settings -> Assign -> Monitor",
-        explanation: "LAPS requires tenant-level enablement first. Then, you use Intune's Endpoint Security (Account protection) to define the LAPS rules (complexity, rotation schedule, backup target) and deploy it to clients.",
-        moreDetails: "The clients will then automatically rotate the built-in local admin password and escrow it securely into Entra ID, where authorized admins can retrieve it.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-management-intune"
-      },
-      {
-        id: 255,
-        type: "hard",
-        format: "order-steps",
-        question: "Arrange the steps to deploy Windows Hello for Business using the Cloud Trust deployment model:",
-        options: [
-          "Ensure devices are Hybrid Entra ID joined or Entra ID joined.",
-          "Create a Kerberos Server object in the on-premises Active Directory.",
-          "Deploy the Entra Kerberos configuration to devices using Intune.",
-          "Enable Windows Hello for Business in the Intune enrollment profile or Identity Protection policy.",
-          "Users sign in with a password to trigger the WHfB enrollment prompt.",
-          "Users configure a PIN/Biometric and can instantly authenticate to on-premises resources via Cloud Trust."
-        ],
-        answer: "Ensure Join -> Create Kerberos Object -> Deploy Configuration -> Enable WHfB -> User Signs In -> Configure PIN",
-        explanation: "Cloud Trust simplifies WHfB deployment by removing the need for complex PKI or ADFS. You simply establish trust by creating a Kerberos Server object in on-prem AD, push the policy via Intune, and the user's PIN is instantly trusted for SSO to legacy local resources via the Entra ID primary refresh token.",
-        moreDetails: "If the Kerberos Server object is missing, users will be prompted for a password when trying to access on-prem file shares, even if their PIN is working for the desktop.",
-        otherOptions: "N/A",
-        link: "https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/deploy/"
       }
     ]
   },
@@ -1296,6 +1219,298 @@ export const domain2Dataset: TermData[] = [
         moreDetails: "Assigning two different Update Rings to the same device natively causes a 'Conflict' in Intune because the device doesn't know which deferral schedule to follow. Additionally, having legacy WSUS GPOs active while trying to use Intune WUfB creates severe management conflicts (often referred to as 'Dual Scan' issues), where the device is confused about its update source.",
         otherOptions: "Mixing Feature Update profiles, Expedited Quality Update profiles, and Update Rings is the supported, intended architecture; they complement each other, rather than conflict.",
         link: "https://learn.microsoft.com/en-us/windows/deployment/update/wufb-wsus"
+      }
+    ]
+  },
+  {
+    id: 19,
+    term: "Advanced Identity and Access Management",
+    category: "Manage Identity and Compliance",
+    questions: [
+      {
+        id: 2023,
+        type: "hard",
+        format: "multiple-choice",
+        question: "A user purchases a new Windows 11 Pro device and goes through the Out-of-Box Experience (OOBE). They select 'Set up for work or school' and authenticate with their corporate Entra ID account. What is the resulting local privilege level of this specific user account on the device by default?",
+        options: [
+          "The user is added to the local Administrators group.",
+          "The user is created as a Standard User.",
+          "The user is prompted to create a separate local Administrator password during OOBE.",
+          "The user receives temporary admin rights that expire after 24 hours."
+        ],
+        answer: "The user is added to the local Administrators group.",
+        explanation: "By default, when a user manually joins a Windows device to Microsoft Entra ID during the OOBE (without using Windows Autopilot), that specific user is automatically added to the local Administrators group.",
+        moreDetails: "To force users to be Standard Users upon enrollment, administrators must deploy the device using Windows Autopilot.",
+        otherOptions: "They are not standard users by default. There is no temporary 24-hour right native to OOBE. OOBE doesn't prompt for a separate local admin password when joining Entra.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/assign-local-admin"
+      },
+      {
+        id: 2024,
+        type: "medium",
+        format: "multiple-choice",
+        question: "A user installs the Microsoft Teams app on their personal Windows 11 Home laptop and signs in using their corporate Entra ID account. When prompted, they click 'Allow my organization to manage my device'. What is the resulting identity state of this device in Entra ID?",
+        options: [
+          "Microsoft Entra Registered",
+          "Microsoft Entra ID Joined",
+          "Microsoft Entra Hybrid Joined",
+          "Intune MDM Enrolled"
+        ],
+        answer: "Microsoft Entra Registered",
+        explanation: "When a user adds a work account to a personal device (BYOD), especially on Windows Home edition which cannot be natively Entra ID Joined, the device becomes 'Entra Registered'.",
+        moreDetails: "This provides a device identity in Entra ID for Single Sign-On and Conditional Access, but does not join the device to the corporate directory or enroll it in MDM by default.",
+        otherOptions: "Windows Home cannot be Entra ID Joined or Hybrid Joined. Clicking 'Allow' registers the device; MDM enrollment depends on auto-enrollment scopes and licensing.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/concept-directory-join"
+      },
+      {
+        id: 2025,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You need to assign an IT technician the ability to wipe, retire, and sync devices in Intune. You want to follow the principle of least privilege. Which built-in role should you assign them?",
+        options: [
+          "Help Desk Operator (Intune RBAC role)",
+          "Intune Administrator (Entra ID role)",
+          "Global Administrator",
+          "Application Manager (Intune RBAC role)"
+        ],
+        answer: "Help Desk Operator (Intune RBAC role)",
+        explanation: "The Intune built-in 'Help Desk Operator' role allows users to perform remote tasks on users and devices, such as wipe, retire, and sync.",
+        moreDetails: "It accomplishes this without granting them full administrative rights over the entire Intune tenant (which 'Intune Administrator' would do).",
+        otherOptions: "Intune Administrator and Global Admin have too much privilege. Application Manager is for managing app deployments, not device wiping.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control#built-in-roles"
+      },
+      {
+        id: 2026,
+        type: "hard",
+        format: "multiple-choice",
+        question: "What is the primary purpose of the Primary Refresh Token (PRT) on a Windows 11 device that is Microsoft Entra ID Joined?",
+        options: [
+          "To provide Single Sign-On (SSO) seamlessly across Microsoft 365 apps and web resources.",
+          "To encrypt the local BitLocker recovery key before it is escrowed to the cloud.",
+          "To authenticate the device during the Windows Autopilot provisioning phase.",
+          "To bypass Multi-Factor Authentication (MFA) prompts for the device's lifetime."
+        ],
+        answer: "To provide Single Sign-On (SSO) seamlessly across Microsoft 365 apps and web resources.",
+        explanation: "The PRT is a key artifact issued by Entra ID upon a successful login to an Entra Joined or Registered Windows device.",
+        moreDetails: "It serves as an ongoing proof of identity and device state, enabling seamless SSO to cloud apps without requiring the user to constantly re-enter their password.",
+        otherOptions: "It is not used for BitLocker encryption or Autopilot provisioning. It satisfies MFA initially, but does not bypass MFA requirements forever if session lifetimes expire.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/concept-primary-refresh-token"
+      },
+      {
+        id: 2027,
+        type: "hard",
+        format: "multi-select",
+        question: "You are configuring Hybrid Entra ID join for your on-premises Windows 11 devices. Which TWO of the following are strict requirements for the Hybrid join process to succeed automatically? (Select TWO)",
+        options: [
+          "Entra ID Connect (or Cloud Sync) must be configured to sync the computer objects to the cloud.",
+          "A Service Connection Point (SCP) must be configured in the on-premises Active Directory.",
+          "Devices must be enrolled in Intune MDM prior to joining.",
+          "The devices must have direct internet access to an on-premises Domain Controller."
+        ],
+        multiAnswers: [
+          "Entra ID Connect (or Cloud Sync) must be configured to sync the computer objects to the cloud.",
+          "A Service Connection Point (SCP) must be configured in the on-premises Active Directory."
+        ],
+        explanation: "For a device to automatically Hybrid Join, it must query the on-premises AD for the SCP to find the Entra ID tenant information.",
+        moreDetails: "Then, the computer object must be synced to Entra ID via Entra ID Connect. MDM enrollment is a separate subsequent step, usually triggered by Group Policy after the join.",
+        otherOptions: "MDM enrollment happens after, not before. Devices need line-of-sight to the DC, but not necessarily 'direct internet access' to it.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/devices/how-to-hybrid-join"
+      },
+      {
+        id: 2028,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are configuring Windows LAPS (Local Administrator Password Solution) backed by Microsoft Entra ID via an Intune Endpoint Security policy. Which local accounts can this policy manage on a Windows 11 device?",
+        options: [
+          "Either the built-in Administrator account or a custom local administrator account specified by name.",
+          "Only the built-in default Administrator account (SID ending in -500).",
+          "The Entra ID Global Administrator account.",
+          "Any standard local user account."
+        ],
+        answer: "Either the built-in Administrator account or a custom local administrator account specified by name.",
+        explanation: "Windows LAPS policies in Intune allow you to manage the well-known built-in Administrator account (regardless of whether it has been renamed).",
+        moreDetails: "Alternatively, you can manage a custom local administrator account by specifying its exact string name in the policy.",
+        otherOptions: "It is not restricted only to the -500 SID. It cannot manage cloud Entra ID accounts or standard local users.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/windows-laps-overview"
+      },
+      {
+        id: 2029,
+        type: "easy",
+        format: "multi-select",
+        question: "Which TWO of the following statements correctly distinguish Microsoft Entra ID roles from Intune Role-Based Access Control (RBAC) roles? (Select TWO)",
+        options: [
+          "Entra ID roles govern access to identity features like creating users, resetting passwords, and managing licenses.",
+          "Intune RBAC roles govern access to endpoint management features like wiping devices, deploying configuration profiles, and viewing compliance.",
+          "Intune RBAC roles can be assigned to external B2B guest users, but Entra ID roles cannot.",
+          "Entra ID roles use Scope Tags to limit visibility to specific regional devices."
+        ],
+        multiAnswers: [
+          "Entra ID roles govern access to identity features like creating users, resetting passwords, and managing licenses.",
+          "Intune RBAC roles govern access to endpoint management features like wiping devices, deploying configuration profiles, and viewing compliance."
+        ],
+        explanation: "Entra ID roles manage directory-level identity tasks.",
+        moreDetails: "Intune RBAC is specific to the Intune admin center and endpoint management workloads. Intune RBAC relies on Scope Tags to limit regional visibility, not Entra ID roles.",
+        otherOptions: "Guest users can hold Entra ID roles. Scope Tags are an Intune-specific feature.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/fundamentals/role-based-access-control"
+      },
+      {
+        id: 2030,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You enable Self-Service Password Reset (SSPR) for all users in Entra ID. A user on a Microsoft Entra ID Joined Windows 11 laptop clicks the 'Reset password' link directly on the Windows lock screen. What is a strict prerequisite for this lock screen SSPR integration to function successfully?",
+        options: [
+          "The user must have previously registered their strong authentication methods at aka.ms/ssprsetup.",
+          "The device must be connected to an on-premises Domain Controller via VPN.",
+          "A Device Configuration profile must be deployed from Intune enabling the 'Allow PIN Reset' OMA-URI.",
+          "The device must have a TPM 2.0 chip cleared of ownership."
+        ],
+        answer: "The user must have previously registered their strong authentication methods at aka.ms/ssprsetup.",
+        explanation: "For the 'Reset password' link on the Windows lock screen to work, the user must have already registered their required authentication methods (like the Authenticator app, alternate email, or phone) for SSPR.",
+        moreDetails: "Without prior registration, they cannot prove their identity to execute the reset from the locked state.",
+        otherOptions: "VPN is not needed for cloud-only Entra ID SSPR. PIN reset is a different feature (Windows Hello). TPM clearing is irrelevant.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/authentication/howto-sspr-windows"
+      }
+    ]
+  },
+  {
+    id: 20,
+    term: "Advanced Compliance & Conditional Access",
+    category: "Manage Identity and Compliance",
+    questions: [
+      {
+        id: 2031,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your organization allows BYOD. You want to ensure corporate data in Outlook is protected by a PIN, but you do NOT want to manage the user's personal device or check for OS jailbreak/rooting at the MDM level. What is the most appropriate feature to deploy?",
+        options: [
+          "An App Protection Policy (MAM) targeting Outlook.",
+          "A Device Compliance policy with a PIN requirement.",
+          "A Device Configuration profile targeting the Outlook app.",
+          "A Conditional Access policy requiring a compliant device."
+        ],
+        answer: "An App Protection Policy (MAM) targeting Outlook.",
+        explanation: "App Protection Policies (MAM) operate without requiring MDM enrollment.",
+        moreDetails: "They secure the corporate data within the app itself (e.g., requiring an app PIN, blocking copy/paste) without taking control of the entire personal device or requiring device compliance.",
+        otherOptions: "Device Compliance and Configuration profiles require full MDM enrollment. Conditional Access requiring compliance also mandates MDM enrollment.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/app-protection-policy"
+      },
+      {
+        id: 2032,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You create a Conditional Access policy targeting all users accessing Microsoft 365. The policy requires Multi-Factor Authentication (MFA) AND requires the device to be marked as compliant. A user attempts to sign in from a newly purchased, unmanaged personal iPad. What is the immediate user experience?",
+        options: [
+          "The user is actively prompted and guided to enroll the device in Intune via the Company Portal app.",
+          "The user is prompted for MFA, and if successful, they are granted access.",
+          "The user is granted access but placed in read-only mode.",
+          "The policy ignores the compliance requirement because it only applies to Windows devices."
+        ],
+        answer: "The user is actively prompted and guided to enroll the device in Intune via the Company Portal app.",
+        explanation: "If Conditional Access requires a compliant device and the device is unregistered or unmanaged (and therefore its compliance cannot be evaluated), Entra ID intercepts the login.",
+        moreDetails: "It presents a specific block screen that actively guides the user to download the Company Portal and enroll their device so compliance can be measured.",
+        otherOptions: "MFA alone won't bypass the compliance grant control. Read-only mode requires Session Controls. Compliance policies apply to iOS/iPadOS as well.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-grant#require-device-to-be-marked-as-compliant"
+      },
+      {
+        id: 2033,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have a compliance policy for Windows 11 requiring a specific registry key, evaluated via a custom PowerShell script. The action for noncompliance is 'Mark device noncompliant' immediately. A device evaluates as noncompliant. You later edit the policy to add a 3-day grace period. What is the immediate compliance status of the already noncompliant device?",
+        options: [
+          "It changes to 'In Grace Period' for 3 days.",
+          "It remains 'Noncompliant' because the grace period only applies to newly evaluated failures.",
+          "It changes to 'Compliant' for 3 days.",
+          "It changes to 'Not Evaluated'."
+        ],
+        answer: "It changes to 'In Grace Period' for 3 days.",
+        explanation: "When you modify the grace period of an existing compliance policy, Intune dynamically recalculates the status for all targeted devices.",
+        moreDetails: "If a device failed within the newly defined grace period window (e.g., failed yesterday, grace period is 3 days), its status dynamically updates to 'In Grace Period' until the timer expires relative to its initial failure detection.",
+        otherOptions: "It does not remain noncompliant, nor does it become compliant. It is actively in the grace period.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/actions-for-noncompliance"
+      },
+      {
+        id: 2034,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You configure a compliance policy requiring 'Code integrity' and 'Secure Boot' to be enabled. How does Intune cryptographically verify these hardware-backed security features?",
+        options: [
+          "By evaluating the Windows Health Attestation Service (HAS) report generated during the boot process.",
+          "By running a daily PowerShell discovery script pushed by the Intune Management Extension.",
+          "By querying the on-premises Active Directory schema.",
+          "By parsing the local Windows Event Viewer logs."
+        ],
+        answer: "By evaluating the Windows Health Attestation Service (HAS) report generated during the boot process.",
+        explanation: "For hardware-level security features like Secure Boot, Code Integrity, and BitLocker, Windows measures the boot process and sends an encrypted Health Attestation report to Microsoft's Device Health Attestation service.",
+        moreDetails: "Intune evaluates this trusted report to determine compliance, preventing compromised OS components from spoofing a compliant status.",
+        otherOptions: "PowerShell scripts and Event Logs can be spoofed by rootkits. AD schema holds no live hardware telemetry.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/health-threat-defense"
+      },
+      {
+        id: 2035,
+        type: "easy",
+        format: "multiple-choice",
+        question: "Your company policy states that users should not enroll more than 3 personal devices into Intune. Where do you configure this restriction to strictly prevent a user from enrolling a 4th device?",
+        options: [
+          "Intune > Devices > Enrollment restrictions > Device limit restrictions.",
+          "Entra ID > Devices > Device settings > Maximum number of devices per user.",
+          "Intune > Devices > Compliance policies > Device limits.",
+          "Conditional Access > Session controls."
+        ],
+        answer: "Intune > Devices > Enrollment restrictions > Device limit restrictions.",
+        explanation: "While Entra ID has a general limit for registered devices (default 50), Intune specifically uses 'Device limit restrictions' to control how many devices a licensed user can actively enroll into the MDM service.",
+        moreDetails: "Administrators can set this limit anywhere from 1 to 15 devices per user.",
+        otherOptions: "Entra ID limits registration, not MDM enrollment. Compliance policies measure health, they don't block enrollment. Session controls manage app sessions.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/enrollment-restrictions-set#create-a-device-limit-restriction"
+      },
+      {
+        id: 2036,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have a requirement that users accessing SharePoint Online from an unmanaged (BYOD) device must NOT be able to download, print, or sync files, but they CAN view them in the browser. How do you configure this using Conditional Access?",
+        options: [
+          "Create a Conditional Access policy with a Session control using 'Use app enforced restrictions'.",
+          "Deploy an Intune App Protection Policy (MAM) to block downloads.",
+          "Create a Conditional Access policy with a Grant control of 'Require compliant device'.",
+          "Deploy a Windows Information Protection (WIP) policy."
+        ],
+        answer: "Create a Conditional Access policy with a Session control using 'Use app enforced restrictions'.",
+        explanation: "SharePoint Online natively supports limiting access from unmanaged devices.",
+        moreDetails: "By configuring a Conditional Access policy with the Session control 'Use app enforced restrictions', Entra ID passes the device state to SharePoint, which then restricts the UI to a web-only, read-only mode, disabling download/print buttons.",
+        otherOptions: "MAM applies to mobile apps, not generic web browsers on PCs. Requiring a compliant device blocks access entirely. WIP is deprecated and for managed Windows devices.",
+        link: "https://learn.microsoft.com/en-us/sharepoint/control-access-from-unmanaged-devices"
+      },
+      {
+        id: 2037,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You want to gently nudge your users to move away from SMS-based MFA and start using the Microsoft Authenticator app. You want them to be prompted to set it up after a successful login, but you want to allow them to 'Snooze' the prompt for 3 days. Which Entra ID feature accomplishes this?",
+        options: [
+          "Registration campaign (Nudge)",
+          "Conditional Access Terms of Use",
+          "Identity Protection User Risk policy",
+          "Intune App Configuration policy"
+        ],
+        answer: "Registration campaign (Nudge)",
+        explanation: "The Microsoft Entra ID 'Registration campaign' feature explicitly prompts users to set up the Microsoft Authenticator app after they successfully sign in using a less secure method (like SMS).",
+        moreDetails: "It includes a configurable 'Snooze' duration, allowing users to delay the setup for a specified number of days before being prompted again.",
+        otherOptions: "Terms of Use presents text to accept. User Risk forces a password reset or MFA. App Config configures the app itself, not the Entra ID prompt.",
+        link: "https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-mfa-registration-campaign"
+      },
+      {
+        id: 2038,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You integrate Microsoft Defender for Endpoint with Intune. A user downloads a zero-day malware file, and Defender elevates the Machine Risk Score to 'Medium'. Assuming a Conditional Access policy requires device compliance, and your compliance policy requires the score to be 'Clear', what happens when Defender automatically quarantines the file 10 minutes later?",
+        options: [
+          "The risk score drops back to Clear, Intune dynamically re-evaluates the device as compliant, and access is automatically restored.",
+          "The Intune administrator must manually clear the noncompliant state in the Intune portal before access is restored.",
+          "The user must reboot the device into Safe Mode to force a sync.",
+          "The device remains permanently blocked until a Windows Autopilot Reset is performed."
+        ],
+        answer: "The risk score drops back to Clear, Intune dynamically re-evaluates the device as compliant, and access is automatically restored.",
+        explanation: "The integration between Defender, Intune, and Entra ID Conditional Access is highly dynamic.",
+        moreDetails: "Once Defender remediates the threat locally (e.g., quarantining the file), it lowers the risk score. Intune immediately receives this updated score, marks the device as compliant again, and Conditional Access unblocks the user without requiring IT intervention.",
+        otherOptions: "No manual admin intervention, safe mode, or device reset is required. The system is designed for auto-remediation.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/protect/advanced-threat-protection-configure#create-and-assign-compliance-policy-to-set-device-risk-level"
       }
     ]
   }

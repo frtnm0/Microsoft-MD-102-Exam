@@ -25,24 +25,6 @@ export const domain1Dataset: TermData[] = [
     term: "Windows Autopilot Provisioning",
     category: "Deploy Windows client",
     questions: [
-
-      {
-        id: 103,
-        type: "medium",
-        question: "When configuring a <b>Windows Autopilot</b> deployment profile, which setting determines whether the user is prompted to configure privacy settings during OOBE?",
-        options: [
-          "Hide privacy settings",
-          "User account type",
-          "Language (Region)",
-          "Skip Microsoft account sign-in"
-        ],
-        answer: "Hide privacy settings",
-        explanation: "In the Autopilot deployment profile, setting <b>'Hide privacy settings'</b> to Yes ensures that the user is not prompted to configure diagnostic data, location, and other privacy settings during the Out-of-Box Experience (OOBE).",
-        moreDetails: "Hiding OOBE screens like privacy, EULA, and OEM registration provides a faster and more streamlined deployment experience for the end user, adhering to the organization's centrally managed policies.",
-        otherOptions: "User account type determines Standard vs Admin. Language/Region skips the locale selection. Skipping Microsoft account sign-in is not a profile setting for privacy.",
-        link: "https://learn.microsoft.com/en-us/autopilot/profiles"
-      },
-
       {
         id: 105,
         type: "easy",
@@ -59,30 +41,6 @@ export const domain1Dataset: TermData[] = [
         otherOptions: "Pre-provisioned mode is for staging new devices. Self-deploying is for kiosks. Hybrid join is for integrating with local AD.",
         link: "https://learn.microsoft.com/en-us/autopilot/windows-autopilot-reset"
       }
-    ]
-  },
-  {
-    id: 2,
-    term: "Autopilot Enrollment Status Page (ESP)",
-    category: "Deploy Windows client",
-    questions: [
-      {
-        id: 106,
-        type: "easy",
-        question: "What is the primary purpose of the <b>Enrollment Status Page (ESP)</b> during a Windows Autopilot deployment?",
-        options: [
-          "To block users from using the device until all required policies and applications are fully installed.",
-          "To allow users to select which version of Windows to install.",
-          "To capture the device's hardware hash.",
-          "To prompt the user for BitLocker recovery keys."
-        ],
-        answer: "To block users from using the device until all required policies and applications are fully installed.",
-        explanation: "The <b>Enrollment Status Page (ESP)</b> displays the installation progress and can be configured to block device use until critical apps and profiles have successfully installed.",
-        moreDetails: "This ensures that a user does not access the desktop until the device is fully secure and compliant according to organizational standards.",
-        otherOptions: "ESP does not allow OS selection, hash capture, or prompt for BitLocker keys (though it might wait for BitLocker to encrypt).",
-        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/windows-enrollment-status"
-      },
-
     ]
   },
   {
@@ -105,22 +63,6 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "MDT uses Task Sequences to orchestrate the installation of the OS, drivers, applications, and updates, typically utilized in traditional, image-based deployment scenarios.",
         otherOptions: "MDT is an on-prem deployment tool, not a cloud MDM, identity policy manager, or analytics engine.",
         link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/get-started-with-the-microsoft-deployment-toolkit"
-      },
-      {
-        id: 112,
-        type: "medium",
-        question: "In MDT, what is the purpose of a <b>Task Sequence</b>?",
-        options: [
-          "It defines the step-by-step instructions and scripts executed during the deployment process.",
-          "It maps network drives for end-users upon login.",
-          "It provides the licensing mechanism for Windows 11.",
-          "It syncs on-premises Active Directory with Entra ID."
-        ],
-        answer: "It defines the step-by-step instructions and scripts executed during the deployment process.",
-        explanation: "A <b>Task Sequence</b> in MDT is the core engine that defines exactly what actions to take during deployment, such as formatting the disk, applying the OS image, injecting drivers, and installing applications.",
-        moreDetails: "Administrators can customize Task Sequences heavily, adding PowerShell scripts, custom reboots, or specific conditional logic based on WMI queries.",
-        otherOptions: "Task sequences do not handle network drive mapping for users, licensing, or directory synchronization.",
-        link: "https://learn.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/create-a-windows-10-reference-image"
       },
       {
         id: 113,
@@ -178,22 +120,6 @@ export const domain1Dataset: TermData[] = [
     category: "Deploy Windows client",
     questions: [
 
-      {
-        id: 117,
-        type: "medium",
-        question: "Before performing an in-place upgrade to Windows 11 across your enterprise, which tool should you use to assess hardware readiness and compatibility?",
-        options: [
-          "Windows Performance Monitor",
-          "Endpoint analytics (Update compliance/Windows 11 readiness report)",
-          "Active Directory Users and Computers",
-          "Windows Defender Firewall"
-        ],
-        answer: "Endpoint analytics (Update compliance/Windows 11 readiness report)",
-        explanation: "<b>Endpoint analytics</b> in Intune provides a Windows 11 readiness report that evaluates the hardware and software across your enrolled devices to ensure they meet the strict Windows 11 requirements (like TPM 2.0 and CPU generation).",
-        moreDetails: "Using data-driven analytics ensures you do not deploy upgrade policies to machines that will fail the upgrade, reducing downtime and helpdesk tickets.",
-        otherOptions: "Performance Monitor measures real-time stats. ADUC manages directory objects. Firewall manages network rules.",
-        link: "https://learn.microsoft.com/en-us/mem/analytics/work-from-anywhere"
-      },
 
       {
         id: 119,
@@ -313,7 +239,7 @@ export const domain1Dataset: TermData[] = [
         type: "easy",
         question: "What is a key administrative difference between Windows 365 Business and Windows 365 Enterprise?",
         options: [
-          "Business supports 5000 users, Enterprise supports 10.",
+          "Business supports 1000 users, Enterprise supports 300.",
           "Enterprise requires and integrates deeply with Microsoft Intune for management, while Business is meant for smaller organizations without Intune.",
           "Enterprise runs on Linux servers.",
           "Business does not support Windows 11."
@@ -331,23 +257,6 @@ export const domain1Dataset: TermData[] = [
     term: "Azure Virtual Desktop (AVD)",
     category: "Deploy Windows client",
     questions: [
-
-      {
-        id: 137,
-        type: "medium",
-        question: "When deploying AVD, what is a <b>Host Pool</b>?",
-        options: [
-          "A cluster of physical servers sitting in a corporate basement.",
-          "A collection of Azure virtual machines that register to AVD as session hosts to serve desktops and apps to users.",
-          "A pool of IP addresses reserved by the ISP.",
-          "The licensing mechanism for AVD users."
-        ],
-        answer: "A collection of Azure virtual machines that register to AVD as session hosts to serve desktops and apps to users.",
-        explanation: "A <b>Host Pool</b> is the core logical grouping in AVD. It contains the identical virtual machines (Session Hosts) that users connect to when they launch a desktop or remote application.",
-        moreDetails: "Host pools can be 'Personal' (1:1 persistent assignment like Windows 365) or 'Pooled' (multi-session, where users are load-balanced across available VMs).",
-        otherOptions: "They are Azure VMs, not physical on-prem servers, IP pools, or licensing mechanisms.",
-        link: "https://learn.microsoft.com/en-us/azure/virtual-desktop/environment-setup"
-      },
       {
         id: 138,
         type: "hard",
@@ -399,29 +308,6 @@ export const domain1Dataset: TermData[] = [
     ]
   },
   {
-    id: 9,
-    term: "Remote Help and Management",
-    category: "Deploy Windows client",
-    questions: [
-      {
-        id: 143,
-        type: "hard",
-        question: "How does Remote Help handle a scenario where a standard user device receives a User Account Control (UAC) prompt requiring administrative credentials?",
-        options: [
-          "The session immediately disconnects.",
-          "The remote helper can enter their administrative credentials to bypass the UAC prompt if they have 'Elevation' permissions.",
-          "The UAC prompt is automatically hidden and accepted.",
-          "The screen goes black permanently."
-        ],
-        answer: "The remote helper can enter their administrative credentials to bypass the UAC prompt if they have 'Elevation' permissions.",
-        explanation: "A key feature of Intune <b>Remote Help</b> is that it allows IT admins to securely interact with <b>UAC prompts</b> on a standard user's machine, entering admin credentials to elevate processes without revealing the password to the user.",
-        moreDetails: "This explicitly requires the helper to have the 'Elevation' permission granted in their RBAC role.",
-        otherOptions: "The session does not disconnect. UAC is a critical security boundary and cannot be automatically accepted. The screen doesn't go permanently black.",
-        link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#elevation"
-      },
-    ]
-  },
-  {
     id: 10,
     term: "Device Authentication & Identity",
     category: "Deploy Windows client",
@@ -441,22 +327,6 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "Joined devices allow users to log in using their organizational credentials natively at the Windows lock screen, and they can be fully managed by Intune.",
         otherOptions: "Registered devices are not strictly corporate. Joined devices still need internet for initial auth.",
         link: "https://learn.microsoft.com/en-us/entra/identity/devices/concept-directory-join"
-      },
-      {
-        id: 147,
-        type: "medium",
-        question: "What is a 'Hybrid Entra ID Joined' device?",
-        options: [
-          "A device that runs both Windows and Linux simultaneously.",
-          "A device that is joined to a local on-premises Active Directory domain AND registered with Microsoft Entra ID.",
-          "A device that uses both Wi-Fi and Ethernet.",
-          "A device exclusively managed by a third-party MDM."
-        ],
-        answer: "A device that is joined to a local on-premises Active Directory domain AND registered with Microsoft Entra ID.",
-        explanation: "<b>Hybrid Entra ID Joined</b> devices are traditional on-premises domain-joined machines that have been synchronized (usually via Entra Connect) to also possess an identity in the cloud.",
-        moreDetails: "This allows legacy organizations to leverage cloud features (like Conditional Access and Intune co-management) without having to immediately abandon their on-premises Group Policies and Domain Controllers.",
-        otherOptions: "It refers to identity boundaries, not operating systems, networking, or third-party MDMs.",
-        link: "https://learn.microsoft.com/en-us/entra/identity/devices/concept-hybrid-join"
       },
       {
         id: 148,
@@ -583,7 +453,7 @@ export const domain1Dataset: TermData[] = [
         id: 159,
         type: "hard",
         format: "multi-select",
-        question: "You are designing a Windows Autopilot Self-Deploying mode scenario. Which of the following requirements MUST be met for this specific mode to succeed? (Select THREE)",
+        question: "You are designing a Windows Autopilot Self-Deploying mode scenario. Which of the following requirements MUST be met for this specific mode to succeed? (Select <b>THREE</b>)",
         options: [
           "The device must have a physical TPM 2.0 chip that supports device attestation.",
           "The device must be connected to an Ethernet (wired) network.",
@@ -625,7 +495,7 @@ export const domain1Dataset: TermData[] = [
         id: 161,
         type: "easy",
         format: "multi-select",
-        question: "When configuring a Windows Autopilot deployment profile, which of the following Out-of-Box Experience (OOBE) settings can you choose to HIDE from the end-user? (Select THREE)",
+        question: "When configuring a Windows Autopilot deployment profile, which of the following Out-of-Box Experience (OOBE) settings can you choose to HIDE from the end-user? (Select <b>THREE</b>)",
         options: [
           "Privacy settings.",
           "End User License Agreement (EULA).",
@@ -672,26 +542,6 @@ export const domain1Dataset: TermData[] = [
     term: "Multi-Select (Select Two) Deployment Scenarios",
     category: "Deploy Windows client",
     questions: [
-      {
-        id: 163,
-        type: "medium",
-        format: "multi-select",
-        question: "Which of the following built-in Windows 11 editions natively support Windows Autopilot enrollment? (Select TWO)",
-        options: [
-          "Windows 11 Home",
-          "Windows 11 Pro",
-          "Windows 11 Enterprise",
-          "Windows 11 IoT Core"
-        ],
-        multiAnswers: [
-          "Windows 11 Pro",
-          "Windows 11 Enterprise"
-        ],
-        explanation: "Windows Autopilot requires a business-class edition of Windows to perform Azure AD Join and MDM enrollment. <b>Windows Pro</b> and <b>Enterprise</b> (including Education/Pro for Workstations) are supported.",
-        moreDetails: "Windows Home does not support Azure AD Join or Autopilot. IoT Core is also unsupported.",
-        otherOptions: "Home and IoT Core editions lack the necessary MDM and Entra ID joining capabilities.",
-        link: "https://learn.microsoft.com/en-us/autopilot/software-requirements"
-      },
       {
         id: 164,
         type: "hard",
@@ -815,13 +665,13 @@ export const domain1Dataset: TermData[] = [
         options: [
           "The devices are running Windows 10 Enterprise.",
           "The Configuration Manager client agent is broken or disabled on those devices.",
-          "The Intune Win32 app size exceeds 8GB.",
+          "The Intune Win32 app size exceeds 30GB.",
           "The 'Client apps' workload requires the 'Device Configuration' workload to be moved to Intune first."
         ],
         answer: "The Configuration Manager client agent is broken or disabled on those devices.",
         explanation: "Even when the 'Client apps' workload is moved to Intune, Intune Win32 app deployment heavily relies on the Intune Management Extension (IME). In a co-managed environment, the IME relies on the health of the Configuration Manager client to function correctly and evaluate workloads.",
         moreDetails: "If the SCCM client is broken, the device might not correctly recognize that the workload has shifted, causing the IME to halt app deployments to avoid conflicts.",
-        otherOptions: "Windows 10 Enterprise is supported. The default Win32 app limit is 8GB, but the question doesn't imply it's oversized. Workloads can be moved independently.",
+        otherOptions: "Windows 10 Enterprise is supported. The default Win32 app limit is 30GB (previously 8GB), but the question doesn't imply it's oversized. Workloads can be moved independently.",
         link: "https://learn.microsoft.com/en-us/mem/configmgr/comanage/workloads"
       },
       {
@@ -2967,6 +2817,217 @@ export const domain1Dataset: TermData[] = [
         moreDetails: "Administrators can configure Entra ID Conditional Access policies specifically targeting the 'Remote Help' cloud app. This allows IT to enforce strong security controls—such as requiring Multi-Factor Authentication (MFA) or ensuring both the helper and the receiver are on 'Compliant' devices—before the screen-sharing session can even begin.",
         otherOptions: "Defender is an XDR platform. PIM is for role elevation. Access Reviews are for auditing group memberships.",
         link: "https://learn.microsoft.com/en-us/mem/intune/remote-actions/remote-help#conditional-access"
+      }
+    ]
+  },
+  {
+    id: 1115,
+    term: "Non-Windows Device Enrollment (Android & Apple)",
+    category: "Enroll devices",
+    questions: [
+      {
+        id: 3101,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization’s Apple MDM Push Certificate (APNs) is about to expire. The administrator who originally created the certificate left the company, and you do not know which Apple ID they used. You decide to generate a new CSR and create a brand new APNs certificate using a generic corporate Apple ID. What will happen to your currently enrolled iOS devices when you upload this new certificate to Intune?",
+        options: [
+          "The devices will automatically negotiate trust with the new certificate during their next check-in.",
+          "All currently enrolled Apple devices will become unmanaged and must be factory reset or re-enrolled.",
+          "Intune will prompt users via the Company Portal to trust the new certificate.",
+          "The Intune admin center will temporarily suspend management until the devices are rebooted."
+        ],
+        answer: "All currently enrolled Apple devices will become unmanaged and must be factory reset or re-enrolled.",
+        explanation: "An APNs certificate MUST be renewed using the exact same Apple ID that created it.",
+        moreDetails: "If you upload a completely new certificate instead of renewing the existing one, the trust chain breaks. All currently enrolled devices lose contact with Intune and cannot be managed, wiped, or updated until they are manually re-enrolled.",
+        otherOptions: "Devices do not auto-negotiate, nor do they prompt the user.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/apple-mdm-push-certificate-get"
+      },
+      {
+        id: 3102,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are configuring Apple User Enrollment for employees using their personal iPads (BYOD). To ensure the separation of personal and corporate data, which specific requirement must be met during the enrollment process?",
+        options: [
+          "The device must be put into Supervised mode using Apple Configurator.",
+          "The user must authenticate using a Managed Apple ID federated with Entra ID.",
+          "The device must be registered in Apple Business Manager (ABM).",
+          "The user must surrender their personal Apple ID password to the Intune portal."
+        ],
+        answer: "The user must authenticate using a Managed Apple ID federated with Entra ID.",
+        explanation: "Apple User Enrollment relies on the concept of dual identities on the device: the user's personal Apple ID and a corporate Managed Apple ID.",
+        moreDetails: "The Managed Apple ID is used to provision the corporate volume on the device and install work apps. Typically, this is achieved by federating Apple Business Manager with Microsoft Entra ID.",
+        otherOptions: "ABM registration and Supervised mode are for corporate-owned devices (Device Enrollment / ADE), not BYOD User Enrollment.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/ios-user-enrollment"
+      },
+      {
+        id: 3103,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your company still has hundreds of legacy Android devices managed using the Android Device Administrator method. You are planning a migration to Android Enterprise. What happens to devices running Android 10 or later that remain on Device Administrator management?",
+        options: [
+          "Microsoft automatically converts them to Android Enterprise Personally-owned work profiles.",
+          "Google has deprecated Device Administrator, so password enforcement, camera blocking, and wipe commands may fail or be ignored by the OS.",
+          "They will continue to function normally, but cannot install apps from the Google Play Store.",
+          "The devices will automatically factory reset themselves to enforce the new security standard."
+        ],
+        answer: "Google has deprecated Device Administrator, so password enforcement, camera blocking, and wipe commands may fail or be ignored by the OS.",
+        explanation: "Google officially deprecated Android Device Administrator management starting with Android 9, removing key management APIs in Android 10.",
+        moreDetails: "Features like enforcing complex passcodes or restricting the camera no longer work reliably on modern Android versions using Device Administrator. Organizations must migrate to Android Enterprise.",
+        otherOptions: "Intune does not auto-migrate devices. They do not auto-wipe. Play Store access is not strictly blocked by the deprecation, but corporate app management is broken.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-enroll-device-administrator"
+      },
+      {
+        id: 3104,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You are deploying 100 corporate-owned MacBooks to developers. You require that the users cannot remove the Intune Management Profile from the System Settings under any circumstances. Which enrollment method strictly enforces this requirement?",
+        options: [
+          "Direct enrollment using a Device Enrollment Manager (DEM) account.",
+          "User-approved MDM via the Intune Company Portal app.",
+          "Automated Device Enrollment (ADE) via Apple Business Manager.",
+          "Intune Mac App wrapping tool."
+        ],
+        answer: "Automated Device Enrollment (ADE) via Apple Business Manager.",
+        explanation: "The only way to lock an MDM management profile to a macOS or iOS device so the user cannot remove it is via Apple Automated Device Enrollment (formerly DEP).",
+        moreDetails: "If a user enrolls via the Company Portal (User-approved MDM), they always retain the administrative right to remove the profile from System Settings.",
+        otherOptions: "DEM accounts bypass device limits but don't lock profiles. The App wrapping tool is for application packaging.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-program-enroll-macos"
+      },
+      {
+        id: 3105,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You configure an Android Enterprise Corporate-Owned Dedicated device profile for warehouse barcode scanners. When a warehouse worker picks up a scanner, they notice the Intune Company Portal app is missing and they are not prompted to sign in with their Entra ID account. Why does this happen?",
+        options: [
+          "Dedicated devices are enrolled 'userless' and do not use user affinity or the Company Portal.",
+          "The devices have lost connectivity to Managed Google Play.",
+          "The worker must first manually download the Company Portal from the public Google Play Store.",
+          "The enrollment profile was incorrectly assigned to a User Group instead of a Device Group."
+        ],
+        answer: "Dedicated devices are enrolled 'userless' and do not use user affinity or the Company Portal.",
+        explanation: "Dedicated devices (Kiosk mode) are intended for single-use scenarios where the device is not tied to a specific user's identity.",
+        moreDetails: "Because there is no user affinity, the Company Portal app is not installed, and users cannot authenticate to access personalized corporate resources or Conditional Access-protected apps.",
+        otherOptions: "It is not a network failure or a mistake; it is the intended design of the Dedicated device scenario.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-kiosk-enroll"
+      },
+      {
+        id: 3106,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You are creating an Apple Automated Device Enrollment (ADE) profile in Intune. You want the device setup to be as fast as possible. Which feature in the ADE profile allows you to streamline the out-of-box experience for the end-user?",
+        options: [
+          "Hiding Setup Assistant screens (like Apple ID, Siri, and Screen Time).",
+          "Automatically accepting the Entra ID Terms of Use without user interaction.",
+          "Bypassing the Wi-Fi connection requirement during OOBE.",
+          "Disabling the Apple Activation Lock globally."
+        ],
+        answer: "Hiding Setup Assistant screens (like Apple ID, Siri, and Screen Time).",
+        explanation: "ADE profiles allow Intune administrators to selectively hide or skip various screens presented during the Apple Setup Assistant.",
+        moreDetails: "This ensures users aren't bogged down by consumer-focused setup prompts (like Apple Pay or Siri) and are pushed directly to the corporate enrollment phase.",
+        otherOptions: "You cannot bypass the network requirement (the device needs internet to talk to ABM). Entra Terms of Use must be accepted by the user. Activation Lock is managed separately.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-program-enroll-ios#create-an-apple-enrollment-profile"
+      },
+      {
+        id: 3107,
+        type: "medium",
+        format: "multiple-choice",
+        question: "Your organization mandates that only corporate-purchased Android devices can access company resources. You configure an Intune Enrollment Device Platform Restriction to block \"Android Enterprise (work profile)\". What is the immediate effect of this policy?",
+        options: [
+          "It blocks users from enrolling their personal Android phones into Intune.",
+          "It blocks the enrollment of Android Enterprise Corporate-owned fully managed devices.",
+          "It unenrolls all currently managed personal Android devices immediately.",
+          "It prevents users from downloading the Microsoft Authenticator app on personal devices."
+        ],
+        answer: "It blocks users from enrolling their personal Android phones into Intune.",
+        explanation: "In Intune's platform restrictions, blocking the \"Android Enterprise (work profile)\" specifically targets the Personally-Owned Work Profile enrollment method (BYOD).",
+        moreDetails: "This effectively prevents users from downloading the Company Portal on a personal device and establishing a work profile. Corporate-owned methods (Fully Managed, Dedicated, COPE) are controlled by separate toggles or tokens.",
+        otherOptions: "Enrollment restrictions only prevent *new* enrollments; they do not wipe existing ones. It does not block Fully Managed devices or the Authenticator app itself.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/enrollment-restrictions-set"
+      },
+      {
+        id: 3108,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have hired a contractor to enroll 200 corporate-owned Android devices. To bypass the standard 15-device limit per user, you assign the contractor a Device Enrollment Manager (DEM) role in Intune. Which of the following enrollment types is strictly UNSUPPORTED when using a DEM account?",
+        options: [
+          "Apple Automated Device Enrollment (ADE) with user affinity.",
+          "Android Enterprise Corporate-owned dedicated devices.",
+          "Windows Autopilot self-deploying mode.",
+          "Android Enterprise Corporate-owned fully managed devices."
+        ],
+        answer: "Apple Automated Device Enrollment (ADE) with user affinity.",
+        explanation: "Device Enrollment Manager (DEM) accounts are designed for bulk provisioning, but they have significant limitations. Specifically, DEM accounts cannot be used to enroll Apple devices via ADE/DEP if the profile is configured \"With User Affinity\".",
+        moreDetails: "DEM accounts also cannot be used with Apple User Enrollment, and they do not support Conditional Access policies that require MFA during enrollment.",
+        otherOptions: "DEM accounts work fine for dedicated devices and bulk Windows provisioning, though Autopilot self-deploying mode doesn't even require a DEM account.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-manager-enroll"
+      },
+      {
+        id: 3109,
+        type: "hard",
+        format: "multiple-choice",
+        question: "An employee is issued a Corporate-Owned phone with a Work Profile (COPE). The employee installs a personal social media app on the personal side of the device. Can the Intune administrator view the data or block the usage of that specific social media app?",
+        options: [
+          "Yes, because the device is corporate-owned, the administrator has full visibility and control over all apps on the device.",
+          "No, the administrator can only view and manage apps installed within the secure Work Profile.",
+          "Yes, but only if the device is placed into 'Lost Mode'.",
+          "No, unless the administrator enables 'Advanced App Appraisals' in the Endpoint Security blade."
+        ],
+        answer: "No, the administrator can only view and manage apps installed within the secure Work Profile.",
+        explanation: "The COPE (Corporate-Owned, Personally Enabled) model provides device-level hardware control (like wiping the whole device or enforcing Wi-Fi), but it still strictly respects the privacy of the personal profile.",
+        moreDetails: "IT administrators cannot see which personal apps are installed, cannot view personal browsing history, and cannot manage or wipe data on the personal side of the COPE boundary.",
+        otherOptions: "Even though it is corporate-owned, the dual-profile nature explicitly limits app-level visibility to the work partition.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/android-corporate-owned-work-profile-enroll"
+      },
+      {
+        id: 3110,
+        type: "hard",
+        format: "multiple-choice",
+        question: "You have deployed an iOS Automated Device Enrollment (ADE) profile with \"User Affinity\" to corporate iPhones. You want Microsoft Word to install silently during the setup process without prompting the user for an Apple ID. How must the app be deployed?",
+        options: [
+          "The app must be synchronized from Apple Business Manager via a Volume Purchase Program (VPP) token and assigned using 'Device' licensing.",
+          "The app must be packaged as an .ipa file and deployed as a Line-of-Business (LOB) app.",
+          "The app must be assigned using 'User' licensing via Apple Business Manager.",
+          "The user must sign into the Company Portal with a Managed Apple ID."
+        ],
+        answer: "The app must be synchronized from Apple Business Manager via a Volume Purchase Program (VPP) token and assigned using 'Device' licensing.",
+        explanation: "To achieve silent app installation on iOS without prompting for an Apple ID, you must leverage Apple VPP (now part of Apple Business Manager) and assign the licenses to the device itself.",
+        moreDetails: "If you use 'User' licensing, the user will be prompted to link their Apple ID to the VPP system, breaking the silent, zero-touch experience.",
+        otherOptions: "LOB apps do not update automatically via the App Store. Managed Apple IDs are for User Enrollment.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/vpp-apps-ios"
+      },
+      {
+        id: 3111,
+        type: "medium",
+        format: "multiple-choice",
+        question: "You approve a new custom web app in the Managed Google Play console to be deployed to your Android Enterprise devices. However, the app is not showing up in the Intune Admin Center. What is the most likely reason?",
+        options: [
+          "You need to manually trigger a synchronization between Intune and Managed Google Play in the Tenant Administration blade.",
+          "Custom web apps are only supported on Android Device Administrator enrollments.",
+          "You did not wrap the web app using the Intune App Wrapping Tool for Android.",
+          "The Android devices must reboot to pull the new app catalog."
+        ],
+        answer: "You need to manually trigger a synchronization between Intune and Managed Google Play in the Tenant Administration blade.",
+        explanation: "When you add, approve, or create custom apps directly in the Managed Google Play portal, they do not appear in Intune instantly.",
+        moreDetails: "Intune synchronizes with Managed Google Play periodically. If you need the app to appear immediately so you can assign it, you must navigate to Tenant Administration > Connectors and tokens > Managed Google Play, and manually click \"Sync\".",
+        otherOptions: "Web apps are natively supported in Android Enterprise without wrapping. The devices rebooting has no impact on the Intune cloud console visibility.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/apps/apps-add-android-for-work"
+      },
+      {
+        id: 3112,
+        type: "hard",
+        format: "multiple-choice",
+        question: "Your organization uses Apple Automated Device Enrollment (ADE). Suddenly, new MacBooks purchased from Apple are failing to enroll during Setup Assistant, and no new devices are appearing in Intune. What is the most likely cause?",
+        options: [
+          "The Apple Automated Device Enrollment (ADE/DEP) token in Intune has expired.",
+          "The Apple Push Notification service (APNs) certificate has expired.",
+          "The Intune Company Portal app requires an update on the MacBooks.",
+          "The devices were purchased from a retail store instead of an authorized enterprise reseller."
+        ],
+        answer: "The Apple Automated Device Enrollment (ADE/DEP) token in Intune has expired.",
+        explanation: "The ADE token (which connects Intune to Apple Business Manager) expires annually and must be renewed.",
+        moreDetails: "If the ADE token expires, Intune can no longer sync new device serial numbers from ABM, and devices attempting OOBE enrollment will fail to pull their management profiles. While an expired APNs certificate breaks management for *existing* devices, an expired ADE token specifically breaks the synchronization of *new* corporate devices from ABM.",
+        otherOptions: "If the devices were purchased from retail, they wouldn't even attempt ADE. APNs expiration breaks existing management.",
+        link: "https://learn.microsoft.com/en-us/mem/intune/enrollment/device-enrollment-program-enroll-ios#renew-an-ade-token"
       }
     ]
   }
